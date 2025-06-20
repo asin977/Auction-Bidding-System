@@ -1,0 +1,51 @@
+.site-container {
+    background-color:#fff;
+    margin:15px;
+    color:black;
+    margin-top:50px;
+    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.4);
+    padding-bottom:12px; 
+}
+
+.site-explanation {
+    text-align: justify;
+    margin:15px;
+    line-height:20px;
+}
+.sub-head {
+    font-size:20px;
+    font-family:'script';
+}
+.name {
+    font-family:'Rubic';
+    padding:10px;
+    border-bottom:1px solid black;
+}
+
+@media screen and (min-width:768px){
+    .site-explanation  {
+       padding:30px;
+    }
+}
+
+@media screen and (min-width:968px) {
+    .site-explanation  {
+        padding:30px;
+    }
+    .site-container {
+        width:80%;
+        display:flex;
+        flex-direction: row;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+    }
+    .name {
+        border-bottom:none;
+    }
+    .main-site-container {
+        display:flex;
+        align-content: center;
+        justify-content: center;
+    }
+}
