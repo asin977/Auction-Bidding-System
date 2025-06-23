@@ -1,0 +1,45 @@
+.footer-container {
+    margin-bottom:0px;
+    width:100%;
+    margin-top:0px;
+    position:fixed;
+    bottom:0;
+   
+}
+
+.footer{
+    padding:10px;
+    background-color:#fff;
+}
+.footer-content {
+    font-size:17px;
+    font-family:'Inconsolata';
+    color:rgb(159, 159, 163);
+    margin:0;
+    font-weight:bold;
+}
+a{
+    text-decoration: none;
+    color:#b4b3b3;
+    font-weight:bold;
+}
+.footer-links {
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    gap:15px;
+    font-family:'Inconsolata';
+    color:gray;
+}
+.links {
+    font-size:18px;
+}
+.footer-description {
+    font-size:16px;
+    width:100%;
+    font-family:'script';
+    text-align: center;
+    font-weight:bold;
+    
+}
