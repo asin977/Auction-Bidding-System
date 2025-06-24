@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
-import {Content} from './components/Content';
+import { SearchIcon } from './components/search';
 
 function App() {
   return (
     <div className="App">
-      <Content />
+      <SearchIcon />
     </div>
   );
 }
