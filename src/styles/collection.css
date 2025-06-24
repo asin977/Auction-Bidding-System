@@ -1,0 +1,26 @@
+.feature-image {
+    width:150px;
+    height:150px;
+}
+.feature-name {
+    font-weight:bold;
+    font-size:15px;
+    font-weight:'script';
+    color:black;
+}
+.feature-main-container{
+   background-color: #fff;
+   display:flex;
+   flex-direction: row;
+   gap:35px;
+   padding-left: 50px;
+   padding-top:30px;
+   padding-bottom:20px;
+}
+.feature-heading {
+    background-color: #fff;
+    margin:0px;
+    font-size: 40px;
+    font-family: 'script';
+    padding:20px;
+}
