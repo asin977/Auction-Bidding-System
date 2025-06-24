@@ -1,16 +1,12 @@
-import React from 'react'
-import {SignIn} from '../components/SignIn';
-import {SiteDetails} from '../components/SiteDetails';
-import {Footer} from '../components/Footer'
+import {SignIn} from '../components/signin';
+import {SiteDetails} from '../components/sitedetails';
+import {Footer} from '../components/footer';
 
-export const SignInPage =()=> {
-  return (
-    <div>
-        <SignIn />
-        <SiteDetails />
-        <Footer />
-    </div>
-  )
-}
+export const SignInPage =()=> (
+  <div>
+      <SignIn />
+      <SiteDetails />
+      <Footer />
+  </div>
+)
 
-export default SignInPage
