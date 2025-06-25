@@ -1,16 +1,18 @@
 import './App.css';
-import { SearchIcon } from './components/search';
 
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
+import { routes } from './Routes';
 import { Footer } from './components/footer';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { routes } from '../../routes'; 
+
+import {Home} from './pages/Home';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path={routes.home} element={<Footer />} />
+          <Route path={routes.home} element={<Home />} />
         </Routes>
         <Footer />
       </BrowserRouter>

@@ -5,11 +5,13 @@
     font-size:35px;
     padding:15px;
 }
+
 .name-container {
     text-align: justify;
     margin-top:12px;
     color:#5a189a;
 }
+
 input {
     min-width:80%;
     padding: 10px;
@@ -21,14 +23,17 @@ input {
     color:#7b2cbf;
     border:none;
 }
+
 input,button:hover
  {
     transform: scale(1.02);
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
+
 input:focus {
     outline: none;
 }
+
 .sign-up {
    border:none;
    color:#fff;
@@ -40,6 +45,7 @@ input:focus {
    margin-top:16px;
    
 }
+
 .sign-container {
     background-color:#fff;
     color:#fff;
@@ -52,11 +58,13 @@ input:focus {
     margin-top:60px;
     padding:8px;
 }
+
 .forgot-password {
     font-size:15px;
     display: flex;
     margin-left:12px;
 }
+
 .sub-container {
     display: flex;
     flex-direction: column;
@@ -70,6 +78,7 @@ input:focus {
     margin-right:500px;
     margin-bottom:-408px;
 }
+
 .welcome-back {
     display: flex;
     flex-direction: column;
@@ -79,21 +88,26 @@ input:focus {
     font-family:'bold';
     color:#5a189a;
 }
+
 .sign-account {
     color:#5a189a;
 }
+
 .login-container {
     display:none;
 }
+
 .sign-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+
 button{
     width:50%;
 }
+
 .main-sign-container {
     display: flex;
     flex-direction: column;
@@ -102,11 +116,13 @@ button{
     margin-top:80px;
     margin-left:54px;
 }
+
 button:hover {
     background-color:#7d1dd1;
     transform: scale(1.02);
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
+
 input::placeholder {
     color:#5a189a;
     font-size: 16px;

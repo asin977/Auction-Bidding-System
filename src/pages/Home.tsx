@@ -1,11 +1,3 @@
-import CollectionDisplay from "../components/collectionDisplay"
+import React from 'react';
 
-export const HomePage = () => {
-  return (
-    <div className="one">
-      <CollectionDisplay />
-    </div>
-  )
-}
-
-export default HomePage
+export const Home = () => <div></div>;
