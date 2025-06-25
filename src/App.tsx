@@ -1,5 +1,5 @@
-import React from 'react';
 import './App.css';
+import { SignInPage } from './pages/SignInPage';
 
 import { Footer } from './components/footer';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
