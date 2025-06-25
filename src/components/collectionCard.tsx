@@ -1,5 +1,5 @@
 import React from 'react'
-import { Collection } from '../Data/Collections';
+import { Collection } from '../data/Collections';
 import '../styles/collection.css'
 
 const CollectionCard: React.FC<Collection> = (props) => {

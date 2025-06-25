@@ -1,6 +1,6 @@
 import React from 'react';
 import CollectionCard from './collectionCard';
-import { collections } from '../Data/Collections';
+import { collections } from '../data/Collections';
 
 const CollectionDisplay = () => {
   return (
@@ -14,6 +14,6 @@ const CollectionDisplay = () => {
     </div>
     
   );
-};
+}
 
 export default CollectionDisplay;
