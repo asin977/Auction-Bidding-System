@@ -1,10 +1,10 @@
 import './App.css';
-import { SignInPage } from './pages/SignInPage';
+import { SearchIcon } from './components/search';
 
 function App() {
   return (
     <div className="App">
-       <SignInPage />
+      <SearchIcon />
     </div>
   );
 }
