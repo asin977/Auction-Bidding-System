@@ -1,7 +1,7 @@
 export type Product = {
     id: string
+    startingPrice: number
     price: number
-    agreedPrice: number
     imageUrl: string
     name: string
     imageDetails: string
@@ -11,8 +11,8 @@ export type Product = {
   export const products: Product[] = [
     {
     id: 'product1',
-    price: 22300,
-    agreedPrice: 25600,
+    startingPrice: 22300,
+    price: 25600,
     imageUrl:"https://m.media-amazon.com/images/I/61shPsbYx7L._SY500_.jpg",
     name: 'Used Refrigerator',
     imageDetails: 'Used Whirlpool Refrigerator purchased in 2020'
@@ -20,8 +20,8 @@ export type Product = {
 
     {
     id: 'product2',
-    price: 25000,
-    agreedPrice: 26200,
+    startingPrice:25000,
+    price: 26200,
     imageUrl: 'https://demo.auctify.com/uploads/1745146694_1.webp',
     name: 'Horse',
     imageDetails: 'Meet Apollo VHX'
@@ -29,8 +29,8 @@ export type Product = {
 
     {
     id: 'product3',
-    price: 25000,
-    agreedPrice: 26002,
+    startingPrice: 25000,
+    price: 26002,
     imageUrl: 'https://demo.auctify.com/uploads/1740674710_chair3.webp',
     name: 'Used Chair',
     imageDetails: 'Used Ergonomic Office Chair Purchased in 2024'
@@ -38,8 +38,8 @@ export type Product = {
 
     {
     id: 'product4',
-    price: 1200,
-    agreedPrice: 2800,
+    startingPrice:1200,
+    price: 2800,
     imageUrl: 'https://demo.auctify.com/uploads/1740674804_chair4.webp',
     name: 'Used Chair',
     imageDetails: 'Used Ergonomic Office Chair Purchased in 2022'
@@ -47,8 +47,8 @@ export type Product = {
 
     {
     id: 'product5',
-    price: 60000,
-    agreedPrice: 42600,
+    startingPrice:60000,
+    price: 42600,
     imageUrl: 'https://demo.auctify.com/uploads/1740681611_coffeemachine1.webp',
     name: 'Coffee Machine',
     imageDetails: 'Pre-Owned Italian-Style Office Coffee Machine Purchased in 2022'
@@ -56,8 +56,8 @@ export type Product = {
 
     {
     id: 'product6',
-    price: 200000,
-    agreedPrice: 222600,
+    startingPrice:200000,
+    price: 222600,
     imageUrl: 'https://demo.auctify.com/uploads/1740681376_refrigerator2_1.webp',
     name: 'Used Refrigerator',
     imageDetails: 'Pre-Owned Large Refrigerator Stainless Steel Finish (Purchased in 2022)'
@@ -65,8 +65,8 @@ export type Product = {
 
     {
     id: 'product7',
-    price: 180000,
-    agreedPrice: 152600,
+    startingPrice: 180000,
+    price: 152600,
     imageUrl: 'https://demo.auctify.com/uploads/1740682142_copymachine2.webp',
     name: 'Pre-Owned Copy Machine White',
     imageDetails: 'Pre-Owned Professional Copy Machine White, Purchased in 2022'
@@ -74,25 +74,25 @@ export type Product = {
 
     {
     id: 'product8',
-    price: 150000,
-    agreedPrice: 162600,
+    startingPrice: 150000,
+    price: 162600,
     imageUrl: 'https://demo.auctify.com/uploads/1740681015_refrigerator.webp',
     name: 'Pre-Owned Refrigerator',
     imageDetails: 'Pre-Owned Refrigerator(Purchased in 2022)'
     },
     {
-      id: 'product9',
-      price: 150000,
-      agreedPrice: 162600,
-      imageUrl: 'https://demo.auctify.com/uploads/1740682873_coffeemachine3.webp',
-      name: 'Pre-Owned Coffee Machine Black',
-      imageDetails: 'Pre-Owned Professional Coffee Machine Metallic Black (Purchased in 2022)'
-      },
+    id: 'product9',
+    startingPrice: 150000,
+    price: 162600,
+    imageUrl: 'https://demo.auctify.com/uploads/1740682873_coffeemachine3.webp',
+    name: 'Pre-Owned Coffee Machine Black',
+    imageDetails: 'Pre-Owned Professional Coffee Machine Metallic Black (Purchased in 2022)'
+    },
 
     {
     id: 'product10',
-    price: 108000,
-    agreedPrice: 92600,
+    startingPrice: 108000,
+    price: 92600,
     imageUrl: 'https://demo.auctify.com/uploads/1740674470_chair2.webp',
     name: 'Used Chair',
     imageDetails: 'Used Ergonomic Office Chair Purchased in 2021'
@@ -100,8 +100,8 @@ export type Product = {
 
     {
     id: 'product11',
-    price: 2500,
-    agreedPrice: 2600,
+    startingPrice:2500,
+    price: 2600,
     imageUrl: 'https://demo.auctify.com/uploads/1742828740_84_original.webp',
     name: 'Used Bag',
     imageDetails: 'Michael Kors Crossbody Bag'
@@ -109,8 +109,8 @@ export type Product = {
 
     {
     id: 'product12',
-    price: 362500,
-    agreedPrice: 322600,
+    startingPrice:362500,
+    price: 322600,
     imageUrl: 'https://demo.auctify.com/uploads/1740683543_forklift.webp',
     name: 'Forklift',
     imageDetails: 'Pre-Owned Industrial Forklift Purchased in 2022'
@@ -118,8 +118,8 @@ export type Product = {
 
     {
     id: 'product13',
-    price: 2800,
-    agreedPrice: 2600,
+    startingPrice: 2800,
+    price: 2600,
     imageUrl: 'https://demo.auctify.com/uploads/1740674009_chair.webp',
     name: 'Office Chair',
     imageDetails:"Used Ergonomic Office Chair Purchased in 2021"

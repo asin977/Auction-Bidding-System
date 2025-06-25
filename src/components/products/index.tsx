@@ -1,7 +1,9 @@
-import React from 'react'
-import { Product } from '../Data/products'
+import React from 'react';
+
 import { Link } from 'react-router-dom';
-import '../styles/products.css'
+import { Product } from '../../data/products';
+
+import './styles.css';
 
 export const ProductCard: React.FC<Product> = (props) => {
   <Link to='/home' />
@@ -16,7 +18,6 @@ export const ProductCard: React.FC<Product> = (props) => {
                 <h3 className='product-name'>{props.name}</h3>
                 <p><strong>Price:</strong> ₹{props.price.toLocaleString()}</p>
                 <p><strong>Starting Price:</strong>₹{props.startingPrice.toLocaleString()}</p>
-                <p><strong>Agreed Price:</strong> ₹{props.agreedPrice.toLocaleString()}</p>
                 <div className='buttons'>
                   <button>View Lot</button>
                 </div>

@@ -1,11 +1,11 @@
 import React from 'react'
-import ProductCard from '../components/ProductCard'
-import { products } from '../Data/products';
+import ProductCard from '../components/products'
+import { products } from '../data/products';
 
 
 export const HomePage = () => {
   return (
-    <div>
+    <div className='main-product-container'>
       {products.map((data)=> (
         <ProductCard key={data.id} {...data}/>
       ))}
