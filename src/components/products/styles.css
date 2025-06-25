@@ -14,7 +14,7 @@
 }
 .product-details {
     font-size:20px;
-    font-family:'script';
+    font-family:'bold';
     font-weight:bold;
     color:rgb(177, 176, 176);
 } 
@@ -27,7 +27,7 @@ button {
     color: #fff;
     font-weight:bold;
     font-size:16px;
-    font-family: 'script';
+    font-family: 'semi-bold';
     padding:4px 40px;
     border-radius:6px;
     cursor:pointer;
@@ -51,4 +51,7 @@ button {
     display:grid;
     grid-template-rows:repeat(5,1fr);
     grid-template-columns: repeat(2,1fr);
+}
+.time-left {
+    font-family:'bold';
 }
