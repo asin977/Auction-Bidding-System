@@ -5,8 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #CDB4DB;
 }
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -25,6 +25,4 @@ html {
   font-family:'semi-bold';
   src: url('./Fonts/Poppins/Poppins-Regular.ttf');
 }
-body {
-  background-color: #CDB4DB;
-}
+
