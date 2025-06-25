@@ -16,6 +16,7 @@
     margin-top:12px;
     cursor:pointer;
     font-family: 'script';
+    margin-bottom:20px;
 }
 .search-input:focus,:after {
     outline : none;
