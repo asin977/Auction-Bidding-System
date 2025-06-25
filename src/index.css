@@ -5,12 +5,24 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #CDB4DB;
 }
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-body {
-  background-color: black;
+html {
+  box-sizing: border-box;
 }
+*,*::after,*::before {
+  box-sizing: inherit;
+}
+@font-face {
+  font-family:'bold';
+  src: url('./Fonts/Poppins/Poppins-Bold.ttf');
+}
+@font-face {
+  font-family:'semi-bold';
+  src: url('./Fonts/Poppins/Poppins-Regular.ttf');
+}
+
