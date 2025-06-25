@@ -1,5 +1,5 @@
 import './App.css';
-import { SignInPage } from './pages/SignInPage';
+import { SearchIcon } from './components/search';
 
 import { Footer } from './components/footer';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
