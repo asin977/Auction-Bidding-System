@@ -1,0 +1,111 @@
+.product-card {
+  background-color: #fff;
+  border: 0.5px solid rgb(243, 240, 240);
+}
+
+.product-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.product-container {
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+button {
+  width: fit-content;
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(56, 1, 56);
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  font-family: 'semi-bold';
+  padding: 4px 40px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  margin-top: 20px;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+  margin-right: 10px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.main-product-container {
+  display: grid;
+  grid-template-rows: repeat(5, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.time-left {
+  font-family: 'bold';
+}
+
+.auction-club {
+  background-color: #fff;
+  margin: 0;
+  padding: 20px;
+  font-family: 'bold';
+  font-size: 35px;
+}
+
+.product-details {
+  font-family: 'semi-bold';
+  font-size: 22px;
+}
+
+.time-left {
+  color: red;
+  font-size: 18px;
+}
+
+.product-name {
+  color: darkblue;
+}
+
+.product-price {
+  color: darkred;
+  margin-top: 12px;
+}
+
+.price {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 16px;
+}
+
+.price span::before {
+  content: '◘ ';
+  margin-right: 4px;
+  color: #999;
+}
+
+.product-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.home-header {
+  font-family: 'bold';
+  font-size: 40px;
+  margin: 0px;
+  padding: 20px;
+}

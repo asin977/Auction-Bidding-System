@@ -1,7 +1,9 @@
-.button {
+.common-button {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
     margin-top: 12px;
     margin-right: 10px;
+    margin-bottom: 20px;
   }
+  
