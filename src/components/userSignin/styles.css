@@ -126,3 +126,13 @@ input::placeholder {
   color: #5a189a;
   font-size: 16px;
 }
+
+.signup-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
+}
