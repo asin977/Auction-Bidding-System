@@ -11,6 +11,7 @@ const Footer = () => (
     <p className="footer-description">
       This is a real-time auction bidding system.Buit with JavaScript.
     </p>
+    
     <div className="footer-links">
       <Link to="routes.about" className="footer-about">
         About

@@ -1,6 +1,6 @@
 import './styles.css';
 
-const Signin = () => (
+const UserSignIn = () => (
   <>
     <div className="main-sign-container">
       <div className="sub-container">
@@ -35,4 +35,4 @@ const Signin = () => (
   </>
 );
 
-export default Signin;
+export default UserSignIn;
