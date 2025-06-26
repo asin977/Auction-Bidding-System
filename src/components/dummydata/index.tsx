@@ -7,7 +7,7 @@ export function AuctionProductData() {
     ? productDataJson.map(item => ({
         ...(item as any),
         price: Number(item.price),
-        startingPrice: Number(item.startingPrice) || 0,
+        startingPrice: Number(item.startingPrice) || 0
       }))
     : [];
 
