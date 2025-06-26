@@ -1,6 +1,6 @@
-import './index.css';
+import './styles.css';
 
-export const SignIn = () => (
+const UserSignIn = () => (
   <>
     <div className="main-sign-container">
       <div className="sub-container">
@@ -34,3 +34,5 @@ export const SignIn = () => (
     </div>
   </>
 );
+
+export default UserSignIn;

@@ -1,13 +1,19 @@
 import './App.css';
 
-import { SearchIcon } from './components/search';
-import { HomePage } from './pages/home/Home';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
+import { routes } from './Routes';
+import { Home, SignIn } from './pages';
 
 function App() {
   return (
     <div className="App">
-      <HomePage />
-      <SearchIcon />
+      <BrowserRouter>
+        <Routes>
+          <Route path={routes.home} element={<Home />} />
+          <Route path={routes.signin} element={<SignIn />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
