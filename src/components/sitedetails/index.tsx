@@ -1,6 +1,6 @@
 import './styles.css';
 
-export const SiteDetails = () => (
+const SiteDetails = () => (
   <div className="main-site-container">
     <div className="site-container">
       <h1 className="name">
@@ -18,3 +18,5 @@ export const SiteDetails = () => (
     </div>
   </div>
 );
+
+export default SiteDetails;

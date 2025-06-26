@@ -4,7 +4,7 @@ import './index.css';
 import MyImage from "../images/Logo.png";
 import SignIcon from "../images/avatar.png";
 
-export const Header = () => (
+const Header = () => (
     <div className="header-main-container">
       <div className="container">
         <div className="img-container">
@@ -17,5 +17,5 @@ export const Header = () => (
       </div>
     </div>
 )
-  
 
+export default Header;

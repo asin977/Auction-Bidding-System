@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import './styles.css';
 
-export const Footer = () => (
+const Footer = () => (
   <div className="footer-container">
     <p className="footer-content">
       &copy; 2025 GravelGood. All rights reserved.
@@ -21,3 +21,5 @@ export const Footer = () => (
     </div>
   </div>
 );
+
+export default Footer;
