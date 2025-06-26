@@ -1,4 +1,8 @@
-export type Product = {
+  export type CountdownProps = {
+    endTime: string | number;
+  };
+  
+  export type Product = {
     id: string;
     price: number;
     agreedPrice: number;
@@ -6,3 +10,4 @@ export type Product = {
     name: string;
     imageDetails: string;
   };
+  
