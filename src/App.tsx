@@ -3,9 +3,7 @@ import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { routes } from './Routes';
-import { Footer } from './components/footer';
-
-import {Home} from './pages/Home';
+import { Home, SignIn } from './pages';
 
 function App() {
   return (
@@ -13,8 +11,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path={routes.home} element={<Home />} />
+          <Route path={routes.signin} element={<SignIn />} />
         </Routes>
-        <Footer />
       </BrowserRouter>
     </div>
   );

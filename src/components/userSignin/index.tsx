@@ -1,6 +1,6 @@
 import './styles.css';
 
-export const SignIn = () => (
+export const Signin = () => (
   <>
     <div className="main-sign-container">
       <div className="sub-container">
