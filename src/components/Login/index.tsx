@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+
+import { USERS } from '../constants/Common';
 import './styles.css';
 
-const LoginUser: React.FC = () => {
+const Login: React.FC = () => {
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -38,7 +40,7 @@ const LoginUser: React.FC = () => {
       return;
     }
 
-    const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+    const storedUsers = JSON.parse(localStorage.getItem(USERS) || '[]');
 
     const duplicate = storedUsers.find(
       (user: any) => user.email === form.email,
@@ -50,7 +52,9 @@ const LoginUser: React.FC = () => {
 
     const updatedUsers = [...storedUsers, form];
     localStorage.setItem('users', JSON.stringify(updatedUsers));
-    alert(`Welcome, ${form.name}! Your account has been created and your password is ${form.password} keep it for future references..`);
+    alert(
+      `Welcome, ${form.name}! Your account has been created and your password is ${form.password} keep it for future references..`,
+    );
   };
 
   return (
@@ -99,4 +103,4 @@ const LoginUser: React.FC = () => {
   );
 };
 
-export default LoginUser;
+export default Login;
