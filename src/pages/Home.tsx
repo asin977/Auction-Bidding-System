@@ -2,9 +2,9 @@ import React from 'react';
 
 import productDataJson from '../data/products.json';
 import { ProductList } from '../types/product';
-import '../components/AuctionProducts/styles.css';
 import Button from '../components/button';
 import '../components/AuctionProducts/styles.css';
+
 
 export const Home: React.FC = () => (
   <>
