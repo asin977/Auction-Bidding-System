@@ -1,39 +1,32 @@
 import React, { useState } from 'react';
 
-import { USERS } from '../constants/Common';
+import { USERS } from '../components/constants/Common';
+import { isStrongPassword, isValidEmail } from '../utils/valiadators';
 import './styles.css';
 
 const Login: React.FC = () => {
-  const [form, setForm] = useState({
+  const [formInputs, setFormInputs] = useState({
     name: '',
     email: '',
     password: '',
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [event.target.name]: event.target.value });
-  };
-
-  const isStrongPassword = (password: string): boolean => {
-    return (
-      password.length >= 8 &&
-      /[A-Z]/.test(password) &&
-      /[a-z]/.test(password) &&
-      /[0-9]/.test(password) &&
-      /[^A-Za-z0-9]/.test(password)
-    );
+    setFormInputs({
+      ...formInputs,
+      [event.target.name]: event.target.value,
+    });
   };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(form.email)) {
+    if (!isValidEmail(formInputs.email)) {
       alert('Please enter a valid email address.');
       return;
     }
 
-    if (!isStrongPassword(form.password)) {
+    if (!isStrongPassword(formInputs.password)) {
       alert(
         'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.',
       );
@@ -43,17 +36,19 @@ const Login: React.FC = () => {
     const storedUsers = JSON.parse(localStorage.getItem(USERS) || '[]');
 
     const duplicate = storedUsers.find(
-      (user: any) => user.email === form.email,
+      (user: any) => user.email === formInputs.email,
     );
+
     if (duplicate) {
       alert('An account with this email already exists.');
       return;
     }
 
-    const updatedUsers = [...storedUsers, form];
-    localStorage.setItem('users', JSON.stringify(updatedUsers));
+    const updatedUsers = [...storedUsers, formInputs];
+    localStorage.setItem(USERS, JSON.stringify(updatedUsers));
+
     alert(
-      `Welcome, ${form.name}! Your account has been created and your password is ${form.password} keep it for future references..`,
+      `Welcome, ${formInputs.name}! Your account has been created and your password is ${formInputs.password}. Keep it safe for future reference.`,
     );
   };
 
@@ -61,39 +56,43 @@ const Login: React.FC = () => {
     <div className="main-login-container">
       <div className="login-container">
         <h1 className="head">Welcome New User</h1>
+
         <form onSubmit={handleSubmit} className="details-container">
           <input
             className="name-container"
             type="text"
             name="name"
             placeholder="Enter your full name *"
-            value={form.name}
+            value={formInputs.name}
             onChange={handleChange}
             required
           />
+
           <input
             className="name-container"
             type="email"
             name="email"
             placeholder="Enter your email *"
-            value={form.email}
+            value={formInputs.email}
             onChange={handleChange}
             required
           />
+
           <input
             className="name-container"
             type="password"
             name="password"
             placeholder="Create your password *"
-            value={form.password}
+            value={formInputs.password}
             onChange={handleChange}
             required
           />
+          
           <div className="button-container">
             <button className="sign-up" type="submit">
               Create Account
             </button>
-            <button className="sign-up" type="submit">
+            <button className="sign-up" type="button">
               Login
             </button>
           </div>
