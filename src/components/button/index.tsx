@@ -9,7 +9,7 @@ export interface ButtonProps extends React.ComponentPropsWithRef<'button'> {
 }
 
 const Button: React.FC<ButtonProps> = ({ variant = 'primary', children }) => {
-  const buttonClass = `primary:${variant}`;
+  const buttonClass = `${variant}-variant`;
 
   return <button className={`${buttonClass} common-button`}>{children}</button>;
 };
