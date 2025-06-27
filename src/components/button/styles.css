@@ -1,9 +1,15 @@
 .common-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 12px;
-    margin-right: 10px;
-    margin-bottom: 20px;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+  margin-right: 10px;
+  margin-bottom: 20px;
+  background-color: rgb(77, 2, 77);
+  color: #fff;
+  font-size: 16px;
+  font-family: 'bold';
+  padding: 5px 30px;
+  width: 150px;
+  border-radius: 3px;
+}

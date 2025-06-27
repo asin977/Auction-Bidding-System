@@ -3,8 +3,7 @@ import React from 'react';
 import productDataJson from '../data/products.json';
 import { ProductList } from '../types/product';
 import Button from '../components/button';
-import '../components/AuctionProducts/styles.css';
-
+import './home.css';
 
 export const Home: React.FC = () => (
   <>
@@ -29,9 +28,9 @@ export const Home: React.FC = () => (
               </span>
             </p>
           </div>
-          <div className="button">
+          <div className="button-container">
             <Button> Bid Now</Button>
-            <Button> Active</Button>
+            <Button>Active</Button>
           </div>
         </div>
       ))}
