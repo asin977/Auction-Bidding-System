@@ -2,23 +2,23 @@
   {
     "id": "product1",
     "price": 22300,
-    "agreedPrice": 25600,
+    "startingPrice": 25600,
     "imageUrl": "https://m.media-amazon.com/images/I/61shPsbYx7L._SY500_.jpg",
     "name": "Used Refrigerator",
     "imageDetails": "Used Whirlpool Refrigerator purchased in 2020",
-    "endTime":"2025-01-15T23:00:00",
-    "startTime":"2025-01-15T23:00:00"
+    "endTime":"2025-01-15T23:59:59",
+    "startTime":"2025-01-15T23:59:59"
   },
 
   {
     "id": "product2",
     "price": 25000,
-    "agreedPrice": 26200,
+    "startingPrice": 26200,
     "imageUrl": "https://demo.auctify.com/uploads/1745146694_1.webp",
     "name": "Horse",
     "imageDetails": "Meet Apollo VHX",
-    "endTime":"2025-01-15T23:00:00",
-    "startTime":"2025-01-15T23:00:00"
+    "endTime":"2025-01-15T23:59:59",
+    "startTime":"2025-01-15T23:59:59"
 
   },
 

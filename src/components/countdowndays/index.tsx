@@ -1,23 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { getDateDifferenceInDays } from '../../utils/Utils';
-import './styles.css';
+import {
+  getDateDifferenceInDays,
+  getDateDifferenceInHours,
+  getDateDifferenceInMinutes,
+  getDateDifferenceInSeconds,
+} from '../../utils/Utils';
 
-export type CountdownProps = {
+type CountdownProps = {
   endTime: string | number;
 };
 
 const CountdownTimer: React.FC<CountdownProps> = ({ endTime }) => {
-  const startDate = new Date('2025-06-27'); 
-  const endDate = new Date(endTime);
+  const [tick, setTick] = useState(0);
 
-  const daysDifference = getDateDifferenceInDays(endDate, startDate);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTick(prev => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const target = new Date(endTime);
+  const now = new Date();
+  const diff = target.getTime() - now.getTime();
+
+  const days = getDateDifferenceInDays(target, now);
+  const hours = getDateDifferenceInHours(diff);
+  const minutes = getDateDifferenceInMinutes(diff);
+  const seconds = getDateDifferenceInSeconds(diff);
 
   return (
-    <div>
-      <p>Start Date: {startDate.toDateString()}</p>
-      <p>End Date: {endDate.toDateString()}</p>
-      <p>Difference in Days: {daysDifference}</p>
+    <div className="time-container">
+      <span className="date">Day:</span>
+      <span className="value">{Math.max(days, 0)}</span>
+
+      <span className="date">Hours:</span>
+      <span className="value">{Math.max(hours, 0)}</span>
+
+      <span className="date">Minutes:</span>
+      <span className="value">{Math.max(minutes, 0)}</span>
+
+      <span className="date">Seconds:</span>
+      <span className="value">{Math.max(seconds, 0)}</span>
     </div>
   );
 };
