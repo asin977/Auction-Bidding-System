@@ -1,10 +1,10 @@
 import React from 'react';
 
 import productDataJson from '../data/products.json';
-import { ProductList } from '../types/types';
+import { ProductList } from '../types/product';
 import '../components/AuctionProducts/styles.css';
 import Button from '../components/button';
-import '../components/AuctionProducts/styles.css'
+import '../components/AuctionProducts/styles.css';
 
 export const Home: React.FC = () => (
   <>
@@ -30,8 +30,8 @@ export const Home: React.FC = () => (
             </p>
           </div>
           <div className="button">
-            <Button variant="primary">Bid Now</Button>
-            <Button variant="primary">Active</Button>
+            <Button> Bid Now</Button>
+            <Button> Active</Button>
           </div>
         </div>
       ))}

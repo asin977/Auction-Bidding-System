@@ -1,7 +1,12 @@
 import React from 'react';
 
-import { ButtonProps } from '../../types/types';
 import './styles.css';
+
+export interface ButtonProps extends React.ComponentPropsWithRef<'button'> {
+  variant? : 'primary' | 'secondary';
+
+  children: React.ReactNode;
+}
 
 const Button: React.FC<ButtonProps> = ({ variant = 'primary', children }) => {
   const buttonClass = `button:${variant}`;
