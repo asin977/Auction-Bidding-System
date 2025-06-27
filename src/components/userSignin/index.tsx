@@ -1,35 +1,40 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+
+
 import { routes } from '../../Routes';
 import './styles.css';
 
 const UserSignIn: React.FC = () => {
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+  });
+
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: '', password: '' });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(form.email)) {
-      alert('Please enter a valid email address.');
-      return;
-    }
+    const storedUsers = JSON.parse(localStorage.getItem("users") || '[]');
 
-    const savedUser = JSON.parse(localStorage.getItem('newUser') || '{}');
+    const match = storedUsers.find(
+      (user: any) =>
+        user.email === form.email && user.password === form.password
+    );
 
-    if (
-      savedUser.email === form.email &&
-      savedUser.password === form.password
-    ) {
-      alert(`Welcome back, ${savedUser.name}!`);
-      navigate(routes.home); 
+    if (match) {
+      alert(`Welcome back, ${match.name}!`);
+      navigate(routes.home);
     } else {
-      alert('Invalid email or password.');
+      alert('Invalid email or password. Please try again.');
     }
   };
 

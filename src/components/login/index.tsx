@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+
 import './styles.css';
+import { routes } from '../../Routes';
 
 const Login: React.FC = () => {
   const [form, setForm] = useState({
@@ -7,11 +11,12 @@ const Login: React.FC = () => {
     email: '',
     password: '',
   });
+  
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
   const isStrongPassword = (password: string): boolean => {
     return (
       password.length >= 8 &&
@@ -22,27 +27,28 @@ const Login: React.FC = () => {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(form.email)) {
       alert('Please enter a valid email address.');
       return;
     }
+  
+
+    
 
     if (!isStrongPassword(form.password)) {
       alert(
-        'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.',
+        'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.'
       );
       return;
     }
 
     const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
 
-    const duplicate = storedUsers.find(
-      (user: any) => user.email === form.email,
-    );
+    const duplicate = storedUsers.find((user: any) => user.email === form.email);
     if (duplicate) {
       alert('An account with this email already exists.');
       return;
@@ -50,6 +56,7 @@ const Login: React.FC = () => {
 
     const updatedUsers = [...storedUsers, form];
     localStorage.setItem('users', JSON.stringify(updatedUsers));
+
     alert(`Welcome, ${form.name}! Your account has been created.`);
   };
 
@@ -85,11 +92,15 @@ const Login: React.FC = () => {
             onChange={handleChange}
             required
           />
-          <div className='button-container'>
+          <div className="button-container">
             <button className="sign-up" type="submit">
               Create Account
             </button>
-            <button className="sign-up" type="submit">
+            <button
+              className="sign-up"
+              type="button"
+              onClick={() => navigate(routes.home)}
+            >
               Login
             </button>
           </div>
