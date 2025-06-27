@@ -54,7 +54,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="main-sign-container">
+    <div className="main-login-container">
       <div className="login-container">
         <h1 className="head">Welcome New User</h1>
         <form onSubmit={handleSubmit} className="details-container">
