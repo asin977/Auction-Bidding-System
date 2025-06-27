@@ -5,7 +5,7 @@ const Login: React.FC = () => {
   const [form, setForm] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,13 +32,17 @@ const Login: React.FC = () => {
     }
 
     if (!isStrongPassword(form.password)) {
-      alert('Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.');
+      alert(
+        'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.',
+      );
       return;
     }
 
     const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
 
-    const duplicate = storedUsers.find((user: any) => user.email === form.email);
+    const duplicate = storedUsers.find(
+      (user: any) => user.email === form.email,
+    );
     if (duplicate) {
       alert('An account with this email already exists.');
       return;
@@ -51,7 +55,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="main-sign-container">
-      <div className="sign-container">
+      <div className="login-container">
         <h1 className="head">Welcome New User</h1>
         <form onSubmit={handleSubmit} className="details-container">
           <input
@@ -81,9 +85,14 @@ const Login: React.FC = () => {
             onChange={handleChange}
             required
           />
-          <button className="sign-up" type="submit">
-            Create Account
-          </button>
+          <div className='button-container'>
+            <button className="sign-up" type="submit">
+              Create Account
+            </button>
+            <button className="sign-up" type="submit">
+              Login
+            </button>
+          </div>
         </form>
       </div>
     </div>
