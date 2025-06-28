@@ -1,4 +1,5 @@
 import './App.css';
+import { SignInPage } from './pages/SignInPage';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
