@@ -1,11 +1,14 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import { SignInPage } from './pages/SignInPage';
 
 function App() {
   return (
-    <div className="App">
-       <SignInPage />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<SignInPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

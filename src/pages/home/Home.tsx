@@ -1,7 +1,1 @@
-export const HomePage = () => (
-  <div>
-     
-  </div>
-);
-
-
+export const HomePage = () => <div></div>;
