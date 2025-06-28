@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 
-import { USERS } from '../components/constants/Common';
-import { isStrongPassword, isValidEmail } from '../utils/valiadators';
+import {
+  isStrongPassword,
+  USERS,
+  VALID_EMAIL_REGEX,
+} from '../components/constants/Common';
+import LoginButton from '../components/loginButton';
 import './styles.css';
 
 const Login: React.FC = () => {
@@ -21,7 +25,7 @@ const Login: React.FC = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!isValidEmail(formInputs.email)) {
+    if (!VALID_EMAIL_REGEX(formInputs.email)) {
       alert('Please enter a valid email address.');
       return;
     }
@@ -55,7 +59,7 @@ const Login: React.FC = () => {
   return (
     <div className="main-login-container">
       <div className="login-container">
-        <h1 className="head">Welcome New User</h1>
+        <h1 className="welcome-title">Welcome New User</h1>
 
         <form onSubmit={handleSubmit} className="details-container">
           <input
@@ -87,14 +91,9 @@ const Login: React.FC = () => {
             onChange={handleChange}
             required
           />
-          
+
           <div className="button-container">
-            <button className="sign-up" type="submit">
-              Create Account
-            </button>
-            <button className="sign-up" type="button">
-              Login
-            </button>
+            <LoginButton />
           </div>
         </form>
       </div>
