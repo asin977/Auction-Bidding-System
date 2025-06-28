@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './styles.css'; // Optional CSS if you're styling
+import './styles.css'; 
 
 const BidInput: React.FC = () => {
   const [showInput, setShowInput] = useState(false);
