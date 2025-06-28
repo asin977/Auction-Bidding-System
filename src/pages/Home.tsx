@@ -7,8 +7,9 @@ import './home.css';
 
 export const Home: React.FC = () => (
   <>
-    <h3 className="home-header">Auction Collection Bids</h3>
-    <div className="main-product-container">
+    <h3 className="auction-title">Auction Collection Bids</h3>
+
+    <div className="product-container">
       {(productDataJson || []).map((product: ProductList) => (
         <div key={product.id} className="product-card">
           <p className="product-details">{product.imageDetails}</p>
@@ -18,16 +19,15 @@ export const Home: React.FC = () => (
             className="product-image"
           />
           <h3 className="product-name">Name: {product.name}</h3>
-          <div className="product-price">
-            <p className="price">
-              <span>
-                <strong>Price:</strong> ₹{product.price}
-              </span>
-              <span>
-                <strong>Starting Price:</strong> ₹{product.startingPrice}
-              </span>
-            </p>
-          </div>
+          <p className="price">
+            <span>
+              <strong>Price:</strong> ₹{product.price}
+            </span>
+            <span>
+              <strong>Starting Price:</strong> ₹{product.startingPrice}
+            </span>
+          </p>
+
           <div className="button-container">
             <Button> Bid Now</Button>
             <Button>Active</Button>

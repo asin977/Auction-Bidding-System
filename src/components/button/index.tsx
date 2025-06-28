@@ -4,7 +4,6 @@ import './styles.css';
 
 export interface ButtonProps extends React.ComponentPropsWithRef<'button'> {
   variant?: 'primary' | 'secondary';
-
   children: React.ReactNode;
 }
 
