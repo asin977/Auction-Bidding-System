@@ -1,4 +1,4 @@
-.head {
+.signin-title {
   margin: 0;
   color: #5a189a;
   font-family: 'bold';
@@ -34,7 +34,7 @@ input:focus {
   outline: none;
 }
 
-.sign-up {
+.sign-in {
   border: none;
   color: #fff;
   background-color: #5a189a;
@@ -112,7 +112,7 @@ button {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 80px;
+  margin-top: 110px;
   margin-left: 54px;
 }
 
@@ -125,4 +125,23 @@ button:hover {
 input::placeholder {
   color: #5a189a;
   font-size: 16px;
+}
+
+.signup-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
+}
+
+.button-signIn {
+  display: flex;
+  justify-content: center;
+}
+
+.footer-content {
+  text-align: center;
 }
