@@ -31,8 +31,3 @@
   border-radius: 4px;
   cursor: pointer;
 }
-git stash
-git checkout main
-git branch -D feat/signin-page
-git checkout -b feat/signin-page
-git cherry-pick 813df7546bbeec780c1dd992098ca7b24ca91b53
