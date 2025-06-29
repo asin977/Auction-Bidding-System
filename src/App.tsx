@@ -1,3 +1,4 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -7,6 +8,7 @@ import { Home, SignIn } from './pages';
 
 function App() {
   return (
+<<<<<<< HEAD
     <div className="App">
       <BrowserRouter>
         <Routes>
@@ -15,6 +17,13 @@ function App() {
         </Routes>
       </BrowserRouter>
     </div>
+=======
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<SignInPage />} />
+      </Routes>
+    </BrowserRouter>
+>>>>>>> 813df75 (feat:Implemented the sign-in component)
   );
 }
 
