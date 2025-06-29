@@ -61,3 +61,74 @@
   margin-top: 30px;
   gap: 30px;
 }
+
+.user-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 2rem;
+}
+
+.user-card {
+  border: 1px solid #ccc;
+  padding: 12px;
+  width: 250px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  color:red;
+}
+
+.notification {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  padding: 8px;
+  margin-top: 6px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+/* .bid-interaction {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bid-interaction select,
+.bid-interaction input {
+  padding: 6px;
+  font-size: 14px;
+} */
+
+.notification {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.current-bid {
+  font-weight: bold;
+  margin-top: 6px;
+}
+
+.user-title {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.user-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 1.5rem;
+}
+
+.user-list li {
+  padding: 4px 0;
+  font-size: 14px;
+}
