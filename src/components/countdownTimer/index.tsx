@@ -34,13 +34,13 @@ const CountdownTimer: React.FC<CountdownProps> = ({ endTime }) => {
       <span className="value">{getDateDifferenceInDays(timeLeft)}</span>
 
       <span className="date">Hours:</span>
-      <span className="value">{convertMillisecondsToHours(timeLeft)}</span>
+      <span className="value">{convertMillisecondsToHours(timeLeft)}Hrs</span>
 
       <span className="date">Minutes:</span>
-      <span className="value">{convertMillisecondsToMinutes(timeLeft)}</span>
+      <span className="value">{convertMillisecondsToMinutes(timeLeft)}Mins</span>
 
       <span className="date">Seconds:</span>
-      <span className="value">{convertMillisecondsToSeconds(timeLeft)}</span>
+      <span className="value">{convertMillisecondsToSeconds(timeLeft)}Secs</span>
     </div>
   );
 };
