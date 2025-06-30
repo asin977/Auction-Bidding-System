@@ -8,4 +8,9 @@ export type ProductList = {
   time: string;
 }
 
-
+export type User = {
+  id:string,
+  name:string,
+  email:string,
+  balance:number
+}
