@@ -17,7 +17,7 @@
 
 .product-details {
   font-family: 'semi-bold';
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .time-left {
@@ -27,6 +27,7 @@
 
 .product-name {
   color: darkblue;
+  font-size: 25px;
 }
 
 .product-price {
@@ -65,7 +66,6 @@
 .registered-users-container {
   background-color: rgb(112, 2, 112);
   margin: 0px;
-  padding: 30px;
   font-size: 20px;
   display: flex;
   flex-direction: column;
@@ -94,23 +94,6 @@
   min-width: 150px;
 }
 
-.submit {
-  padding: 0.5rem 1.25rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 4px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  margin-top: 20px;
-  margin-bottom: 25px;
-  font-family: 'bold';
-  font-size: 16px;
-  background-color: #42023a;
-  color: #fff;
-  margin-left: 15px;
-}
-
 .bid-interaction {
   border: transparent;
 }
@@ -124,6 +107,7 @@ select {
   margin-bottom: 12px;
   font-family: 'bold';
   font-weight: 600;
+  cursor:pointer;
 }
 
 select:focus {
