@@ -6,11 +6,10 @@ export type ProductList = {
   price: number;
   startingPrice: number;
   time: string;
-}
+};
 
 export type User = {
-  id:string,
-  name:string,
-  email:string,
-  balance:number
-}
+  id: string;
+  name: string;
+  email: string;
+};
