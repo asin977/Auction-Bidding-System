@@ -6,6 +6,4 @@ export type ProductList = {
   price: number;
   startingPrice: number;
   time: string;
-}
-
-
+};
