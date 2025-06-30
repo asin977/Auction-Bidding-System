@@ -65,8 +65,7 @@ export const Home: React.FC = () => {
                 placeholder="Enter the bid amount"
                 className="enter-bid-amount"
               />
-              {/* TODO */}
-              <button className="submit">Submit</button>
+              <Button>Place the Bid</Button>
             </div>
 
             <div className="button-container">
