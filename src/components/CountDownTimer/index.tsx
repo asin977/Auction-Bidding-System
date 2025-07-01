@@ -6,20 +6,21 @@ import {
   convertMillisecondsToMinutes,
   convertMillisecondsToSeconds,
 } from '../../utils/date-time';
+import './styles.css';
 
 type CountdownProps = {
   endTime: string;
 };
 
 const CountDownTimer: React.FC<CountdownProps> = ({ endTime }) => {
-  const [BidTimeDuration, setBidTimeDuration] = useState<number>(0);
+  const [BidRemainingTime, setBidRemainingTime] = useState<number>(0);
 
   useEffect(() => {
     const updateTimeDifference = () => {
       const target = new Date(endTime).getTime();
       const now = new Date().getTime();
       const diff = Math.max(target - now, 0);
-      setBidTimeDuration(diff);
+      setBidRemainingTime(diff);
     };
 
     updateTimeDifference();
@@ -30,17 +31,17 @@ const CountDownTimer: React.FC<CountdownProps> = ({ endTime }) => {
 
   return (
     <div className="time-container">
-      <span className="date">Day:</span>
-      <span className="value">{convertMillisecondsToDays(BidTimeDuration)}</span>
+      <span className="date-label">Day:</span>
+      <span className="value">{convertMillisecondsToDays(BidRemainingTime)}</span>
 
-      <span className="date">Hours:</span>
-      <span className="value">{convertMillisecondsToHours(BidTimeDuration)}Hrs</span>
+      <span className="date-label">Hours:</span>
+      <span className="value">{convertMillisecondsToHours(BidRemainingTime)}Hrs</span>
 
-      <span className="date">Minutes:</span>
-      <span className="value">{convertMillisecondsToMinutes(BidTimeDuration)}Mins</span>
+      <span className="date-label">Minutes:</span>
+      <span className="value">{convertMillisecondsToMinutes(BidRemainingTime)}Mins</span>
 
-      <span className="date">Seconds:</span>
-      <span className="value">{convertMillisecondsToSeconds(BidTimeDuration)}Secs</span>
+      <span className="date-label">Seconds:</span>
+      <span className="value">{convertMillisecondsToSeconds(BidRemainingTime)}Secs</span>
     </div>
   );
 };
