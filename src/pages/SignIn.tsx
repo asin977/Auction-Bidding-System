@@ -1,10 +1,10 @@
-import SignIn from '../components/signin';
-import SiteDetails from '../components/sitedetails';
-import Footer from '../components/footer';
+import  SiteDetails  from '../components/SiteDetails';
+import Footer from '../components/Footer';
+import UserSignIn from '../components/UserSignin';
 
 export const SignInPage = () => (
   <>
-    <SignIn />
+    <UserSignIn />
     <SiteDetails />
     <Footer />
   </>

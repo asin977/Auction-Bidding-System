@@ -1,0 +1,60 @@
+.product-card {
+  background-color: #fff;
+  border: 0.5px solid rgb(243, 240, 240);
+}
+
+.product-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.product-container {
+  display: grid;
+  grid-template-rows: repeat(5, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.product-details {
+  font-family: 'semi-bold';
+  font-size: 22px;
+}
+
+.time-left {
+  color: red;
+  font-size: 18px;
+}
+
+.product-title {
+  color: darkblue;
+}
+
+.product-price {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 16px;
+  color: darkred;
+  margin-top: 12px;
+}
+
+.price span::before {
+  content: '◘ ';
+  margin-right: 4px;
+  color: #999;
+}
+
+.auction-title {
+  font-family: 'bold';
+  font-size: 40px;
+  margin: 0px;
+  padding: 20px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 30px;
+}
