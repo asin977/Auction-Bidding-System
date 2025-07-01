@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from 'react';
 
 import {
-  getDateDifferenceInDays,
+  convertMillisecondsToDays,
   convertMillisecondsToHours,
   convertMillisecondsToMinutes,
   convertMillisecondsToSeconds,
 } from '../../utils/date-time';
 
 type CountdownProps = {
-  endTime: string | number;
+  endTime: string;
 };
 
-const CountdownTimer: React.FC<CountdownProps> = ({ endTime }) => {
-  const [timeLeft, setTimeLeft] = useState<number>(0);
+const CountDownTimer: React.FC<CountdownProps> = ({ endTime }) => {
+  const [bidTime, setbidTime] = useState<number>(0);
 
   useEffect(() => {
     const updateTimeDifference = () => {
       const target = new Date(endTime).getTime();
       const now = new Date().getTime();
       const diff = Math.max(target - now, 0);
-      setTimeLeft(diff);
+      setbidTime(diff);
     };
 
     updateTimeDifference();
@@ -31,18 +31,18 @@ const CountdownTimer: React.FC<CountdownProps> = ({ endTime }) => {
   return (
     <div className="time-container">
       <span className="date">Day:</span>
-      <span className="value">{getDateDifferenceInDays(timeLeft)}</span>
+      <span className="value">{convertMillisecondsToDays(bidTime)}</span>
 
       <span className="date">Hours:</span>
-      <span className="value">{convertMillisecondsToHours(timeLeft)}Hrs</span>
+      <span className="value">{convertMillisecondsToHours(bidTime)}Hrs</span>
 
       <span className="date">Minutes:</span>
-      <span className="value">{convertMillisecondsToMinutes(timeLeft)}Mins</span>
+      <span className="value">{convertMillisecondsToMinutes(bidTime)}Mins</span>
 
       <span className="date">Seconds:</span>
-      <span className="value">{convertMillisecondsToSeconds(timeLeft)}Secs</span>
+      <span className="value">{convertMillisecondsToSeconds(bidTime)}Secs</span>
     </div>
   );
 };
 
-export default CountdownTimer;
+export default CountDownTimer;

@@ -7,10 +7,3 @@ export type ProductList = {
   startingPrice: number;
   time: string;
 };
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  balance: number;
-}

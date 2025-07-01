@@ -1,4 +1,4 @@
-export const getDateDifferenceInDays = (timeInMilliseconds: number): number => {
+export const convertMillisecondsToDays = (timeInMilliseconds: number): number => {
   const oneDay = 1000 * 60 * 60 * 24;
   return Math.floor(timeInMilliseconds / oneDay);
 };
