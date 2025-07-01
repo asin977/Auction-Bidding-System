@@ -134,7 +134,7 @@ export const Home: React.FC = () => {
     });
 
     dispatch({ type: 'CLEAR_INPUT', productId });
-    
+
     setTimeout(() => {
       dispatch({ type: 'RESET_SUCCESS', productId });
     });
@@ -147,7 +147,6 @@ export const Home: React.FC = () => {
       }.`,
     });
     setSelectedUser('');
-    
   };
   return (
     <>
@@ -206,31 +205,29 @@ export const Home: React.FC = () => {
                     })
                   }
                 />
-                <Button
-                  onClick={() => placeBid()(product.id)}
-                  className="bid-button"
-                  disabled={state.loadingBids[product.id]}
-                >
-                  {isExpired
-                    ? 'Bidding Closed'
-                    : state.loadingBids[product.id]
-                    ? 'Placing...'
-                    : state.successBids[product.id]
-                    ? 'Success!'
-                    : 'Place Bid'}
-                </Button>
+                <div className="bid-buttons">
+                  <Button
+                    onClick={() => placeBid()(product.id)}
+                    className="bid-button"
+                    disabled={state.loadingBids[product.id]}
+                  >
+                    {isExpired
+                      ? 'Bidding Closed'
+                      : state.loadingBids[product.id]
+                      ? 'Placing...'
+                      : state.successBids[product.id]
+                      ? 'Success!'
+                      : 'Place Bid'}
+                  </Button>
+                  <Button>Active</Button>
+                </div>
 
-               
                 {currentBid && (
                   <p className="current-bid">
                     Highest Bid: ₹{currentBid.amount} by{' '}
                     {users.find(u => u.id === currentBid.userId)?.name}
                   </p>
                 )}
-                <div className="button-container">
-                  <Button>Add your Bid</Button>
-                  <Button>Active</Button>
-                </div>
               </div>
             </div>
           );
