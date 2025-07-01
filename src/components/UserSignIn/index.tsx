@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { USER } from '../../constants/common';
 import { routes } from '../../routes/Routes';
+import Button from '../Button';
 import './styles.css';
 
 const UserSignIn: React.FC = () => {
@@ -26,7 +27,7 @@ const UserSignIn: React.FC = () => {
     const storedUsers = JSON.parse(localStorage.getItem(USER) || '[]');
 
     const userMatch = storedUsers.find(
-      (user: any) =>
+      (user: { email: string; password: string }) =>
         user.email === formInputs.email &&
         user.password === formInputs.password,
     );
@@ -70,17 +71,15 @@ const UserSignIn: React.FC = () => {
             onChange={handleInput}
             required
           />
-          {/* TODO */}
-          <button type="submit" className="sign-in">
-            Sign In
-          </button>
+          
+          <Button>Sign In</Button>
         </form>
         
         <span className="forgot-password">Forgot password?</span>
         <p className="sign-account">
           New here?
           <Link to={routes.login} className="signup-link">
-            Create an Account
+             Create an Account
           </Link>
         </p>
       </div>

@@ -1,8 +1,8 @@
-import  SiteDetails  from '../components/SiteDetails';
+import  SiteDetails  from '../components/sitedetails';
 import Footer from '../components/Footer';
-import UserSignIn from '../components/UserSignin';
+import UserSignIn from '../components/UserSignIn';
 
-export const SignInPage = () => (
+export const SignIn = () => (
   <>
     <UserSignIn />
     <SiteDetails />
