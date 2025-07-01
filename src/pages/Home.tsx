@@ -4,8 +4,8 @@ import userLogo from '../assets/images/multipleuserslogo.png';
 import Button from '../components/Button';
 import productDataJson from '../data/products.json';
 import userDataJson from '../data/uers.json';
-import { ProductList} from '../types/product';
-import {User} from '../types/user';
+import { ProductList } from '../types/product';
+import { User } from '../types/user';
 import './home.css';
 
 export const Home: React.FC = () => {
@@ -16,7 +16,7 @@ export const Home: React.FC = () => {
       <h3 className="auction-title">Auction Collection Bids</h3>
       <div className="registered-users-container">
         <h3 className="registerd-users">REGISTERED USERS</h3>
-        <img src={userLogo} alt="logo" className='user-logo'/>
+        <img src={userLogo} alt="logo" className="user-logo" />
         <ul className="user-list">
           {users.map(user => (
             <li key={user.id}>{user.name}</li>

@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color:#e0aaff;
+  background-color: #e0aaff;
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -14,15 +14,16 @@ code {
 html {
   box-sizing: border-box;
 }
-*,*::after,*::before {
+*,
+*::after,
+*::before {
   box-sizing: inherit;
 }
 @font-face {
-  font-family:'bold';
-  src: url("./assets/fonts/Poppins/Poppins-Bold.ttf");
+  font-family: 'bold';
+  src: url('./assets/fonts/Poppins/Poppins-Bold.ttf');
 }
 @font-face {
-  font-family:'semi-bold';
+  font-family: 'semi-bold';
   src: url('./assets/fonts/Poppins/Poppins-SemiBold.ttf');
 }
-
