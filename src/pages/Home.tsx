@@ -4,11 +4,13 @@ import userLogo from '../assets/images/multipleuserslogo.png';
 import Button from '../components/button';
 import productDataJson from '../data/products.json';
 import userDataJson from '../data/uers.json';
-import { ProductList, User } from '../types/product';
+import { ProductList} from '../types/product';
+import {User} from '../types/user';
 import './home.css';
 
 export const Home: React.FC = () => {
   const [users, setUsers] = useState<User[]>(userDataJson);
+
   return (
     <>
       <h3 className="auction-title">Auction Collection Bids</h3>
