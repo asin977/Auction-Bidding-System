@@ -152,6 +152,16 @@ export const Home: React.FC = () => {
     <>
       <Header />
       <h3 className="auction-title">Auction Collection Bids</h3>
+      
+      <div className="registered-users-container">
+        <h3 className="registerd-users">REGISTERED USERS</h3>
+        <img src={userLogo} alt="logo" className="user-logo" />
+        <ul className="user-list">
+          {users.map(user => (
+            <li key={user.id}>{user.name}</li>
+          ))}
+        </ul>
+      </div>
 
       <div className="product-container">
         {productDataJson.map((product: ProductList) => {
