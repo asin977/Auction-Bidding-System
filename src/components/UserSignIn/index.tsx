@@ -71,15 +71,15 @@ const UserSignIn: React.FC = () => {
             onChange={handleInput}
             required
           />
-          
+
           <Button>Sign In</Button>
         </form>
-        
+
         <span className="forgot-password">Forgot password?</span>
         <p className="sign-account">
           New here?
           <Link to={routes.login} className="signup-link">
-             Create an Account
+            Create an Account
           </Link>
         </p>
       </div>
