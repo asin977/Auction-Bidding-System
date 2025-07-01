@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 
-import {
-  isStrongPassword,
-  USERS,
-  VALID_EMAIL_REGEX,
-} from '../components/constants/Common';
 import LoginButton from '../components/loginButton';
+import { USERS } from '../constants/Common';
+import { isStrongPassword, isValidEmail } from '../utils/login_validators';
 import './styles.css';
 
 const Login: React.FC = () => {
@@ -15,7 +12,7 @@ const Login: React.FC = () => {
     password: '',
   });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormInputs({
       ...formInputs,
       [event.target.name]: event.target.value,
@@ -25,7 +22,7 @@ const Login: React.FC = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!VALID_EMAIL_REGEX(formInputs.email)) {
+    if (!isValidEmail(formInputs.email)) {
       alert('Please enter a valid email address.');
       return;
     }
@@ -68,7 +65,7 @@ const Login: React.FC = () => {
             name="name"
             placeholder="Enter your full name *"
             value={formInputs.name}
-            onChange={handleChange}
+            onChange={handleInput}
             required
           />
 
@@ -78,7 +75,7 @@ const Login: React.FC = () => {
             name="email"
             placeholder="Enter your email *"
             value={formInputs.email}
-            onChange={handleChange}
+            onChange={handleInput}
             required
           />
 
@@ -88,7 +85,7 @@ const Login: React.FC = () => {
             name="password"
             placeholder="Create your password *"
             value={formInputs.password}
-            onChange={handleChange}
+            onChange={handleInput}
             required
           />
 

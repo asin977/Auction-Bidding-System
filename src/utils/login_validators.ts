@@ -1,5 +1,3 @@
-export const USERS = 'users';
-
 export const isStrongPassword = (password: string): boolean => {
   return (
     password.length >= 8 &&
@@ -10,7 +8,7 @@ export const isStrongPassword = (password: string): boolean => {
   );
 };
 
-export const VALID_EMAIL_REGEX = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+export const isValidEmail = (email: string): boolean => {
+  const VALID_EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return VALID_EMAIL_REGEX.test(email);
 };
