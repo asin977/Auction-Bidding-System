@@ -64,7 +64,7 @@ input:focus {
   margin-left: 12px;
 }
 
-.sub-container {
+.signin-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -90,10 +90,6 @@ input:focus {
 
 .sign-account {
   color: #5a189a;
-}
-
-.login-container {
-  display: none;
 }
 
 .sign-container {
@@ -142,6 +138,4 @@ input::placeholder {
   justify-content: center;
 }
 
-.footer-content {
-  text-align: center;
-}
+

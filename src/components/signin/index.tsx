@@ -13,7 +13,7 @@ const UserSignIn: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForm({
       ...formInputs,
       [event.target.name]: event.target.value,
@@ -25,23 +25,23 @@ const UserSignIn: React.FC = () => {
 
     const storedUsers = JSON.parse(localStorage.getItem(USER) || '[]');
 
-    const Usermatch = storedUsers.find(
+    const userMatch = storedUsers.find(
       (user: any) =>
         user.email === formInputs.email &&
         user.password === formInputs.password,
     );
 
-    if (Usermatch) {
-      alert(`Welcome back, ${Usermatch.name}!`);
+    if (userMatch) {
+      alert(`Welcome back, ${userMatch.name}!`);
       navigate(routes.home);
-    } else {
-      alert('Invalid email or password. Please try again.');
+      return;
     }
+    alert('Invalid email or password. Please try again.');
   };
 
   return (
     <div className="main-sign-container">
-      <div className="sub-container">
+      <div className="signin-container">
         <div className="welcome-back">
           <h2>Welcome Back</h2>
         </div>
@@ -49,32 +49,33 @@ const UserSignIn: React.FC = () => {
 
       <div className="sign-container">
         <h1 className="signin-title">Sign In</h1>
+
         <form onSubmit={handleSignIn} className="details-container">
           <input
-            className="name-container"
+            className="input-name-box"
             type="email"
             name="email"
             placeholder="Enter your email *"
             value={formInputs.email}
-            onChange={handleChange}
+            onChange={handleInput}
             required
           />
 
           <input
-            className="details-container"
+            className="password-input-box"
             type="password"
             name="password"
             placeholder="Enter your password *"
             value={formInputs.password}
-            onChange={handleChange}
+            onChange={handleInput}
             required
           />
-          <div className="button-signIn">
-            <button type="submit" className="sign-in">
-              Sign In
-            </button>
-          </div>
+          {/* TODO */}
+          <button type="submit" className="sign-in">
+            Sign In
+          </button>
         </form>
+        
         <span className="forgot-password">Forgot password?</span>
         <p className="sign-account">
           New here?
