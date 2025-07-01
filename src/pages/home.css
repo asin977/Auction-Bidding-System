@@ -135,3 +135,13 @@ option {
   gap:30px;
   margin-top:20px;
 }
+
+.bid-button {
+  background-color: #42023a;
+  color: #ffffff;
+  border:none;
+  font-family: 'bold';
+  height: 41px;
+  min-width:120px;
+  border-radius: 3px;
+}

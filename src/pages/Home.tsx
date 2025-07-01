@@ -1,11 +1,14 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer, useEffect, useState } from 'react';
 
 import userLogo from '../assets/images/multipleuserslogo.png';
 import Button from '../components/button';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import CountdownTimer from '../countdownTimer';
+
 import productDataJson from '../data/products.json';
-import userDataJson from '../data/uers.json';
+import userDataJson from '../data/users.json';
+
 import { ProductList } from '../types/product';
 import { User } from '../types/user';
 import './home.css';
@@ -18,7 +21,7 @@ type AuctionState = {
   notifications: Record<string, string>;
 };
 
-export type AuctionAction =
+type AuctionAction =
   | { type: 'SET_INPUT'; productId: string; value: string }
   | { type: 'START_BID'; productId: string }
   | { type: 'BID_SUCCESS'; productId: string; userId: string; amount: number }
@@ -47,10 +50,7 @@ const auctionReducer = (
         ...state,
         bids: {
           ...state.bids,
-          [action.productId]: {
-            userId: action.userId,
-            amount: action.amount,
-          },
+          [action.productId]: { userId: action.userId, amount: action.amount },
         },
         successBids: { ...state.successBids, [action.productId]: true },
         loadingBids: { ...state.loadingBids, [action.productId]: false },
@@ -96,18 +96,36 @@ export const Home: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<string>('');
   const [state, dispatch] = useReducer(auctionReducer, initialAuctionState);
 
-  const placeBid = () => (productId: string) => {
-    const user = users.find(user => user.id === selectedUser);
+  useEffect(() => {
+    const storedNotifications: Record<string, string> = JSON.parse(
+      localStorage.getItem('NOTIFICATIONS') || '{}',
+    );
+    Object.entries(storedNotifications).forEach(([productId, message]) => {
+      dispatch({ type: 'SET_NOTIFICATION', productId, message });
+    });
+  }, []);
+
+  const placeBid = (productId: string) => {
+    const user = users.find(u => u.id === selectedUser);
     const rawInput = state.bidInputs[productId]?.trim();
     const amount = Number(rawInput);
+    const product = productDataJson.find(p => p.id === productId);
+    const endTime = new Date(product?.time || '').getTime();
+    const now = Date.now();
+    const isExpired = now >= endTime;
+
+    if (isExpired) {
+      alert('Bidding has ended for this product.');
+      return;
+    }
 
     if (!user) {
-      alert('Please select a user..');
+      alert('Please select a user.');
       return;
     }
 
     if (!rawInput || isNaN(amount) || amount <= 0) {
-      alert('Please enter a valid bid amount..');
+      alert('Please enter a valid bid amount.');
       return;
     }
 
@@ -115,44 +133,47 @@ export const Home: React.FC = () => {
       alert('Bid must be greater than the current bid.');
       return;
     }
-    if (
-      amount <
-      (productDataJson.find(product => product.id === productId)
-        ?.startingPrice ?? 0)
-    ) {
-      alert('Bid must be greater than the starting price');
+
+    if (amount < (product?.startingPrice ?? 0)) {
+      alert('Bid must be higher than the starting price.');
       return;
     }
 
     dispatch({ type: 'START_BID', productId });
-
-    dispatch({
-      type: 'BID_SUCCESS',
-      productId,
-      userId: user.id,
-      amount: amount,
-    });
-
+    dispatch({ type: 'BID_SUCCESS', productId, userId: user.id, amount });
     dispatch({ type: 'CLEAR_INPUT', productId });
+
+    const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
+    const newBid = {
+      userId: user.id,
+      productId,
+      amount,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem('BIDS', JSON.stringify([...storedBids, newBid]));
+
+    const message = `₹${amount} bid placed by ${user.name} on "${product?.name}"`;
+
+    dispatch({ type: 'SET_NOTIFICATION', productId, message });
+
+    const existingNotifs = JSON.parse(
+      localStorage.getItem('NOTIFICATIONS') || '{}',
+    );
+    const updatedNotifs = { ...existingNotifs, [productId]: message };
+    localStorage.setItem('NOTIFICATIONS', JSON.stringify(updatedNotifs));
 
     setTimeout(() => {
       dispatch({ type: 'RESET_SUCCESS', productId });
-    });
+    }, 2000);
 
-    dispatch({
-      type: 'SET_NOTIFICATION',
-      productId,
-      message: `Bid of ₹${amount} placed by ${user.name} for product ${
-        productDataJson.find(product => product.id === productId)?.name
-      }.`,
-    });
     setSelectedUser('');
   };
+
   return (
     <>
       <Header />
       <h3 className="auction-title">Auction Collection Bids</h3>
-      
+
       <div className="registered-users-container">
         <h3 className="registerd-users">REGISTERED USERS</h3>
         <img src={userLogo} alt="logo" className="user-logo" />
@@ -172,13 +193,12 @@ export const Home: React.FC = () => {
 
           return (
             <div key={product.id} className="product-card">
-              <h3 className="product-name"> {product.name}</h3>
+              <h3 className="product-name">{product.name}</h3>
               <img
                 src={product.imageUrl}
                 alt={product.name}
                 className="product-image"
               />
-
               <p className="product-details">{product.imageDetails}</p>
               <p className="price">
                 <span>
@@ -189,10 +209,13 @@ export const Home: React.FC = () => {
                 </span>
               </p>
 
+              <CountdownTimer endTime={product.time} />
+
               <div className="bid-interaction">
                 <select
                   value={selectedUser}
                   onChange={e => setSelectedUser(e.target.value)}
+                  disabled={isExpired}
                 >
                   <option value="">Select user</option>
                   {users.map(user => (
@@ -214,12 +237,14 @@ export const Home: React.FC = () => {
                       value: e.target.value,
                     })
                   }
+                  disabled={isExpired}
                 />
+
                 <div className="bid-buttons">
                   <Button
-                    onClick={() => placeBid()(product.id)}
+                    onClick={() => placeBid(product.id)}
                     className="bid-button"
-                    disabled={state.loadingBids[product.id]}
+                    disabled={state.loadingBids[product.id] || isExpired}
                   >
                     {isExpired
                       ? 'Bidding Closed'
@@ -229,7 +254,7 @@ export const Home: React.FC = () => {
                       ? 'Success!'
                       : 'Place Bid'}
                   </Button>
-                  <Button>Active</Button>
+                  <Button disabled>Active</Button>
                 </div>
 
                 {currentBid && (
@@ -238,11 +263,24 @@ export const Home: React.FC = () => {
                     {users.find(u => u.id === currentBid.userId)?.name}
                   </p>
                 )}
+
+                {state.notifications[product.id] && (
+                  <p className="notification-toast">
+                    {state.notifications[product.id]}
+                  </p>
+                )}
+
+                {isExpired && (
+                  <p className="expired-message">
+                    Bidding has ended for this item.
+                  </p>
+                )}
               </div>
             </div>
           );
         })}
       </div>
+
       <Footer />
     </>
   );
