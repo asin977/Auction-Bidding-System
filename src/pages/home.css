@@ -6,7 +6,6 @@
 .product-image {
   width: 200px;
   height: 200px;
-  object-fit: cover;
 }
 
 .product-container {
@@ -25,21 +24,18 @@
   font-size: 18px;
 }
 
-.product-name {
+.product-title {
   color: darkblue;
 }
 
 .product-price {
-  color: darkred;
-  margin-top: 12px;
-}
-
-.price {
   display: flex;
   flex-direction: row;
   justify-content: center;
   gap: 30px;
   margin-top: 16px;
+  color: darkred;
+  margin-top: 12px;
 }
 
 .price span::before {
@@ -52,7 +48,7 @@
   font-family: 'bold';
   font-size: 40px;
   margin: 0px;
-  padding: 30px;
+  padding: 20px;
 }
 
 .button-container {
