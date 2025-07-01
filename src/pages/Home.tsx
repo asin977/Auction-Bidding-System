@@ -100,7 +100,32 @@ export const Home: React.FC = () => {
       alert('Bid must be greater than the current bid.');
       return;
     }
+    if (
+      amount <
+      (productDataJson.find(product => product.id === productId)
+        ?.startingPrice ?? 0)
+    ) {
+      alert('Bid must be greater than the starting price');
+      return;
+    }
     dispatch({ type: 'START_BID', productId });
+    dispatch({
+      type: 'BID_SUCCESS',
+      productId,
+      userId: user.id,
+      amount: amount,
+    });
+    dispatch({type:'CLEAR_INPUT',productId});
+    setTimeout(()=> {
+    dispatch({ type:'RESET_SUCCESS', productId });
+    })
+
+    dispatch ({
+    type:'SET_NOTIFICATION',
+    productId,
+    message: `Bid of ₹${amount} placed by ${user.name} for product ${productDataJson.find(product => product.id === productId)?.name}.`
+  })
+    setSelectedUser('');
   };
   return (
     <>
