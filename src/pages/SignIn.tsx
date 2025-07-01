@@ -1,6 +1,6 @@
-import  SiteDetails  from '../components/sitedetails';
-import Footer from '../components/footer';
-import UserSignIn from '../components/userSignin';
+import  SiteDetails  from '../components/SiteDetails';
+import Footer from '../components/Footer';
+import UserSignIn from '../components/UserSignIn';
 
 export const SignIn = () => (
   <>
