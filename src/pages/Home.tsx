@@ -123,14 +123,18 @@ export const Home: React.FC = () => {
       alert('Bid must be greater than the starting price');
       return;
     }
+
     dispatch({ type: 'START_BID', productId });
+
     dispatch({
       type: 'BID_SUCCESS',
       productId,
       userId: user.id,
       amount: amount,
     });
+
     dispatch({ type: 'CLEAR_INPUT', productId });
+    
     setTimeout(() => {
       dispatch({ type: 'RESET_SUCCESS', productId });
     });
@@ -143,6 +147,7 @@ export const Home: React.FC = () => {
       }.`,
     });
     setSelectedUser('');
+    
   };
   return (
     <>
@@ -159,7 +164,6 @@ export const Home: React.FC = () => {
           return (
             <div key={product.id} className="product-card">
               <h3 className="product-name"> {product.name}</h3>
-              <p className="product-details">{product.imageDetails}</p>
               <img
                 src={product.imageUrl}
                 alt={product.name}
@@ -191,7 +195,8 @@ export const Home: React.FC = () => {
 
                 <input
                   type="number"
-                  placeholder="Enter bid" className='bid-input'
+                  placeholder="Enter bid"
+                  className="bid-input"
                   value={state.bidInputs[product.id] || ''}
                   onChange={e =>
                     dispatch({
@@ -201,13 +206,31 @@ export const Home: React.FC = () => {
                     })
                   }
                 />
+                <Button
+                  onClick={() => placeBid()(product.id)}
+                  className="bid-button"
+                  disabled={state.loadingBids[product.id]}
+                >
+                  {isExpired
+                    ? 'Bidding Closed'
+                    : state.loadingBids[product.id]
+                    ? 'Placing...'
+                    : state.successBids[product.id]
+                    ? 'Success!'
+                    : 'Place Bid'}
+                </Button>
 
+               
                 {currentBid && (
                   <p className="current-bid">
                     Highest Bid: ₹{currentBid.amount} by{' '}
                     {users.find(u => u.id === currentBid.userId)?.name}
                   </p>
                 )}
+                <div className="button-container">
+                  <Button>Add your Bid</Button>
+                  <Button>Active</Button>
+                </div>
               </div>
             </div>
           );

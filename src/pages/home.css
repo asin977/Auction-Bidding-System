@@ -97,6 +97,10 @@
 
 .bid-interaction {
   border: transparent;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 select {
