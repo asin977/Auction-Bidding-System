@@ -2,13 +2,17 @@
     position: fixed;
     width:100%;
     margin-top:0px;
+    z-index: 1;
 }
 
 .container {
-    background-color:white;
+    background-color: rgb(112, 2, 112);
     padding:10px;
     display:flex;
     justify-content:space-between;
+    margin-top: -40px;
+    color:#fff;
+    font-family: 'bold';
 }
 
 .img-container img{

@@ -1,8 +1,8 @@
 import React from "react";
 
-import './index.css';
-import MyImage from "../images/Logo.png";
-import SignIcon from "../images/avatar.png";
+import MyImage from '../../assets/images/Logo.png';
+import SignIcon from "../../assets/images/avatar.png";
+import './styles.css';
 
 const Header = () => (
     <div className="header-main-container">

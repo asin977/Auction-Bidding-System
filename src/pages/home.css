@@ -52,8 +52,9 @@
 .auction-title {
   font-family: 'bold';
   font-size: 40px;
-  margin: 0px;
-  padding: 30px;
+  margin-top:40px;
+  padding-top: 35px;
+  color:#3c096c;
 }
 
 .button-container {
@@ -117,4 +118,8 @@ select:focus {
 option {
   font-family: 'bold';
   font-weight: 600;
+}
+
+.bid-input {
+  min-width:250px;
 }
