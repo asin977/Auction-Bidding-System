@@ -108,7 +108,3 @@ select:focus {
   outline: auto;
 }
 
-option {
-  font-family: 'bold';
-  font-weight: 600;
-}

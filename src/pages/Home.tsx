@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import userLogo from '../assets/images/multipleuserslogo.png';
 import Button from '../components/Button';
 import productDataJson from '../data/products.json';
-import userDataJson from '../data/uers.json';
-import { ProductList} from '../types/product';
+import userDataJson from '../data/users.json';
+import { ProductList } from '../types/product';
 import { User } from '../types/user';
 import './home.css';
 
