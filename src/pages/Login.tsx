@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 
 import LoginButton from '../components/loginButton';
-import { USERS } from '../constants/Common';
-import { isStrongPassword, isValidEmail } from '../utils/login_validators';
-import './styles.css';
+import { USERS } from '../constants/common';
+import { User } from '../types/user';
+import { isStrongPassword, isValidEmail } from '../utils/login-validators';
+import './login.css';
 
 const Login: React.FC = () => {
   const [formInputs, setFormInputs] = useState({
@@ -36,11 +37,11 @@ const Login: React.FC = () => {
 
     const storedUsers = JSON.parse(localStorage.getItem(USERS) || '[]');
 
-    const duplicate = storedUsers.find(
-      (user: any) => user.email === formInputs.email,
+    const existingUser = storedUsers.find(
+      (USER: User) => USER.email === formInputs.email,
     );
 
-    if (duplicate) {
+    if (existingUser) {
       alert('An account with this email already exists.');
       return;
     }
@@ -55,45 +56,43 @@ const Login: React.FC = () => {
 
   return (
     <div className="main-login-container">
-      <div className="login-container">
-        <h1 className="welcome-title">Welcome New User</h1>
+      <h1 className="welcome-title">Welcome New User</h1>
 
-        <form onSubmit={handleSubmit} className="details-container">
-          <input
-            className="name-container"
-            type="text"
-            name="name"
-            placeholder="Enter your full name *"
-            value={formInputs.name}
-            onChange={handleInput}
-            required
-          />
+      <form onSubmit={handleSubmit} className="details-container">
+        <input
+          className="name-container"
+          type="text"
+          name="name"
+          placeholder="Enter your full name *"
+          value={formInputs.name}
+          onChange={handleInput}
+          required
+        />
 
-          <input
-            className="name-container"
-            type="email"
-            name="email"
-            placeholder="Enter your email *"
-            value={formInputs.email}
-            onChange={handleInput}
-            required
-          />
+        <input
+          className="name-container"
+          type="email"
+          name="email"
+          placeholder="Enter your email *"
+          value={formInputs.email}
+          onChange={handleInput}
+          required
+        />
 
-          <input
-            className="name-container"
-            type="password"
-            name="password"
-            placeholder="Create your password *"
-            value={formInputs.password}
-            onChange={handleInput}
-            required
-          />
+        <input
+          className="name-container"
+          type="password"
+          name="password"
+          placeholder="Create your password *"
+          value={formInputs.password}
+          onChange={handleInput}
+          required
+        />
 
-          <div className="button-container">
-            <LoginButton />
-          </div>
-        </form>
-      </div>
+        <div className="button-container">
+          <LoginButton />
+        </div>
+      </form>
     </div>
   );
 };

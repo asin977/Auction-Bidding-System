@@ -26,13 +26,6 @@ input {
   display: inline;
 }
 
-.login-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 .button-container {
   display: flex;
   flex-direction: row;
