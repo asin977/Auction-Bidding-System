@@ -77,7 +77,7 @@ const UserSignIn: React.FC = () => {
 
         <span className="forgot-password">Forgot password?</span>
         <p className="sign-account">
-          New here?
+          New here?{' '}
           <Link to={routes.login} className="signup-link">
             Create an Account
           </Link>
