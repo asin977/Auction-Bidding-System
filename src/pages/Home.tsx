@@ -1,8 +1,9 @@
 import React from 'react';
 
+import Button from '../components/Button';
+import ProductDetails from '../components/ProductDetails';
 import productDataJson from '../data/products.json';
 import { ProductList } from '../types/product';
-import Button from '../components/button';
 import './home.css';
 
 export const Home: React.FC = () => (
@@ -18,15 +19,8 @@ export const Home: React.FC = () => (
             alt={product.name}
             className="product-image"
           />
-          <h3 className="product-name">Name: {product.name}</h3>
-          <p className="price">
-            <span>
-              <strong>Price:</strong> ₹{product.price}
-            </span>
-            <span>
-              <strong>Starting Price:</strong> ₹{product.startingPrice}
-            </span>
-          </p>
+
+          <ProductDetails />
 
           <div className="button-container">
             <Button> Bid Now</Button>
