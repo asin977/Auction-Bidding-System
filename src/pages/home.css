@@ -16,7 +16,7 @@
 
 .product-details {
   font-family: 'semi-bold';
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .time-left {
@@ -26,6 +26,7 @@
 
 .product-title {
   color: darkblue;
+  font-size: 25px;
 }
 
 .product-price {
@@ -49,13 +50,6 @@
   font-size: 40px;
   margin: 0px;
   padding: 20px;
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 0px;
-  gap: 30px;
 }
 
 .registered-users-container {
@@ -86,11 +80,7 @@
 }
 
 .enter-bid-amount {
-  min-width: 150px;
-}
-
-.bid-interaction {
-  border: transparent;
+  min-width: 200px;
 }
 
 select {
@@ -102,9 +92,5 @@ select {
   margin-bottom: 12px;
   font-family: 'bold';
   font-weight: 600;
+  cursor: pointer;
 }
-
-select:focus {
-  outline: auto;
-}
-
