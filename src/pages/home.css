@@ -6,7 +6,6 @@
 .product-image {
   width: 200px;
   height: 200px;
-  object-fit: cover;
 }
 
 .product-container {
@@ -17,7 +16,7 @@
 
 .product-details {
   font-family: 'semi-bold';
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .time-left {
@@ -25,18 +24,22 @@
   font-size: 18px;
 }
 
-.product-title {
+.product-name {
   color: darkblue;
+  font-size: 25px;
 }
 
 .product-price {
+  color: darkred;
+  margin-top: 12px;
+}
+
+.price {
   display: flex;
   flex-direction: row;
   justify-content: center;
   gap: 30px;
   margin-top: 16px;
-  color: darkred;
-  margin-top: 12px;
 }
 
 .price span::before {
@@ -48,13 +51,110 @@
 .auction-title {
   font-family: 'bold';
   font-size: 40px;
-  margin: 0px;
-  padding: 20px;
+  margin-top: 40px;
+  padding-top: 35px;
+  color: #3c096c;
 }
 
 .button-container {
   display: flex;
   justify-content: center;
-  margin-top: 30px;
+  margin-top: 0px;
   gap: 30px;
+}
+
+.registered-users-container {
+  background-color: rgb(112, 2, 112);
+  margin: 0px;
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+}
+
+.registerd-users {
+  font-family: 'bold';
+  text-decoration: underline;
+}
+
+.user-logo {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+}
+
+.user-list {
+  list-style-type: none;
+  margin-left: -40px;
+}
+
+.enter-bid-amount {
+  min-width: 150px;
+}
+
+.bid-interaction {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+select {
+  border: none;
+  background-color: #3c096c;
+  padding: 10px 30px;
+  color: #fff;
+  margin-top: 36px;
+  margin-bottom: 12px;
+  font-family: 'bold';
+  font-weight: 600;
+  cursor: pointer;
+}
+
+option {
+  font-family: 'bold';
+  font-weight: 600;
+}
+
+.bid-input {
+  min-width: 250px;
+}
+
+.bid-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.bid-button {
+  background-color: #42023a;
+  color: #ffffff;
+  border: none;
+  font-family: 'bold';
+  height: 41px;
+  min-width: 120px;
+  border-radius: 3px;
+}
+
+.footer-container {
+  position: unset;
+}
+
+.expired-message {
+  font-size: 18px;
+  font-family: 'semi-bold';
+  color: red;
+}
+
+.notification-on-product {
+  background-color: #5390d9;
+  color: #fff;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
 }
