@@ -85,10 +85,6 @@ input:focus {
   margin-top: 26px;
 }
 
-button {
-  width: 50%;
-}
-
 .main-sign-container {
   display: flex;
   flex-direction: column;
