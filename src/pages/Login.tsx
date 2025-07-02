@@ -6,7 +6,7 @@ import { User } from '../types/user';
 import { isStrongPassword, isValidEmail } from '../utils/login-validators';
 import './login.css';
 
-const Login: React.FC = () => {
+export const Login: React.FC = () => {
   const [formInputs, setFormInputs] = useState({
     name: '',
     email: '',
@@ -97,4 +97,3 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
