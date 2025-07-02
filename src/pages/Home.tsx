@@ -1,14 +1,12 @@
-import React, { useReducer, useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 
 import userLogo from '../assets/images/multipleuserslogo.png';
 import Button from '../components/button';
+import CountdownTimer from '../components/CountDownTimer';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import CountdownTimer from '../components/CountDownTimer';
-
 import productDataJson from '../data/products.json';
 import userDataJson from '../data/users.json';
-
 import { ProductList } from '../types/product';
 import { User } from '../types/user';
 import './home.css';
@@ -152,7 +150,7 @@ export const Home: React.FC = () => {
     };
     localStorage.setItem('BIDS', JSON.stringify([...storedBids, newBid]));
 
-    const message = `📣 ₹${amount} bid placed by ${user.name} on "${product?.name}"`;
+    const message = `₹${amount} bid placed by ${user.name} on "${product?.name}"`;
 
     dispatch({ type: 'SET_NOTIFICATION', productId, message });
 
