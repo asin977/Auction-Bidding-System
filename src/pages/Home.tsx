@@ -265,7 +265,7 @@ export const Home: React.FC = () => {
 
                 {state.notifications[product.id] && (
                   <p className="notification-on-product">
-                   📣 {state.notifications[product.id]}
+                    📣 {state.notifications[product.id]}
                   </p>
                 )}
 

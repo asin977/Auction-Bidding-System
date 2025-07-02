@@ -31,17 +31,21 @@ const CountDownTimer: React.FC<CountdownProps> = ({ endTime }) => {
 
   return (
     <div className="time-container">
-      <span className="date-label">Day:</span>
-      <span className="value">{convertMillisecondsToDays(BidRemainingTime)}</span>
+      <span className="date-label">📅
+        <span className="date-value">{convertMillisecondsToDays(BidRemainingTime)} Days</span>
+      </span>
 
-      <span className="date-label">Hours:</span>
-      <span className="value">{convertMillisecondsToHours(BidRemainingTime)}Hrs</span>
+      <span className="date-label"> ⏱ 
+         <span className="date-value">{convertMillisecondsToHours(BidRemainingTime)} Hrs</span>
+      </span>
 
-      <span className="date-label">Minutes:</span>
-      <span className="value">{convertMillisecondsToMinutes(BidRemainingTime)}Mins</span>
+      <span className="date-label"> ⏱ 
+         <span className="date-value">{convertMillisecondsToMinutes(BidRemainingTime)} Mins</span>
+      </span>
 
-      <span className="date-label">Seconds:</span>
-      <span className="value">{convertMillisecondsToSeconds(BidRemainingTime)}Secs</span>
+      <span className="date-label"> ⏱ 
+        <span className="date-value">{convertMillisecondsToSeconds(BidRemainingTime)} Secs</span>
+      </span>
     </div>
   );
 };

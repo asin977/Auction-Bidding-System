@@ -14,14 +14,24 @@
   font-family: 'semi-bold';
 }
 
-.time-container ::before {
-  content: '‣ ';
-}
-
 .date-label {
   color: #5a189a;
   font-weight: 500;
   font-family: 'semi-bold';
   margin-right: 5px;
+  font-size: 16px;
+}
+
+.time-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.date-value {
+  color: #dd3327;
+  font-weight: 500;
+  font-family: 'semi-bold';
   font-size: 16px;
 }
