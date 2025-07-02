@@ -1,10 +1,8 @@
-import './App.css';
-
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { routes } from './Routes';
-import  {SignIn} from './pages/SignIn';
-import { Home} from './pages';
+import { Home, SignIn } from './pages';
+import './App.css';
 
 function App() {
   return (

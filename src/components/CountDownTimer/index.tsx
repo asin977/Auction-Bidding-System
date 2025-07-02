@@ -13,14 +13,15 @@ type CountdownProps = {
 };
 
 const CountDownTimer: React.FC<CountdownProps> = ({ endTime }) => {
-  const [BidRemainingTime, setBidRemainingTime] = useState<number>(0);
+  const [remainingTimeInMilliseconds, setRemainingTimeInMilliseconds] =
+    useState<number>(0);
 
   useEffect(() => {
     const updateTimeDifference = () => {
       const target = new Date(endTime).getTime();
       const now = new Date().getTime();
       const diff = Math.max(target - now, 0);
-      setBidRemainingTime(diff);
+      setRemainingTimeInMilliseconds(diff);
     };
 
     updateTimeDifference();
@@ -31,17 +32,12 @@ const CountDownTimer: React.FC<CountdownProps> = ({ endTime }) => {
 
   return (
     <div className="time-container">
-      <span className="date-label">Day:</span>
-      <span className="value">{convertMillisecondsToDays(BidRemainingTime)}</span>
-
-      <span className="date-label">Hours:</span>
-      <span className="value">{convertMillisecondsToHours(BidRemainingTime)}Hrs</span>
-
-      <span className="date-label">Minutes:</span>
-      <span className="value">{convertMillisecondsToMinutes(BidRemainingTime)}Mins</span>
-
-      <span className="date-label">Seconds:</span>
-      <span className="value">{convertMillisecondsToSeconds(BidRemainingTime)}Secs</span>
+      <span className="time-label">
+        📅 {convertMillisecondsToDays(remainingTimeInMilliseconds)} Days ⏱{' '}
+        {convertMillisecondsToHours(remainingTimeInMilliseconds)} Hrs ⏱{' '}
+        {convertMillisecondsToMinutes(remainingTimeInMilliseconds)} Mins ⏱{' '}
+        {convertMillisecondsToSeconds(remainingTimeInMilliseconds)} Secs
+      </span>
     </div>
   );
 };
