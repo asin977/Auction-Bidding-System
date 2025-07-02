@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-
-
-import { routes } from '../../Routes';
+import { useNavigate } from 'react-router-dom';
 import './styles.css';
+import { routes } from '../../Routes';
 
-const UserSignIn: React.FC = () => {
+const SignIn: React.FC = () => {
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -14,73 +12,79 @@ const UserSignIn: React.FC = () => {
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSignIn = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
 
-    const storedUsers = JSON.parse(localStorage.getItem("users") || '[]');
+    const { email, password } = form;
+    const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
 
-    const match = storedUsers.find(
+    const matchedUser = storedUsers.find(
       (user: any) =>
-        user.email === form.email && user.password === form.password
+        user.email.toLowerCase() === email.toLowerCase() &&
+        user.password === password
     );
 
-    if (match) {
-      alert(`Welcome back, ${match.name}!`);
-      navigate(routes.home);
-    } else {
-      alert('Invalid email or password. Please try again.');
+    if (!matchedUser) {
+      alert('Incorrect email or password.');
+      return;
     }
+
+  
+    localStorage.setItem(
+      'LOGGED_IN_USER',
+      JSON.stringify({
+        id: matchedUser.id,
+        name: matchedUser.name,
+        email: matchedUser.email,
+      })
+    );
+
+    alert(`Welcome back, ${matchedUser.name}!`);
+    navigate(routes.home); 
   };
 
   return (
-    <div className="main-sign-container">
-      <div className="sub-container">
-        <div className="welcome-back">
-          <h2>Welcome Back</h2>
-        </div>
-      </div>
-
-      <div className="sign-container">
+    <div className="main-login-container">
+      <div className="login-container">
         <h1 className="head">Sign In</h1>
-        <form onSubmit={handleSignIn} className="details-container">
+        <form onSubmit={handleSubmit} className="details-container">
           <input
             className="name-container"
             type="email"
             name="email"
-            placeholder="Enter your email *"
+            placeholder="Email *"
             value={form.email}
             onChange={handleChange}
             required
           />
           <input
-            className="details-container"
+            className="name-container"
             type="password"
             name="password"
-            placeholder="Enter your password *"
+            placeholder="Password *"
             value={form.password}
             onChange={handleChange}
             required
           />
-          <button type="submit" className="sign-up">
-            Sign In
-          </button>
+          <div className="button-container">
+            <button className="sign-up" type="submit">
+              Sign In
+            </button>
+            <button
+              className="sign-up"
+              type="button"
+              onClick={() => navigate(routes.signup)}
+            >
+              Need to create an account?
+            </button>
+          </div>
         </form>
-        <span className="forgot-password">Forgot password?</span>
-        <p className="sign-account">
-          New here?{' '}
-          <Link to={routes.signup} className="signup-link">
-            Create an Account
-          </Link>
-        </p>
       </div>
     </div>
   );
 };
 
-export default UserSignIn;
+export default SignIn;

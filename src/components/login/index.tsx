@@ -65,17 +65,19 @@ const Login: React.FC = () => {
     const updatedUsers = [...storedUsers, newUser];
     localStorage.setItem('users', JSON.stringify(updatedUsers));
 
-    // ✅ Set user as logged in (optional if you want to log in right away)
-    localStorage.setItem('LOGGED_IN_USER', JSON.stringify({
-      id: newUser.id,
-      name: newUser.name,
-      email: newUser.email,
-    }));
+    localStorage.setItem(
+      'LOGGED_IN_USER',
+      JSON.stringify({
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+      })
+    );
 
     console.log('✅ User registered:', newUser);
     alert(`Welcome, ${newUser.name}! Your account has been created.`);
 
-    navigate(routes.signin); // redirect to login/sign-in route
+    navigate(routes.signin); // redirect to sign-in page or wherever you like
   };
 
   return (

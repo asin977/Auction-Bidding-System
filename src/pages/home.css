@@ -158,3 +158,24 @@ option {
   font-size: 16px;
   border-radius: 5px;
 }
+
+.notification-bell {
+  position: fixed;
+  top: 16px;
+  right: 24px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.notification-bell:hover {
+  transform: scale(1.2);
+}
+
+.notification-bell {
+  position: fixed;
+  top: 16px;
+  right: 24px;
+}

@@ -90,9 +90,6 @@ export const Home: React.FC = () => {
     } catch (err) {
       console.error('Could not parse LOGGED_IN_USER:', err);
     }
-
-    // Optional: clear all bids on first load
-    // localStorage.removeItem('BIDS');
   }, []);
 
   const placeBid = (productId: string) => {
@@ -137,6 +134,9 @@ export const Home: React.FC = () => {
     dispatch({ type: 'BID_SUCCESS', productId, userId: user.id, amount: bidAmount });
     dispatch({ type: 'CLEAR_INPUT', productId });
 
+    const message = `₹${bidAmount} bid placed by ${user.name} on "${product.name}"`;
+    dispatch({ type: 'SET_NOTIFICATION', productId, message });
+
     const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]') as {
       productId: string;
       userId: string;
@@ -153,15 +153,11 @@ export const Home: React.FC = () => {
       timer: now,
     };
 
-    // Remove user's previous bid on the same product
     const updatedBids = storedBids.filter(
       (bid) => !(bid.productId === productId && bid.userId === user.id)
     );
 
     localStorage.setItem('BIDS', JSON.stringify([...updatedBids, newBid]));
-
-    const message = `₹${bidAmount} bid placed by ${user.name} on "${product.name}"`;
-    dispatch({ type: 'SET_NOTIFICATION', productId, message });
 
     setTimeout(() => {
       dispatch({ type: 'RESET_SUCCESS', productId });
@@ -170,6 +166,17 @@ export const Home: React.FC = () => {
 
   return (
     <>
+      
+      <button
+        className="notification-bell"
+        onClick={() => {
+          const section = document.getElementById('notification-feed');
+          section?.scrollIntoView({ behavior: 'smooth' });
+        }}
+      >
+        🔔
+      </button>
+
       <Header />
       <h3 className="auction-title">Auction Collection Bids</h3>
 
@@ -181,6 +188,18 @@ export const Home: React.FC = () => {
       ) : (
         <div className="login-warning">
           ⚠️ Please <a href="/signin">sign in</a> to place bids.
+        </div>
+      )}
+
+    
+      {Object.values(state.notifications).length > 0 && (
+        <div id="notification-feed" className="global-notification-feed">
+          <h4>📢 Bid Activity Feed</h4>
+          <ul className="notification-list">
+            {Object.entries(state.notifications).map(([key, message]) => (
+              <li key={key} className="notification-item">{message}</li>
+            ))}
+          </ul>
         </div>
       )}
 
