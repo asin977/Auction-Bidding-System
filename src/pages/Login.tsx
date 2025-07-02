@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import LoginButton from '../components/loginButton';
-import { USERS } from '../constants/common';
+import { USER } from '../constants/common';
 import { User } from '../types/user';
 import { isStrongPassword, isValidEmail } from '../utils/login-validators';
 import './login.css';
@@ -35,7 +35,7 @@ export const Login: React.FC = () => {
       return;
     }
 
-    const storedUsers = JSON.parse(localStorage.getItem(USERS) || '[]');
+    const storedUsers = JSON.parse(localStorage.getItem(USER) || '[]');
 
     const existingUser = storedUsers.find(
       (USER: User) => USER.email === formInputs.email,
@@ -47,7 +47,7 @@ export const Login: React.FC = () => {
     }
 
     const updatedUsers = [...storedUsers, formInputs];
-    localStorage.setItem(USERS, JSON.stringify(updatedUsers));
+    localStorage.setItem(USER, JSON.stringify(updatedUsers));
 
     alert(
       `Welcome, ${formInputs.name}! Your account has been created and your password is ${formInputs.password}. Keep it safe for future reference.`,
