@@ -134,7 +134,7 @@ export const Home: React.FC = () => {
       return;
     }
 
-    if (amount < (product?.startingPrice ?? 0)) {
+    if (amount <= (product?.startingPrice ?? 0)) {
       alert('Bid must be higher than the starting price.');
       return;
     }
@@ -148,11 +148,11 @@ export const Home: React.FC = () => {
       userId: user.id,
       productId,
       amount,
-      timestamp: Date.now(),
+      timer: Date.now(),
     };
     localStorage.setItem('BIDS', JSON.stringify([...storedBids, newBid]));
 
-    const message = `₹${amount} bid placed by ${user.name} on "${product?.name}"`;
+    const message = `📣 ₹${amount} bid placed by ${user.name} on "${product?.name}"`;
 
     dispatch({ type: 'SET_NOTIFICATION', productId, message });
 
@@ -254,7 +254,6 @@ export const Home: React.FC = () => {
                       ? 'Success!'
                       : 'Place Bid'}
                   </Button>
-                  <Button disabled>Active</Button>
                 </div>
 
                 {currentBid && (
@@ -265,8 +264,8 @@ export const Home: React.FC = () => {
                 )}
 
                 {state.notifications[product.id] && (
-                  <p className="notification-toast">
-                    {state.notifications[product.id]}
+                  <p className="notification-on-product">
+                   📣 {state.notifications[product.id]}
                   </p>
                 )}
 

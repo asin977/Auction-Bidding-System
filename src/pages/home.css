@@ -6,7 +6,6 @@
 .product-image {
   width: 200px;
   height: 200px;
-  
 }
 
 .product-container {
@@ -52,9 +51,9 @@
 .auction-title {
   font-family: 'bold';
   font-size: 40px;
-  margin-top:40px;
+  margin-top: 40px;
   padding-top: 35px;
-  color:#3c096c;
+  color: #3c096c;
 }
 
 .button-container {
@@ -97,7 +96,7 @@
 
 .bid-interaction {
   border: transparent;
-  display:flex;
+  display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
@@ -108,11 +107,11 @@ select {
   background-color: #3c096c;
   padding: 10px 30px;
   color: #fff;
-  margin-top: 12px;
+  margin-top: 36px;
   margin-bottom: 12px;
   font-family: 'bold';
   font-weight: 600;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 select:focus {
@@ -125,23 +124,42 @@ option {
 }
 
 .bid-input {
-  min-width:250px;
+  min-width: 250px;
 }
 
 .bid-buttons {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap:30px;
-  margin-top:20px;
+  gap: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .bid-button {
   background-color: #42023a;
   color: #ffffff;
-  border:none;
+  border: none;
   font-family: 'bold';
   height: 41px;
-  min-width:120px;
+  min-width: 120px;
   border-radius: 3px;
+}
+
+.footer-container {
+  position: unset;
+}
+
+.expired-message {
+  font-size: 18px;
+  font-family: 'semi-bold';
+  color: red;
+}
+
+.notification-on-product {
+  background-color: #5390d9;
+  color: #fff;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
 }
