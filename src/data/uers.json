@@ -1,28 +1,26 @@
 [
-    {
-      "id": "user1",
-      "name": "Anna Ben",
-      "email": "anna.ben@example.com",
-      "balance": 100000
-    },
-    {
-      "id": "user2",
-      "name": "Mathews George",
-      "email": "mathews.george@example.com",
-      "balance": 75000
-    },
-    {
-      "id": "user3",
-      "name": "John Mathew",
-      "email": "john.mathew@example.com",
-      "balance": 85000
-    },
-    {
-      "id": "user4",
-      "name": "Maria",
-      "email": "maria.elsa@example.com",
-      "balance": 120000
-    }
-  ]
-  
-  
+  {
+    "id": "user1",
+    "name": "Anna Ben",
+    "email": "anna.ben@example.com",
+    "balance": 100000
+  },
+  {
+    "id": "user2",
+    "name": "Mathews George",
+    "email": "mathews.george@example.com",
+    "balance": 75000
+  },
+  {
+    "id": "user3",
+    "name": "John Mathew",
+    "email": "john.mathew@example.com",
+    "balance": 85000
+  },
+  {
+    "id": "user4",
+    "name": "Maria",
+    "email": "maria.elsa@example.com",
+    "balance": 120000
+  }
+]
