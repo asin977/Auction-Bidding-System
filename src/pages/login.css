@@ -8,6 +8,7 @@
   padding: 50px;
   width: 50%;
   margin-left: 480px;
+  box-shadow: 0 2px 10px #5a189a;
 }
 
 input {
@@ -22,10 +23,6 @@ input {
   border: none;
 }
 
-.details-container {
-  display: inline;
-}
-
 .button-container {
   display: flex;
   flex-direction: row;
@@ -36,5 +33,6 @@ input {
 
 .welcome-title {
   font-family: 'bold';
-  font-size: 30px;
+  font-size: 40px;
+  color: #5a1f8c;
 }

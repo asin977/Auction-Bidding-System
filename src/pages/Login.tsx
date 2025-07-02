@@ -60,7 +60,7 @@ const Login: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="details-container">
         <input
-          className="name-container"
+          className="details-input-box"
           type="text"
           name="name"
           placeholder="Enter your full name *"
@@ -70,7 +70,7 @@ const Login: React.FC = () => {
         />
 
         <input
-          className="name-container"
+          className="details-input-box"
           type="email"
           name="email"
           placeholder="Enter your email *"
@@ -80,7 +80,7 @@ const Login: React.FC = () => {
         />
 
         <input
-          className="name-container"
+          className="details-input-box"
           type="password"
           name="password"
           placeholder="Create your password *"
@@ -88,11 +88,11 @@ const Login: React.FC = () => {
           onChange={handleInput}
           required
         />
-
-        <div className="button-container">
-          <LoginButton />
-        </div>
       </form>
+
+      <div className="button-container">
+        <LoginButton />
+      </div>
     </div>
   );
 };
