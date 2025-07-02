@@ -4,7 +4,7 @@ import userLogo from '../assets/images/multipleuserslogo.png';
 import Button from '../components/button';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import CountdownTimer from '../countdownTimer';
+import CountdownTimer from '../components/CountDownTimer';
 
 import productDataJson from '../data/products.json';
 import userDataJson from '../data/users.json';
