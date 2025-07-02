@@ -42,13 +42,11 @@ const UserSignIn: React.FC = () => {
 
   return (
     <div className="main-sign-container">
-      <div className="signin-container">
-        <div className="welcome-back">
-          <h2>Welcome Back</h2>
-        </div>
+      <div className="sign-in-container">
+        <h2>Welcome Back</h2>
       </div>
 
-      <div className="sign-container">
+      <div className="sign-in-input-box-details">
         <h1 className="signin-title">Sign In</h1>
 
         <form onSubmit={handleSignIn} className="details-container">
