@@ -7,7 +7,6 @@ const ProductDetails: React.FC = () => {
 
   return (
     <>
-      <h3 className="product-title">{product.name}</h3>
       <p className="product-price">
         <span>
           <strong>Price:</strong> ₹{product.price}
@@ -16,6 +15,7 @@ const ProductDetails: React.FC = () => {
           <strong>Starting Price:</strong> ₹{product.startingPrice}
         </span>
       </p>
+      <p className="product-details">{product.imageDetails}</p>
     </>
   );
 };

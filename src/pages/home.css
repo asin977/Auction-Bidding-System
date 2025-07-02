@@ -6,7 +6,6 @@
 .product-image {
   width: 200px;
   height: 200px;
-  object-fit: cover;
 }
 
 .product-container {
@@ -17,7 +16,7 @@
 
 .product-details {
   font-family: 'semi-bold';
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .time-left {
@@ -27,6 +26,7 @@
 
 .product-title {
   color: darkblue;
+  font-size: 25px;
 }
 
 .product-price {
@@ -52,9 +52,45 @@
   padding: 20px;
 }
 
-.button-container {
+.registered-users-container {
+  background-color: rgb(112, 2, 112);
+  margin: 0px;
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+}
+
+.registerd-users {
+  font-family: 'bold';
+  text-decoration: underline;
+}
+
+.user-logo {
+  width: 50px;
+  height: 50px;
   display: flex;
   justify-content: center;
-  margin-top: 30px;
-  gap: 30px;
+  align-self: center;
+}
+
+.user-list {
+  list-style-type: none;
+  margin-left: -40px;
+}
+
+.enter-bid-amount {
+  min-width: 200px;
+}
+
+select {
+  border: none;
+  background-color: #3c096c;
+  padding: 10px 30px;
+  color: #fff;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  font-family: 'bold';
+  font-weight: 600;
+  cursor: pointer;
 }
