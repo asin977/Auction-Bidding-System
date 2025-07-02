@@ -1,0 +1,11 @@
+.time-label {
+  color: #5a189a;
+  font-weight: 500;
+  font-family: 'semi-bold';
+  margin-right: 5px;
+  font-size: 18px;
+}
+
+.time-container {
+  margin-top: 30px;
+}
