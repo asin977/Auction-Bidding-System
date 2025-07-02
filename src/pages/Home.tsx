@@ -1,12 +1,9 @@
 import React, { useEffect, useReducer, useState } from 'react';
-
-// import userLogo from '../assets/images/multipleuserslogo.png';
 import Button from '../components/Button';
 import CountdownTimer from '../components/CountDownTimer';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import productDataJson from '../data/products.json';
-import userDataJson from '../data/users.json';
 import { ProductList } from '../types/product';
 import { User } from '../types/user';
 import './home.css';
@@ -25,13 +22,17 @@ type AuctionAction =
   | { type: 'BID_SUCCESS'; productId: string; userId: string; amount: number }
   | { type: 'CLEAR_INPUT'; productId: string }
   | { type: 'SET_NOTIFICATION'; productId: string; message: string }
-  | { type: 'CLEAR_NOTIFICATION'; productId: string }
   | { type: 'RESET_SUCCESS'; productId: string };
 
-const auctionReducer = (
-  state: AuctionState,
-  action: AuctionAction,
-): AuctionState => {
+const initialAuctionState: AuctionState = {
+  bidInputs: {},
+  bids: {},
+  loadingBids: {},
+  successBids: {},
+  notifications: {},
+};
+
+const auctionReducer = (state: AuctionState, action: AuctionAction): AuctionState => {
   switch (action.type) {
     case 'SET_INPUT':
       return {
@@ -61,15 +62,7 @@ const auctionReducer = (
     case 'SET_NOTIFICATION':
       return {
         ...state,
-        notifications: {
-          ...state.notifications,
-          [action.productId]: action.message,
-        },
-      };
-    case 'CLEAR_NOTIFICATION':
-      return {
-        ...state,
-        notifications: { ...state.notifications, [action.productId]: '' },
+        notifications: { ...state.notifications, [action.productId]: action.message },
       };
     case 'RESET_SUCCESS':
       return {
@@ -81,90 +74,98 @@ const auctionReducer = (
   }
 };
 
-const initialAuctionState: AuctionState = {
-  bidInputs: {},
-  bids: {},
-  loadingBids: {},
-  successBids: {},
-  notifications: {},
-};
-
 export const Home: React.FC = () => {
-  const [users, setUsers] = useState<User[]>(userDataJson);
-  const [selectedUser, setSelectedUser] = useState<string>('');
+  const [user, setUser] = useState<User | null>(null);
   const [state, dispatch] = useReducer(auctionReducer, initialAuctionState);
 
   useEffect(() => {
-    const storedNotifications: Record<string, string> = JSON.parse(
-      localStorage.getItem('NOTIFICATIONS') || '{}',
-    );
-    Object.entries(storedNotifications).forEach(([productId, message]) => {
-      dispatch({ type: 'SET_NOTIFICATION', productId, message });
-    });
+    try {
+      const storedUser = localStorage.getItem('LOGGED_IN_USER');
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        if (parsedUser?.id && parsedUser?.name && parsedUser?.email) {
+          setUser(parsedUser);
+        }
+      }
+    } catch (err) {
+      console.error('Could not parse LOGGED_IN_USER:', err);
+    }
+
+    // Optional: clear all bids on first load
+    // localStorage.removeItem('BIDS');
   }, []);
 
   const placeBid = (productId: string) => {
-    const user = users.find(u => u.id === selectedUser);
-    const rawInput = state.bidInputs[productId]?.trim();
-    const amount = Number(rawInput);
+    if (!user) {
+      alert('You must be logged in to place a bid.');
+      return;
+    }
+
+    const input = state.bidInputs[productId]?.trim();
+    const bidAmount = Number(input);
     const product = productDataJson.find(p => p.id === productId);
-    const endTime = new Date(product?.time || '').getTime();
     const now = Date.now();
+    const endTime = new Date(product?.time || '').getTime();
     const isExpired = now >= endTime;
+
+    if (!input || isNaN(bidAmount) || bidAmount <= 0) {
+      alert('Please enter a valid bid amount.');
+      return;
+    }
+
+    if (!product) {
+      alert('Product not found.');
+      return;
+    }
 
     if (isExpired) {
       alert('Bidding has ended for this product.');
       return;
     }
 
-    if (!user) {
-      alert('Please select a user.');
-      return;
-    }
-
-    if (!rawInput || isNaN(amount) || amount <= 0) {
-      alert('Please enter a valid bid amount.');
-      return;
-    }
-
-    if (amount <= (state.bids[productId]?.amount || 0)) {
+    if (bidAmount <= (state.bids[productId]?.amount || 0)) {
       alert('Bid must be greater than the current bid.');
       return;
     }
 
-    if (amount <= (product?.startingPrice ?? 0)) {
+    if (bidAmount <= product.startingPrice) {
       alert('Bid must be higher than the starting price.');
       return;
     }
 
     dispatch({ type: 'START_BID', productId });
-    dispatch({ type: 'BID_SUCCESS', productId, userId: user.id, amount });
+    dispatch({ type: 'BID_SUCCESS', productId, userId: user.id, amount: bidAmount });
     dispatch({ type: 'CLEAR_INPUT', productId });
 
-    const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
+    const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]') as {
+      productId: string;
+      userId: string;
+      amount: number;
+      userName: string;
+      timer: number;
+    }[];
+
     const newBid = {
-      userId: user.id,
       productId,
-      amount,
-      timer: Date.now(),
+      userId: user.id,
+      userName: user.name,
+      amount: bidAmount,
+      timer: now,
     };
-    localStorage.setItem('BIDS', JSON.stringify([...storedBids, newBid]));
 
-    const message = `₹${amount} bid placed by ${user.name} on "${product?.name}"`;
-
-    dispatch({ type: 'SET_NOTIFICATION', productId, message });
-
-    const existingNotifs = JSON.parse(
-      localStorage.getItem('NOTIFICATIONS') || '{}',
+    // Remove user's previous bid on the same product
+    const updatedBids = storedBids.filter(
+      (bid) => !(bid.productId === productId && bid.userId === user.id)
     );
-    const updatedNotifs = { ...existingNotifs, [productId]: message };
-    localStorage.setItem('NOTIFICATIONS', JSON.stringify(updatedNotifs));
+
+    localStorage.setItem('BIDS', JSON.stringify([...updatedBids, newBid]));
+
+    const message = `₹${bidAmount} bid placed by ${user.name} on "${product.name}"`;
+    dispatch({ type: 'SET_NOTIFICATION', productId, message });
 
     setTimeout(() => {
       dispatch({ type: 'RESET_SUCCESS', productId });
     }, 2000);
-
-    setSelectedUser('');
   };
 
   return (
@@ -172,107 +173,68 @@ export const Home: React.FC = () => {
       <Header />
       <h3 className="auction-title">Auction Collection Bids</h3>
 
-      <div className="registered-users-container">
-        <h3 className="registerd-users">REGISTERED USERS</h3>
-        {/* <img src={userLogo} alt="logo" className="user-logo" /> */}
-        <ul className="user-list">
-          {users.map(user => (
-            <li key={user.id}>{user.name}</li>
-          ))}
-        </ul>
-      </div>
+      {user ? (
+        <div className="welcome-message">
+          👋 Welcome, <strong>{user.name}</strong><br />
+          📧 Your email: <em>{user.email}</em>
+        </div>
+      ) : (
+        <div className="login-warning">
+          ⚠️ Please <a href="/signin">sign in</a> to place bids.
+        </div>
+      )}
 
       <div className="product-container">
         {productDataJson.map((product: ProductList) => {
           const now = Date.now();
           const endTime = new Date(product.time).getTime();
           const isExpired = now >= endTime;
-          const currentBid = state.bids[product.id];
 
           return (
             <div key={product.id} className="product-card">
               <h3 className="product-name">{product.name}</h3>
-              <img
-                src={product.imageUrl}
-                alt={product.name}
-                className="product-image"
-              />
+              <img src={product.imageUrl} alt={product.name} className="product-image" />
               <p className="product-details">{product.imageDetails}</p>
               <p className="price">
-                <span>
-                  <strong>Price:</strong> ₹{product.price}
-                </span>
-                <span>
-                  <strong>Starting Price:</strong> ₹{product.startingPrice}
-                </span>
+                <strong>Price:</strong> ₹{product.price} | <strong>Starting Price:</strong> ₹{product.startingPrice}
               </p>
 
               <CountdownTimer endTime={product.time} />
 
-              <div className="bid-interaction">
-                <select
-                  value={selectedUser}
-                  onChange={e => setSelectedUser(e.target.value)}
-                  disabled={isExpired}
+              <input
+                type="number"
+                placeholder="Enter bid amount"
+                className="bid-input"
+                value={state.bidInputs[product.id] || ''}
+                onChange={(e) =>
+                  dispatch({ type: 'SET_INPUT', productId: product.id, value: e.target.value })
+                }
+                disabled={!user || isExpired}
+              />
+
+              <div className="bid-buttons">
+                <Button
+                  onClick={() => placeBid(product.id)}
+                  className="bid-button"
+                  disabled={state.loadingBids[product.id] || isExpired || !user}
                 >
-                  <option value="">Select user</option>
-                  {users.map(user => (
-                    <option key={user.id} value={user.id}>
-                      {user.name}
-                    </option>
-                  ))}
-                </select>
-
-                <input
-                  type="number"
-                  placeholder="Enter bid"
-                  className="bid-input"
-                  value={state.bidInputs[product.id] || ''}
-                  onChange={e =>
-                    dispatch({
-                      type: 'SET_INPUT',
-                      productId: product.id,
-                      value: e.target.value,
-                    })
-                  }
-                  disabled={isExpired}
-                />
-
-                <div className="bid-buttons">
-                  <Button
-                    onClick={() => placeBid(product.id)}
-                    className="bid-button"
-                    disabled={state.loadingBids[product.id] || isExpired}
-                  >
-                    {isExpired
-                      ? 'Bidding Closed'
-                      : state.loadingBids[product.id]
-                      ? 'Placing...'
-                      : state.successBids[product.id]
-                      ? 'Success!'
-                      : 'Place Bid'}
-                  </Button>
-                </div>
-
-                {currentBid && (
-                  <p className="current-bid">
-                    Highest Bid: ₹{currentBid.amount} by{' '}
-                    {users.find(u => u.id === currentBid.userId)?.name}
-                  </p>
-                )}
-
-                {state.notifications[product.id] && (
-                  <p className="notification-on-product">
-                    📣 {state.notifications[product.id]}
-                  </p>
-                )}
-
-                {isExpired && (
-                  <p className="expired-message">
-                    Bidding has ended for this item.
-                  </p>
-                )}
+                  {isExpired
+                    ? 'Bidding Closed'
+                    : state.loadingBids[product.id]
+                    ? 'Placing...'
+                    : state.successBids[product.id]
+                    ? 'Success!'
+                    : 'Place Bid'}
+                </Button>
               </div>
+
+              {state.notifications[product.id] && (
+                <p className="notification-on-product">📣 {state.notifications[product.id]}</p>
+              )}
+
+              {isExpired && (
+                <p className="expired-message">⏱️ Bidding has ended for this item.</p>
+              )}
             </div>
           );
         })}

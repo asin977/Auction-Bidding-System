@@ -2,26 +2,30 @@
     {
       "id": "user1",
       "name": "Anna Ben",
-      "email": "anna.ben@example.com",
-      "balance": 100000
+      "email": "anna.ben@example.com"
+      
+      
     },
     {
       "id": "user2",
       "name": "Mathews George",
-      "email": "mathews.george@example.com",
-      "balance": 75000
+      "email": "mathews.george@example.com"
+      
+      
     },
     {
       "id": "user3",
       "name": "John Mathew",
-      "email": "john.mathew@example.com",
-      "balance": 85000
+      "email": "john.mathew@example.com"
+      
+      
     },
     {
       "id": "user4",
-      "name": "Maria Elsa",
-      "email": "maria.elsa@example.com",
-      "balance": 120000
+      "name": "Maria Thomas",
+      "email": "maria.elsa@example.com"
+      
+      
     }
   ]
   

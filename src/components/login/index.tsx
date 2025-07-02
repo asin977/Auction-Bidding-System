@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-
 import './styles.css';
 import { routes } from '../../Routes';
+
+const generateId = () =>
+  typeof crypto?.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : Math.random().toString(36).substring(2, 10);
 
 const Login: React.FC = () => {
   const [form, setForm] = useState({
@@ -11,12 +14,13 @@ const Login: React.FC = () => {
     email: '',
     password: '',
   });
-  
+
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
   const isStrongPassword = (password: string): boolean => {
     return (
       password.length >= 8 &&
@@ -35,29 +39,43 @@ const Login: React.FC = () => {
       alert('Please enter a valid email address.');
       return;
     }
-  
-
-    
 
     if (!isStrongPassword(form.password)) {
       alert(
-        'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.'
+        'Password must be at least 8 characters and include uppercase, lowercase, number, and special character.'
       );
       return;
     }
 
     const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
 
-    const duplicate = storedUsers.find((user: any) => user.email === form.email);
+    const duplicate = storedUsers.find(
+      (user: any) => user.email.toLowerCase() === form.email.toLowerCase()
+    );
     if (duplicate) {
       alert('An account with this email already exists.');
       return;
     }
 
-    const updatedUsers = [...storedUsers, form];
+    const newUser = {
+      id: generateId(),
+      ...form,
+    };
+
+    const updatedUsers = [...storedUsers, newUser];
     localStorage.setItem('users', JSON.stringify(updatedUsers));
 
-    alert(`Welcome, ${form.name}! Your account has been created.`);
+    // ✅ Set user as logged in (optional if you want to log in right away)
+    localStorage.setItem('LOGGED_IN_USER', JSON.stringify({
+      id: newUser.id,
+      name: newUser.name,
+      email: newUser.email,
+    }));
+
+    console.log('✅ User registered:', newUser);
+    alert(`Welcome, ${newUser.name}! Your account has been created.`);
+
+    navigate(routes.signin); // redirect to login/sign-in route
   };
 
   return (
@@ -99,9 +117,9 @@ const Login: React.FC = () => {
             <button
               className="sign-up"
               type="button"
-              onClick={() => navigate(routes.home)}
+              onClick={() => navigate(routes.signin)}
             >
-              Login
+              Already have an account?
             </button>
           </div>
         </form>
