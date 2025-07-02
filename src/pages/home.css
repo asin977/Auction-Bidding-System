@@ -95,7 +95,6 @@
 }
 
 .bid-interaction {
-  border: transparent;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -112,10 +111,6 @@ select {
   font-family: 'bold';
   font-weight: 600;
   cursor: pointer;
-}
-
-select:focus {
-  outline: auto;
 }
 
 option {
