@@ -1,15 +1,9 @@
-.head {
+.signin-title {
   margin: 0;
   color: #5a189a;
   font-family: 'bold';
   font-size: 35px;
   padding: 15px;
-}
-
-.name-container {
-  text-align: justify;
-  margin-top: 12px;
-  color: #5a189a;
 }
 
 input {
@@ -34,7 +28,7 @@ input:focus {
   outline: none;
 }
 
-.sign-up {
+.sign-in {
   border: none;
   color: #fff;
   background-color: #5a189a;
@@ -45,16 +39,14 @@ input:focus {
   margin-top: 16px;
 }
 
-.sign-container {
+.sign-in-input-box-details {
   background-color: #fff;
   color: #fff;
   margin: 15px;
-  margin-top: 72px;
   box-shadow: 0 2px 10px #5a189a;
-  padding-bottom: 12px;
   border-radius: 10px;
   margin-right: -398px;
-  margin-top: 60px;
+  margin-top: 25px;
   padding: 8px;
 }
 
@@ -64,43 +56,33 @@ input:focus {
   margin-left: 12px;
 }
 
-.sub-container {
+.sign-in-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: black;
+  color: #5a189a;
   font-family: 'script';
   font-size: 19px;
   background-color: #fff;
   border-radius: 10px;
   margin-right: 500px;
   margin-bottom: -408px;
-}
-
-.welcome-back {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 129px;
+  margin-top: 30px;
+  padding: 146px;
   font-family: 'bold';
-  color: #5a189a;
 }
 
 .sign-account {
   color: #5a189a;
 }
 
-.login-container {
-  display: none;
-}
-
-.sign-container {
+.sign-input-box-details {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 26px;
 }
 
 .main-sign-container {
@@ -108,7 +90,7 @@ input:focus {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 80px;
+  margin-top: 52px;
   margin-left: 54px;
 }
 
@@ -123,6 +105,12 @@ input::placeholder {
   font-size: 16px;
 }
 
-.sign-up {
-  width: 50%;
+.signup-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
 }
