@@ -4,25 +4,22 @@ import { useNavigate } from 'react-router-dom';
 import { routes } from '../../Routes';
 import './styles.css';
 
-
 const LoginButton = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
-    <>
-    <button className="create-account" type="button">
-      Create Account
-    </button>
-    
-    <button
-      className="login-button"
-      type="button"
-      onClick={() => navigate(routes.home)}
-    >
-    Login
-    </button>
-  </>
-  )
-  
-}
+    <div className="button-container">
+      <button className="create-account-button" type="submit">
+        Create Account
+      </button>
+      <button
+        className="login-button"
+        type="button"
+        onClick={() => navigate(routes.home)}
+      >
+        Login
+      </button>
+    </div>
+  );
+};
 
 export default LoginButton;

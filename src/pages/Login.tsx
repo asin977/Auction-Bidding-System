@@ -5,7 +5,7 @@ import LoginButton from '../components/loginButton';
 import { USERS } from '../constants/common';
 import { User } from '../types/user';
 import { isStrongPassword, isValidEmail } from '../utils/login-validators';
-import {routes} from '../Routes';
+import { routes } from '../Routes';
 import './login.css';
 
 const generateId = () =>
@@ -46,7 +46,8 @@ export const Login: React.FC = () => {
     const storedUsers = JSON.parse(localStorage.getItem(USERS) || '[]');
 
     const existingUser = storedUsers.find(
-      (USER: User) => USER.email.toLowerCase() === formInputs.email.toLowerCase(),
+      (USER: User) =>
+        USER.email.toLowerCase() === formInputs.email.toLowerCase(),
     );
 
     if (existingUser) {
@@ -54,25 +55,25 @@ export const Login: React.FC = () => {
       return;
     }
     const newUser = {
-      id:generateId(),
+      id: generateId(),
       ...formInputs,
-    }
-    const updatedUsers = [...storedUsers,newUser];
+    };
+    const updatedUsers = [...storedUsers, newUser];
     localStorage.setItem(USERS, JSON.stringify(updatedUsers));
 
     localStorage.setItem(
       'LOGGED_IN_USER',
       JSON.stringify({
-        id:newUser.id,
-        name:newUser.name,
-        email:newUser.email
-      })
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+      }),
     );
 
     alert(
       `Welcome, ${formInputs.name}! Your account has been created and your password is ${formInputs.password}. Keep it safe for future reference.`,
     );
-    navigate(routes.signin)
+    navigate(routes.signin);
   };
 
   return (
@@ -109,11 +110,11 @@ export const Login: React.FC = () => {
           onChange={handleInput}
           required
         />
-      </form>
 
-      <div className="button-container">
-        <LoginButton />
-      </div>
+        <div className="button-container">
+          <LoginButton />
+        </div>
+      </form>
     </div>
   );
 };

@@ -21,6 +21,8 @@ input {
   margin: 15px;
   color: #7b2cbf;
   border: none;
+  border-radius: 3px;
+  border: 1px solid #ccc;
 }
 
 .button-container {
