@@ -3,7 +3,6 @@ export type ProductList = {
   name: string;
   imageUrl: string;
   imageDetails: string;
-  price: number;
   startingPrice: number;
   time: string;
 };

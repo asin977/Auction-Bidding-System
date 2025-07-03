@@ -217,7 +217,7 @@ export const Home: React.FC = () => {
 
       {user ? (
         <div className="welcome-message">
-          Welcome! <strong>{user.name}</strong>
+          Welcome, <strong>{user.name}</strong>
           <br />
           email: <em>{user.email}</em>
         </div>
@@ -228,10 +228,7 @@ export const Home: React.FC = () => {
       )}
 
       {Object.values(state.notifications).length > 0 && (
-        <button
-          id="notification-container"
-          className="sub-notification-container"
-        >
+        <div id="notification-container" className="sub-notification-container">
           <h4>Bid Activity Notifications</h4>
           <ul className="notification-list">
             {Object.entries(state.notifications).map(([key, message]) => (
@@ -240,7 +237,7 @@ export const Home: React.FC = () => {
               </li>
             ))}
           </ul>
-        </button>
+        </div>
       )}
 
       <div className="product-container">
@@ -259,7 +256,6 @@ export const Home: React.FC = () => {
               />
               <p className="product-details">{product.imageDetails}</p>
               <p className="price">
-                <strong>Price:</strong> ₹{product.price} |{' '}
                 <strong>Starting Price:</strong> ₹{product.startingPrice}
               </p>
 
@@ -295,6 +291,12 @@ export const Home: React.FC = () => {
                     : 'Place Bid'}
                 </Button>
               </div>
+
+              {state.notifications[product.id] && (
+                <p className="notification-on-product">
+                  {state.notifications[product.id]}
+                </p>
+              )}
 
               {isExpired && (
                 <p className="expired-message">
