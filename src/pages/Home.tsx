@@ -88,20 +88,24 @@ export const Home: React.FC = () => {
     try {
       const storedUser = localStorage.getItem('LOGGED_IN_USER');
       if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        if (parsedUser?.id && parsedUser?.name && parsedUser?.email) {
-          setUser(parsedUser);
+        const existingUser = JSON.parse(storedUser);
+        if (existingUser?.id && existingUser?.name && existingUser?.email) {
+          setUser(existingUser);
         }
       }
     } catch (error) {
-      console.error('Could not parse LOGGED_IN_USER:', error);
+      console.error('Could not find LOGGED_IN_USER:', error);
     }
 
     const storedNotifications = localStorage.getItem('BID_NOTIFICATIONS');
     if (storedNotifications) {
       const parsedNotifications = JSON.parse(storedNotifications);
       Object.entries(parsedNotifications).forEach(([productId, message]) => {
-        dispatch({ type: 'SET_NOTIFICATION', productId, message: message as string });
+        dispatch({
+          type: 'SET_NOTIFICATION',
+          productId,
+          message: message as string,
+        });
       });
     }
   }, []);
@@ -178,12 +182,17 @@ export const Home: React.FC = () => {
 
     localStorage.setItem('BIDS', JSON.stringify([...updatedBids, newBid]));
 
-    const existingNotifications = JSON.parse(localStorage.getItem('BID_NOTIFICATIONS') || '{}');
+    const existingNotifications = JSON.parse(
+      localStorage.getItem('BID_NOTIFICATIONS') || '{}',
+    );
     const updatedNotifications = {
       ...existingNotifications,
       [productId]: message,
     };
-    localStorage.setItem('BID_NOTIFICATIONS', JSON.stringify(updatedNotifications));
+    localStorage.setItem(
+      'BID_NOTIFICATIONS',
+      JSON.stringify(updatedNotifications),
+    );
 
     setTimeout(() => {
       dispatch({ type: 'RESET_SUCCESS', productId });
@@ -195,20 +204,34 @@ export const Home: React.FC = () => {
       <Header />
       <h3 className="auction-title">Auction Collection Bids</h3>
 
+      <Button
+        onClick={() => {
+          localStorage.removeItem('LOGGED_IN_USER');
+          setUser(null);
+          window.location.href = '/signin';
+        }}
+        className="logout-button"
+      >
+        Logout
+      </Button>
+
       {user ? (
         <div className="welcome-message">
-          Welcome, <strong>{user.name}</strong>
+          Welcome! <strong>{user.name}</strong>
           <br />
           email: <em>{user.email}</em>
         </div>
       ) : (
         <div className="login-warning">
-          ⚠️ Please <a href="/signin">sign in</a> to place bids.
+          Please <a href="/signin">sign in</a> to place bids.
         </div>
       )}
 
       {Object.values(state.notifications).length > 0 && (
-        <div id="notification-container" className="sub-notification-container">
+        <button
+          id="notification-container"
+          className="sub-notification-container"
+        >
           <h4>Bid Activity Notifications</h4>
           <ul className="notification-list">
             {Object.entries(state.notifications).map(([key, message]) => (
@@ -217,7 +240,7 @@ export const Home: React.FC = () => {
               </li>
             ))}
           </ul>
-        </div>
+        </button>
       )}
 
       <div className="product-container">
@@ -273,12 +296,6 @@ export const Home: React.FC = () => {
                 </Button>
               </div>
 
-              {state.notifications[product.id] && (
-                <p className="notification-on-product">
-                  {state.notifications[product.id]}
-                </p>
-              )}
-
               {isExpired && (
                 <p className="expired-message">
                   ⏱️ Bidding has ended for this item.
@@ -291,5 +308,5 @@ export const Home: React.FC = () => {
 
       <Footer />
     </>
-  )
+  );
 };

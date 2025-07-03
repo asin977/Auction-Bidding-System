@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './styles.css';
 import { routes } from '../../routes';
+import LoginButton from '../loginButton';
+import { isStrongPassword } from '../../utils/login-validators';
 
 const generateId = () =>
   typeof crypto?.randomUUID === 'function'
@@ -9,7 +11,7 @@ const generateId = () =>
     : Math.random().toString(36).substring(2, 10);
 
 const Login: React.FC = () => {
-  const [form, setForm] = useState({
+  const [formInputs, setFormInputs] = useState({
     name: '',
     email: '',
     password: '',
@@ -18,29 +20,15 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setFormInputs({ ...formInputs, [e.target.name]: e.target.value });
   };
 
-  const isStrongPassword = (password: string): boolean => {
-    return (
-      password.length >= 8 &&
-      /[A-Z]/.test(password) &&
-      /[a-z]/.test(password) &&
-      /[0-9]/.test(password) &&
-      /[^A-Za-z0-9]/.test(password)
-    );
-  };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(form.email)) {
-      alert('Please enter a valid email address.');
-      return;
-    }
 
-    if (!isStrongPassword(form.password)) {
+    if (!isStrongPassword(formInputs.password)) {
       alert(
         'Password must be at least 8 characters and include uppercase, lowercase, number, and special character.',
       );
@@ -50,7 +38,7 @@ const Login: React.FC = () => {
     const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
 
     const duplicate = storedUsers.find(
-      (user: any) => user.email.toLowerCase() === form.email.toLowerCase(),
+      (user: any) => user.email.toLowerCase() === formInputs.email.toLowerCase(),
     );
     if (duplicate) {
       alert('An account with this email already exists.');
@@ -59,7 +47,7 @@ const Login: React.FC = () => {
 
     const newUser = {
       id: generateId(),
-      ...form,
+      ...formInputs,
     };
 
     const updatedUsers = [...storedUsers, newUser];
@@ -74,7 +62,7 @@ const Login: React.FC = () => {
       }),
     );
 
-    console.log('✅ User registered:', newUser);
+    console.log('User registered:', newUser);
     alert(`Welcome, ${newUser.name}! Your account has been created.`);
 
     navigate(routes.signin); 
@@ -90,7 +78,7 @@ const Login: React.FC = () => {
             type="text"
             name="name"
             placeholder="Enter your full name *"
-            value={form.name}
+            value={formInputs.name}
             onChange={handleChange}
             required
           />
@@ -99,7 +87,7 @@ const Login: React.FC = () => {
             type="email"
             name="email"
             placeholder="Enter your email *"
-            value={form.email}
+            value={formInputs.email}
             onChange={handleChange}
             required
           />
@@ -108,22 +96,11 @@ const Login: React.FC = () => {
             type="password"
             name="password"
             placeholder="Create your password *"
-            value={form.password}
+            value={formInputs.password}
             onChange={handleChange}
             required
           />
-          <div className="button-container">
-            <button className="sign-up" type="submit">
-              Create Account
-            </button>
-            <button
-              className="sign-up"
-              type="button"
-              onClick={() => navigate(routes.signin)}
-            >
-              Already have an account?
-            </button>
-          </div>
+         <LoginButton />
         </form>
       </div>
     </div>

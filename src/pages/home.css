@@ -108,6 +108,11 @@
   padding: 10px;
   font-size: 16px;
   border-radius: 5px;
+  max-width:500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
 }
 
 .notification-bell {
@@ -125,12 +130,18 @@
   transform: scale(1.2);
 }
 
-.notification-bell {
-  position: fixed;
-  top: 16px;
-  right: 24px;
+.sub-notification-container {
+  background:#42023a ;
+  padding:20px;
+  color:#fff;
+  margin-top: 20px;
 }
 
-.notification-container {
-  background: #fff;
+.logout-button {
+  background-color: #42023a;
+  color: #fff;
+}
+
+.notification-list {
+  list-style-type: none;
 }
