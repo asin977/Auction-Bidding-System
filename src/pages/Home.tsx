@@ -172,16 +172,6 @@ export const Home: React.FC = () => {
       <Header />
       <h3 className="auction-title">Auction Collection Bids</h3>
 
-      <div className="registered-users-container">
-        <h3 className="registerd-users">REGISTERED USERS</h3>
-        <img src={userLogo} alt="logo" className="user-logo" />
-        <ul className="user-list">
-          {users.map(user => (
-            <li key={user.id}>{user.name}</li>
-          ))}
-        </ul>
-      </div>
-
       <div className="product-container">
         {productDataJson.map((product: ProductList) => {
           const now = Date.now();
@@ -210,19 +200,6 @@ export const Home: React.FC = () => {
               <CountdownTimer endTime={product.time} />
 
               <div className="bid-interaction">
-                <select
-                  value={selectedUser}
-                  onChange={e => setSelectedUser(e.target.value)}
-                  disabled={isExpired}
-                >
-                  <option value="">Select user</option>
-                  {users.map(user => (
-                    <option key={user.id} value={user.id}>
-                      {user.name}
-                    </option>
-                  ))}
-                </select>
-
                 <input
                   type="number"
                   placeholder="Enter bid"
