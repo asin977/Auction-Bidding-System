@@ -3,6 +3,7 @@ import Button from '../components/Button';
 import CountdownTimer from '../components/CountDownTimer';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import Modal from '../components/Modal';
 import productDataJson from '../data/products.json';
 import { ProductList } from '../types/product';
 import { User } from '../types/user';
@@ -83,18 +84,20 @@ const auctionReducer = (
 export const Home: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [state, dispatch] = useReducer(auctionReducer, initialAuctionState);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem('LOGGED_IN_USER');
-      if (storedUser) {
+    const storedUser = localStorage.getItem('LOGGED_IN_USER');
+    if (storedUser) {
+      try {
         const existingUser = JSON.parse(storedUser);
         if (existingUser?.id && existingUser?.name && existingUser?.email) {
           setUser(existingUser);
         }
+      } catch (err) {
+        console.error('Error parsing user:', err);
       }
-    } catch (error) {
-      console.error('Could not find LOGGED_IN_USER:', error);
     }
 
     const storedNotifications = localStorage.getItem('BID_NOTIFICATIONS');
@@ -110,9 +113,14 @@ export const Home: React.FC = () => {
     }
   }, []);
 
+  const triggerModal = (msg: string) => {
+    setModalMessage(msg);
+    setShowModal(true);
+  };
+
   const placeBid = (productId: string) => {
     if (!user) {
-      alert('You must be logged in to place a bid.');
+      triggerModal('You must be logged in to place a bid.');
       return;
     }
 
@@ -124,27 +132,27 @@ export const Home: React.FC = () => {
     const isExpired = now >= endTime;
 
     if (!input || isNaN(bidAmount) || bidAmount <= 0) {
-      alert('Please enter a valid bid amount.');
+      triggerModal('Please enter a valid bid amount.');
       return;
     }
 
     if (!product) {
-      alert('Product not found.');
+      triggerModal('Product not found.');
       return;
     }
 
     if (isExpired) {
-      alert('Bidding has ended for this product.');
+      triggerModal('Bidding has ended for this product.');
       return;
     }
 
     if (bidAmount <= (state.bids[productId]?.amount || 0)) {
-      alert('Bid must be greater than the current bid.');
+      triggerModal('Bid must be greater than the current bid.');
       return;
     }
 
     if (bidAmount <= product.startingPrice) {
-      alert('Bid must be higher than the starting price.');
+      triggerModal('Bid must be higher than the starting price.');
       return;
     }
 
@@ -204,40 +212,8 @@ export const Home: React.FC = () => {
       <Header />
       <h3 className="auction-title">Auction Collection Bids</h3>
 
-      <Button
-        onClick={() => {
-          localStorage.removeItem('LOGGED_IN_USER');
-          setUser(null);
-          window.location.href = '/signin';
-        }}
-        className="logout-button"
-      >
-        Logout
-      </Button>
-
-      {user ? (
-        <div className="welcome-message">
-          Welcome, <strong>{user.name}</strong>
-          <br />
-          email: <em>{user.email}</em>
-        </div>
-      ) : (
-        <div className="login-warning">
-          Please <a href="/signin">sign in</a> to place bids.
-        </div>
-      )}
-
-      {Object.values(state.notifications).length > 0 && (
-        <div id="notification-container" className="sub-notification-container">
-          <h4>Bid Activity Notifications</h4>
-          <ul className="notification-list">
-            {Object.entries(state.notifications).map(([key, message]) => (
-              <li key={key} className="notification-item">
-                {message}
-              </li>
-            ))}
-          </ul>
-        </div>
+      {showModal && (
+        <Modal message={modalMessage} onClose={() => setShowModal(false)} />
       )}
 
       <div className="product-container">
@@ -245,6 +221,11 @@ export const Home: React.FC = () => {
           const now = Date.now();
           const endTime = new Date(product.time).getTime();
           const isExpired = now >= endTime;
+
+          const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
+          const highestBid = storedBids
+            .filter((bid: any) => bid.productId === product.id)
+            .sort((a: any, b: any) => b.amount - a.amount)[0];
 
           return (
             <div key={product.id} className="product-card">
@@ -258,6 +239,12 @@ export const Home: React.FC = () => {
               <p className="price">
                 <strong>Starting Price:</strong> ₹{product.startingPrice}
               </p>
+
+              {highestBid && (
+                <p className="highest-bid-info">
+                  🏆 Highest bid: ₹{highestBid.amount} by {highestBid.userName}
+                </p>
+              )}
 
               <CountdownTimer endTime={product.time} />
 
@@ -294,14 +281,6 @@ export const Home: React.FC = () => {
               {state.successBids[product.id] && (
                 <p className="success-message">Your bid was successful!</p>
               )}
-
-              <div className='bid-price-highest-notification'>
-                {state.notifications[product.id] && (
-                  <p className="notification-on-product">
-                    {state.notifications[product.id]}
-                  </p>
-                )}
-              </div>
 
               {isExpired && (
                 <p className="expired-message">
