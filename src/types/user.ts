@@ -1,6 +1,5 @@
-export type User ={
-  id: string;
+export type User = {
   name: string;
   email: string;
-  balance: number;
-}
+  password: string;
+};
