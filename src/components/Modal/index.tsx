@@ -1,19 +1,27 @@
 import React from 'react';
-import './styles.css';
+import './styles.css'; 
 
-type ModalProps = {
+export interface ModalProps {
   message: string;
   onClose: () => void;
-};
+  onConfirm?: () => void; 
+}
 
-const Modal: React.FC<ModalProps> = ({ message, onClose }) => {
+const Modal: React.FC<ModalProps> = ({ message, onClose, onConfirm }) => {
   return (
     <div className="modal-overlay">
-      <div className="modal-container">
+      <div className="modal-box">
         <p className="modal-message">{message}</p>
-        <button className="modal-close" onClick={onClose}>
-          OK
-        </button>
+        <div className="modal-actions">
+          {onConfirm && (
+            <button className="modal-btn confirm" onClick={onConfirm}>
+              Confirm
+            </button>
+          )}
+          <button className="modal-btn cancel" onClick={onClose}>
+            {onConfirm ? 'Cancel' : 'Close'}
+          </button>
+        </div>
       </div>
     </div>
   );
