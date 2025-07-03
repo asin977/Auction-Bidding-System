@@ -223,9 +223,9 @@ export const Home: React.FC = () => {
           const isExpired = now >= endTime;
 
           const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
-          const highestBid = storedBids
-            .filter((bid: any) => bid.productId === product.id)
-            .sort((a: any, b: any) => b.amount - a.amount)[0];
+            const highestBid = storedBids
+            .filter((bid: { productId: string; amount: number; userName: string }) => bid.productId === product.id)
+            .sort((a: { amount: number }, b: { amount: number }) => b.amount - a.amount)[0];
 
           return (
             <div key={product.id} className="product-card">
