@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { USER } from '../../constants/common';
+import { USERS } from '../../constants/common';
 import { routes } from '../../routes/Routes';
 import Button from '../Button';
 import './styles.css';
@@ -24,7 +24,7 @@ const UserSignIn: React.FC = () => {
   const handleSignIn = (event: React.FormEvent) => {
     event.preventDefault();
 
-    const storedUsers = JSON.parse(localStorage.getItem(USER) || '[]');
+    const storedUsers = JSON.parse(localStorage.getItem(USERS) || '[]');
 
     const userMatch = storedUsers.find(
       (user: { email: string; password: string }) =>
