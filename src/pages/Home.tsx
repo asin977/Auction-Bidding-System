@@ -1,10 +1,8 @@
 import React, { useEffect, useReducer, useState } from 'react';
-
 import Button from '../components/Button';
-import CountDownTimer from '../components/CountDownTimer';
+import CountdownTimer from '../components/CountDownTimer';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import ProductDetails from '../components/ProductDetails';
 import productDataJson from '../data/products.json';
 import { ProductList } from '../types/product';
 import { User } from '../types/user';
@@ -33,6 +31,7 @@ const initialAuctionState: AuctionState = {
   successBids: {},
   notifications: {},
 };
+
 const auctionReducer = (
   state: AuctionState,
   action: AuctionAction,
@@ -94,8 +93,16 @@ export const Home: React.FC = () => {
           setUser(parsedUser);
         }
       }
-    } catch (err) {
-      console.error('Could not parse LOGGED_IN_USER:', err);
+    } catch (error) {
+      console.error('Could not parse LOGGED_IN_USER:', error);
+    }
+
+    const storedNotifications = localStorage.getItem('BID_NOTIFICATIONS');
+    if (storedNotifications) {
+      const parsedNotifications = JSON.parse(storedNotifications);
+      Object.entries(parsedNotifications).forEach(([productId, message]) => {
+        dispatch({ type: 'SET_NOTIFICATION', productId, message: message as string });
+      });
     }
   }, []);
 
@@ -171,6 +178,13 @@ export const Home: React.FC = () => {
 
     localStorage.setItem('BIDS', JSON.stringify([...updatedBids, newBid]));
 
+    const existingNotifications = JSON.parse(localStorage.getItem('BID_NOTIFICATIONS') || '{}');
+    const updatedNotifications = {
+      ...existingNotifications,
+      [productId]: message,
+    };
+    localStorage.setItem('BID_NOTIFICATIONS', JSON.stringify(updatedNotifications));
+
     setTimeout(() => {
       dispatch({ type: 'RESET_SUCCESS', productId });
     }, 2000);
@@ -190,6 +204,19 @@ export const Home: React.FC = () => {
       ) : (
         <div className="login-warning">
           ⚠️ Please <a href="/signin">sign in</a> to place bids.
+        </div>
+      )}
+
+      {Object.values(state.notifications).length > 0 && (
+        <div id="notification-container" className="sub-notification-container">
+          <h4>Bid Activity Notifications</h4>
+          <ul className="notification-list">
+            {Object.entries(state.notifications).map(([key, message]) => (
+              <li key={key} className="notification-item">
+                {message}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
@@ -213,7 +240,7 @@ export const Home: React.FC = () => {
                 <strong>Starting Price:</strong> ₹{product.startingPrice}
               </p>
 
-              <CountDownTimer endTime={product.time} />
+              <CountdownTimer endTime={product.time} />
 
               <input
                 type="number"
@@ -264,5 +291,5 @@ export const Home: React.FC = () => {
 
       <Footer />
     </>
-  );
+  )
 };

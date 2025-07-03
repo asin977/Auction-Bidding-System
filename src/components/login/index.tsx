@@ -77,7 +77,7 @@ const Login: React.FC = () => {
     console.log('✅ User registered:', newUser);
     alert(`Welcome, ${newUser.name}! Your account has been created.`);
 
-    navigate(routes.signin); // redirect to sign-in page or wherever you like
+    navigate(routes.signin); 
   };
 
   return (
