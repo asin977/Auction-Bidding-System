@@ -291,12 +291,17 @@ export const Home: React.FC = () => {
                     : 'Place Bid'}
                 </Button>
               </div>
-
-              {state.notifications[product.id] && (
-                <p className="notification-on-product">
-                  {state.notifications[product.id]}
-                </p>
+              {state.successBids[product.id] && (
+                <p className="success-message">Your bid was successful!</p>
               )}
+
+              <div className='bid-price-highest-notification'>
+                {state.notifications[product.id] && (
+                  <p className="notification-on-product">
+                    {state.notifications[product.id]}
+                  </p>
+                )}
+              </div>
 
               {isExpired && (
                 <p className="expired-message">

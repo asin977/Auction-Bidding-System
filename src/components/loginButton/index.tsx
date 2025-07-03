@@ -11,13 +11,6 @@ const LoginButton = () => {
       <button className="create-account-button" type="submit">
         Create Account
       </button>
-      <button
-        className="login-button"
-        type="button"
-        onClick={() => navigate(routes.home)}
-      >
-        Login
-      </button>
     </div>
   );
 };
