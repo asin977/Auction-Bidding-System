@@ -1,12 +1,12 @@
 .footer-container {
   width: 100%;
-  position: fixed;
   bottom: 0;
-  background-color: #fff;
+  background-color: #42023a;
+  margin-top:104px;
 }
 
 .footer-about {
-  color: grey;
+  color: cornsilk;
   font-weight: bold;
   text-decoration: none;
 }
@@ -14,7 +14,7 @@
 .footer-content {
   font-size: 17px;
   font-family: 'Inconsolata';
-  color: rgb(159, 159, 163);
+  color: cornsilk;
   margin: 0;
   font-weight: bold;
 }
@@ -26,7 +26,7 @@
   text-align: center;
   gap: 15px;
   font-family: 'Inconsolata';
-  color: gray;
+  color: cornsilk;
 }
 
 .footer-description {
@@ -35,4 +35,5 @@
   font-family: 'script';
   text-align: center;
   font-weight: bold;
+  color: cornsilk;
 }

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { USER } from '../../constants/common';
+import { USERS } from '../../constants/common';
 import { routes } from '../../routes/Routes';
 import Button from '../Button';
 import './styles.css';
 
 const UserSignIn: React.FC = () => {
-  const [formInputs, setForm] = useState({
+  const [formInputs, setFormInputs] = useState({
     email: '',
     password: '',
   });
@@ -15,7 +15,7 @@ const UserSignIn: React.FC = () => {
   const navigate = useNavigate();
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({
+    setFormInputs({
       ...formInputs,
       [event.target.name]: event.target.value,
     });
@@ -24,18 +24,20 @@ const UserSignIn: React.FC = () => {
   const handleSignIn = (event: React.FormEvent) => {
     event.preventDefault();
 
-    const storedUsers = JSON.parse(localStorage.getItem(USER) || '[]');
+    const storedUsers = JSON.parse(localStorage.getItem(USERS) || '[]');
 
-    const userMatch = storedUsers.find(
-      (user: { email: string; password: string }) =>
-        user.email === formInputs.email &&
-        user.password === formInputs.password,
+    const matchedUser = storedUsers.find(
+      (USER: { email: string; password: string;
+        id: string; name: string
+      }) =>
+        USER.email.toLocaleLowerCase() === formInputs.email.toLowerCase() &&
+        USER.password === formInputs.password,
     );
 
-    if (userMatch) {
-      alert(`Welcome back, ${userMatch.name}!`);
-      navigate(routes.home);
-      return;
+    if (matchedUser) {
+     localStorage.setItem('currentUser',JSON.stringify(matchedUser));
+     navigate(routes.home);
+     return;
     }
     alert('Invalid email or password. Please try again.');
   };
