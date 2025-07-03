@@ -7,39 +7,47 @@ import Button from '../Button';
 import './styles.css';
 
 const UserSignIn: React.FC = () => {
-  const [formInputs, setForm] = useState({
+  const [formInputs, setFormInputs] = useState({
     email: '',
     password: '',
   });
 
   const navigate = useNavigate();
 
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({
-      ...formInputs,
-      [event.target.name]: event.target.value,
-    });
+  const handleInput  = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFormInputs({ ...formInputs, [event.target.name]: event.target.value });
   };
 
   const handleSignIn = (event: React.FormEvent) => {
     event.preventDefault();
 
+    const { email, password } = formInputs;
     const storedUsers = JSON.parse(localStorage.getItem(USERS) || '[]');
 
-    const userMatch = storedUsers.find(
-      (user: { email: string; password: string }) =>
-        user.email === formInputs.email &&
-        user.password === formInputs.password,
+    const matchedUser = storedUsers.find(
+      (USER: { email: string; password: string; id: string; name: string }) =>
+        USER.email.toLowerCase() === email.toLowerCase() &&
+        USER.password === password
     );
 
-    if (userMatch) {
-      alert(`Welcome back, ${userMatch.name}!`);
-      navigate(routes.home);
+    if (!matchedUser) {
+      alert('Incorrect email or password.');
       return;
     }
-    alert('Invalid email or password. Please try again.');
-  };
 
+  
+    localStorage.setItem(
+      'LOGGED_IN_USER',
+      JSON.stringify({
+        id: matchedUser.id,
+        name: matchedUser.name,
+        email: matchedUser.email,
+      })
+    );
+
+    alert(`Welcome back, ${matchedUser.name}!`);
+    navigate(routes.home); 
+  };
   return (
     <div className="main-sign-container">
       <div className="sign-in-container">
