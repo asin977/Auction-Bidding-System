@@ -5,7 +5,7 @@ import LoginButton from '../components/loginButton';
 import { USERS } from '../constants/common';
 import { User } from '../types/user';
 import { isStrongPassword, isValidEmail } from '../utils/login-validators';
-import { routes } from '../Routes';
+import { routes } from '../routes';
 import './login.css';
 
 const generateId = () =>
@@ -73,7 +73,7 @@ export const Login: React.FC = () => {
     alert(
       `Welcome, ${formInputs.name}! Your account has been created and your password is ${formInputs.password}. Keep it safe for future reference.`,
     );
-    navigate(routes.signin);
+    navigate(routes.home);
   };
 
   return (
