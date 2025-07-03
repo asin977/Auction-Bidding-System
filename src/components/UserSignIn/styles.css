@@ -38,12 +38,6 @@ input:focus {
   padding: 8px;
 }
 
-.forgot-password {
-  font-size: 15px;
-  display: flex;
-  margin-left: 12px;
-}
-
 .sign-in-container {
   display: flex;
   flex-direction: column;
@@ -54,7 +48,7 @@ input:focus {
   font-size: 19px;
   background-color: #fff;
   border-radius: 10px;
-  margin-right: 500px;
+  margin-right: 551px;
   margin-bottom: -408px;
   margin-top: 30px;
   padding: 146px;
@@ -79,7 +73,6 @@ input:focus {
   justify-content: center;
   align-items: center;
   margin-top: 52px;
-  margin-left: 54px;
 }
 
 button:hover {

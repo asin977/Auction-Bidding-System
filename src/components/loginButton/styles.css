@@ -1,4 +1,4 @@
-.login,
+.login-button,
 .create-account {
   width: 30%;
   border: none;
@@ -12,8 +12,9 @@
   border-radius: 3px;
 }
 
-.login,
+.login-button:hover,
 .create-account:hover {
   background-color: #0056b3;
   transform: scale(1.05);
 }
+
