@@ -21,23 +21,7 @@ const Header = () => {
   const [storedUser, setStoredUser] = useState<User | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const loadNotifications = () => {
-    try {
-      const allNotifications = JSON.parse(
-        localStorage.getItem('BID_NOTIFICATIONS') || '{}',
-      );
-      const flattened: Notification[] = (
-        Object.values(allNotifications) as Notification[][]
-      )
-        .flat()
-        .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
-        .slice(0, 5);
-      setNotifications(flattened);
-    } catch (err) {
-      console.error('Error loading notifications:', err);
-    }
-  };
-
+  // Step 1: Load user on mount
   useEffect(() => {
     const parsedUser = JSON.parse(
       localStorage.getItem('LOGGED_IN_USER') || '{}',
@@ -45,6 +29,40 @@ const Header = () => {
     if (parsedUser?.id && parsedUser?.name && parsedUser?.email) {
       setStoredUser(parsedUser);
     }
+  }, []);
+
+  // Step 2: Load notifications when user is available
+  useEffect(() => {
+    if (!storedUser) return;
+
+    const loadNotifications = () => {
+      try {
+        const allNotifications = JSON.parse(
+          localStorage.getItem('BID_NOTIFICATIONS') || '{}',
+        );
+
+        // Get product IDs where current user has placed a bid
+        const userProductIds = Object.entries(allNotifications)
+          .filter(
+            ([_, messages]) =>
+              Array.isArray(messages) &&
+              messages.some(
+                (msg: Notification) => msg.userId === storedUser.id,
+              ),
+          )
+          .map(([productId]) => productId);
+
+        // Collect all messages for those products
+        const filteredMessages: Notification[] = userProductIds
+          .flatMap(productId => allNotifications[productId])
+          .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+          .slice(0, 5); // Optional: limit to latest 5
+
+        setNotifications(filteredMessages);
+      } catch (err) {
+        console.error('Error loading notifications:', err);
+      }
+    };
 
     loadNotifications();
 
@@ -65,7 +83,7 @@ const Header = () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('bidUpdate', handleCustomUpdate);
     };
-  }, []);
+  }, [storedUser]);
 
   const isUserAvailable = storedUser?.name && storedUser?.email;
 
