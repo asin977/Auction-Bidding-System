@@ -49,12 +49,13 @@
 }
 
 img {
-  width: 100%;
+  width:100%;
 }
 
 .user-dropdown-wrapper {
   position: relative;
   display: inline-block;
+  cursor:pointer;
 }
 
 .user-info-dropdown {
@@ -70,6 +71,7 @@ img {
   z-index: 999;
   font-size: 14px;
   color:black;
+  cursor: pointer;
 }
 
 .user-dropdown-wrapper:hover .user-info-dropdown {
@@ -80,7 +82,7 @@ img {
   margin-top: 10px;
   padding: 6px 12px;
   width: 100%;
-  background-color: #ff4d4f;
+  background-color: #42023a;
   color: white;
   border: none;
   cursor: pointer;
@@ -115,6 +117,7 @@ img {
 
 .bell-icon-container {
   display: inline-block;
+  cursor:pointer;
 }
 
 .bell-notification-wrapper:hover .notification-dropdown {

@@ -16,6 +16,7 @@
   padding: 20px 30px;
   border-radius: 8px;
   text-align: center;
+  color:black;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
@@ -36,10 +37,13 @@
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
+  background-color: #42023a;
+  color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .modal-btn.confirm {
-  background-color: #007bff;
+  background-color: #42023a;
   color: white;
 }
 

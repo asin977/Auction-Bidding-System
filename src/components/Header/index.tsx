@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import MyImage from '../../assets/images/Logo.png';
 import SignIcon from '../../assets/images/avatar.png';
 import BellIcon from '../../assets/images/bell.png';
-import Modal from '../Modal';
+import Modal from '../Modal/homePage';
 import { User } from '../../types/user';
 import './styles.css';
 
@@ -11,11 +11,15 @@ const Header = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [storedUser, setStoredUser] = useState<User | null>(null);
-  const [productMessages, setProductMessages] = useState<{ message: string; timestamp?: number }[]>([]);
+  const [productMessages, setProductMessages] = useState<
+    { message: string; timestamp?: number }[]
+  >([]);
 
   useEffect(() => {
     try {
-      const parsedUser = JSON.parse(localStorage.getItem('LOGGED_IN_USER') || '{}');
+      const parsedUser = JSON.parse(
+        localStorage.getItem('LOGGED_IN_USER') || '{}',
+      );
       if (parsedUser?.id && parsedUser?.name && parsedUser?.email) {
         setStoredUser(parsedUser);
       }
@@ -25,7 +29,9 @@ const Header = () => {
 
     try {
       const lastProductId = localStorage.getItem('LAST_BID_PRODUCT_ID') || '';
-      const notifications = JSON.parse(localStorage.getItem('BID_NOTIFICATIONS') || '{}');
+      const notifications = JSON.parse(
+        localStorage.getItem('BID_NOTIFICATIONS') || '{}',
+      );
 
       const relevantMessages = Array.isArray(notifications[lastProductId])
         ? notifications[lastProductId]
@@ -54,7 +60,6 @@ const Header = () => {
   return (
     <div className="header-main-container">
       <div className="container">
-
         {showModal && (
           <Modal
             message={modalMessage}
@@ -83,6 +88,7 @@ const Header = () => {
                     </p>
                   ))}
                 </div>
+                {!productMessages.length && <div>No notifications yet...</div>}
               </div>
             )}
           </div>
@@ -91,8 +97,12 @@ const Header = () => {
             <img src={SignIcon} alt="menu" className="sign-img" />
             {isUserAvailable && (
               <div className="user-info-dropdown">
-                <p><strong>Name:</strong> {storedUser?.name}</p>
-                <p><strong>Email:</strong> {storedUser?.email}</p>
+                <p>
+                  <strong>Name:</strong> {storedUser?.name}
+                </p>
+                <p>
+                  <strong>Email:</strong> {storedUser?.email}
+                </p>
                 <button className="logout-btn" onClick={handleLogoutRequest}>
                   Logout
                 </button>

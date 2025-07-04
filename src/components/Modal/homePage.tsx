@@ -1,11 +1,11 @@
 import React from 'react';
-import './styles.css'; 
+import './styles.css';
 
-export interface ModalProps {
+export type ModalProps = {
   message: string;
   onClose: () => void;
-  onConfirm?: () => void; 
-}
+  onConfirm?: () => void;
+};
 
 const Modal: React.FC<ModalProps> = ({ message, onClose, onConfirm }) => {
   return (

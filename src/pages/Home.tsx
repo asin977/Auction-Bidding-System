@@ -3,7 +3,7 @@ import Button from '../components/Button';
 import CountdownTimer from '../components/CountDownTimer';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import Modal from '../components/Modal';
+import Modal from '../components/Modal/homePage';
 import productDataJson from '../data/products.json';
 import { ProductList } from '../types/product';
 import { User } from '../types/user';
@@ -232,8 +232,14 @@ export const Home: React.FC = () => {
 
           const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
           const highestBid = storedBids
-            .filter((bid: { productId: string; amount: number; userName: string }) => bid.productId === product.id)
-            .sort((a: { amount: number }, b: { amount: number }) => b.amount - a.amount)[0];
+            .filter(
+              (bid: { productId: string; amount: number; userName: string }) =>
+                bid.productId === product.id,
+            )
+            .sort(
+              (a: { amount: number }, b: { amount: number }) =>
+                b.amount - a.amount,
+            )[0];
 
           return (
             <div key={product.id} className="product-card">
@@ -250,7 +256,7 @@ export const Home: React.FC = () => {
 
               {highestBid && (
                 <p className="highest-bid-info">
-                  🏆 Highest bid: ₹{highestBid.amount} by {highestBid.userName}
+                  Highest bid: ₹{highestBid.amount} by {highestBid.userName}
                 </p>
               )}
 
@@ -289,12 +295,6 @@ export const Home: React.FC = () => {
 
               {state.successBids[product.id] && (
                 <p className="success-message">Your bid was successful!</p>
-              )}
-
-              {state.notifications[product.id] && (
-                <p className="bid-notification">
-                  📢 {state.notifications[product.id]}
-                </p>
               )}
 
               {isExpired && (

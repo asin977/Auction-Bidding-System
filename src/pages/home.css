@@ -28,18 +28,18 @@
   color: darkblue;
 }
 
-.product-price {
+.prodcuct-price {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: 30px;
+  gap: 10px;
   margin-top: 16px;
   color: darkred;
   margin-top: 12px;
 }
 
-.price span::before {
-  content: '◘ ';
+.prodcuct-price::before {
+  content: ' 💸 ';
   margin-right: 4px;
   color: #999;
 }
@@ -157,4 +157,17 @@
   display:flex;
   justify-content: center;
   align-items: center;
+}
+
+.highest-bid-info {
+  font-size: 18px;
+  color: #2b7a78;
+  font-weight: bold;
+  margin-top: 30px;
+  text-align: center;
+}
+.highest-bid-info::before {
+  content: '◘ ';
+  margin-right: 4px;
+  color: #999;
 }

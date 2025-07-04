@@ -10,7 +10,9 @@
   margin-bottom: 25px;
   font-family: 'bold';
   font-size: 16px;
-  min-width:140px;
+  min-width: 140px;
+  background-color: #42023a;
+  color: #fff;
 }
 
 .primary-variant {
@@ -23,7 +25,7 @@
 }
 
 .secondary-variant {
-  background-color: #42023a;;
+  background-color: #42023a;
   color: #333333;
   border: 1px solid #ccc;
 }

@@ -14,7 +14,7 @@ const UserSignIn: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const handleInput  = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormInputs({ ...formInputs, [event.target.name]: event.target.value });
   };
 
@@ -27,7 +27,7 @@ const UserSignIn: React.FC = () => {
     const matchedUser = storedUsers.find(
       (USER: { email: string; password: string; id: string; name: string }) =>
         USER.email.toLowerCase() === email.toLowerCase() &&
-        USER.password === password
+        USER.password === password,
     );
 
     if (!matchedUser) {
@@ -35,18 +35,17 @@ const UserSignIn: React.FC = () => {
       return;
     }
 
-  
     localStorage.setItem(
       'LOGGED_IN_USER',
       JSON.stringify({
         id: matchedUser.id,
         name: matchedUser.name,
         email: matchedUser.email,
-      })
+      }),
     );
 
     alert(`Welcome back, ${matchedUser.name}!`);
-    navigate(routes.home); 
+    navigate(routes.home);
   };
   return (
     <div className="main-sign-container">
@@ -57,7 +56,7 @@ const UserSignIn: React.FC = () => {
       <div className="sign-in-input-box-details">
         <h1 className="signin-title">Sign In</h1>
 
-        <form onSubmit={handleSignIn} className="details-container">
+        <form onSubmit={handleSignIn} className="details-container" id='imput-name-box'>
           <input
             className="input-name-box"
             type="email"

@@ -70,9 +70,7 @@ export const Login: React.FC = () => {
       }),
     );
 
-    alert(
-      `Welcome, ${formInputs.name}! Your account has been created and your password is ${formInputs.password}. Keep it safe for future reference.`,
-    );
+    alert(`Welcome ${newUser.name}! Your account has been created.`);
     navigate(routes.home);
   };
 
