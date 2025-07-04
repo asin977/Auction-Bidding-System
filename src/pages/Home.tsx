@@ -9,10 +9,6 @@ import { ProductList } from '../types/product';
 import { User } from '../types/user';
 import './home.css';
 
-// --------------------
-// Types & Initial State
-// --------------------
-
 type AuctionState = {
   bidInputs: Record<string, string>;
   bids: Record<string, { userId: string; amount: number }>;
@@ -37,11 +33,10 @@ const initialAuctionState: AuctionState = {
   notifications: {},
 };
 
-// --------------------
-// Reducer
-// --------------------
-
-const auctionReducer = (state: AuctionState, action: AuctionAction): AuctionState => {
+const auctionReducer = (
+  state: AuctionState,
+  action: AuctionAction,
+): AuctionState => {
   switch (action.type) {
     case 'SET_INPUT':
       return {
@@ -86,19 +81,11 @@ const auctionReducer = (state: AuctionState, action: AuctionAction): AuctionStat
   }
 };
 
-// --------------------
-// Home Component
-// --------------------
-
 export const Home: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [state, dispatch] = useReducer(auctionReducer, initialAuctionState);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-
-  // --------------------
-  // Effects
-  // --------------------
 
   useEffect(() => {
     const storedUser = localStorage.getItem('LOGGED_IN_USER');
@@ -126,10 +113,6 @@ export const Home: React.FC = () => {
       });
     }
   }, []);
-
-  // --------------------
-  // Helpers
-  // --------------------
 
   const triggerModal = (msg: string) => {
     setModalMessage(msg);
@@ -174,11 +157,15 @@ export const Home: React.FC = () => {
       return;
     }
 
-    // Simulate bid success
     dispatch({ type: 'START_BID', productId });
 
     setTimeout(() => {
-      dispatch({ type: 'BID_SUCCESS', productId, userId: user.id, amount: bidAmount });
+      dispatch({
+        type: 'BID_SUCCESS',
+        productId,
+        userId: user.id,
+        amount: bidAmount,
+      });
       dispatch({ type: 'CLEAR_INPUT', productId });
 
       const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
@@ -188,16 +175,30 @@ export const Home: React.FC = () => {
       ];
       localStorage.setItem('BIDS', JSON.stringify(updatedBids));
 
-      // Reset success state after 2 seconds
+      const notifications = JSON.parse(
+        localStorage.getItem('BID_NOTIFICATIONS') || '{}',
+      );
+      const newMessage = {
+        userId: user.id,
+        userName: user.name,
+        amount: bidAmount,
+        productName: product.name,
+        timestamp: Date.now(),
+      };
+      const updatedMessages = Array.isArray(notifications[productId])
+        ? [...notifications[productId], newMessage]
+        : [newMessage];
+
+      notifications[productId] = updatedMessages;
+      localStorage.setItem('BID_NOTIFICATIONS', JSON.stringify(notifications));
+      localStorage.setItem('LAST_BID_PRODUCT_ID', productId);
+      
+      window.dispatchEvent(new Event('bidUpdate'));
       setTimeout(() => {
         dispatch({ type: 'RESET_SUCCESS', productId });
       }, 2000);
     }, 1000);
   };
-
-  // --------------------
-  // Render
-  // --------------------
 
   return (
     <>
@@ -215,18 +216,23 @@ export const Home: React.FC = () => {
           const isExpired = now >= endTime;
 
           const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
-          const highestBid: {
-            productId: string;
-            amount: number;
-            userName: string;
-          } | undefined = storedBids
-            .filter((bid: { productId: string }) => bid.productId === product.id)
-            .sort((a: { amount: number }, b: { amount: number }) => b.amount - a.amount)[0];
+          const highestBid = storedBids
+            .filter(
+              (bid: { productId: string }) => bid.productId === product.id,
+            )
+            .sort(
+              (a: { amount: number }, b: { amount: number }) =>
+                b.amount - a.amount,
+            )[0];
 
           return (
             <div key={product.id} className="product-card">
               <h3 className="product-name">{product.name}</h3>
-              <img src={product.imageUrl} alt={product.name} className="product-image" />
+              <img
+                src={product.imageUrl}
+                alt={product.name}
+                className="product-image"
+              />
               <p className="product-details">{product.imageDetails}</p>
               <p className="price">
                 <strong>Starting Price:</strong> ₹{product.startingPrice}
@@ -276,14 +282,16 @@ export const Home: React.FC = () => {
               )}
 
               {isExpired && (
-                <p className="expired-message">⏱️ Bidding has ended for this item.</p>
+                <p className="expired-message">
+                  ⏱️ Bidding has ended for this item.
+                </p>
               )}
             </div>
           );
         })}
       </div>
 
-        <Footer />
-      </>
-    );
-}
+      <Footer />
+    </>
+  );
+};

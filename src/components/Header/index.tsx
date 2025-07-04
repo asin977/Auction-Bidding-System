@@ -7,42 +7,64 @@ import Modal from '../Modal/homePage';
 import { User } from '../../types/user';
 import './styles.css';
 
+type Notification = {
+  userId: string;
+  userName: string;
+  amount: number;
+  productName: string;
+  timestamp?: number;
+};
+
 const Header = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [storedUser, setStoredUser] = useState<User | null>(null);
-  const [productMessages, setProductMessages] = useState<
-    { message: string; timestamp?: number }[]
-  >([]);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  useEffect(() => {
+  const loadNotifications = () => {
     try {
-      const parsedUser = JSON.parse(
-        localStorage.getItem('LOGGED_IN_USER') || '{}',
-      );
-      if (parsedUser?.id && parsedUser?.name && parsedUser?.email) {
-        setStoredUser(parsedUser);
-      }
-    } catch (err) {
-      console.error('Error parsing LOGGED_IN_USER:', err);
-    }
-
-    try {
-      const lastProductId = localStorage.getItem('LAST_BID_PRODUCT_ID') || '';
-      const notifications = JSON.parse(
+      const allNotifications = JSON.parse(
         localStorage.getItem('BID_NOTIFICATIONS') || '{}',
       );
-
-      const relevantMessages = Array.isArray(notifications[lastProductId])
-        ? notifications[lastProductId]
-        : notifications[lastProductId]
-        ? [{ message: notifications[lastProductId] }]
-        : [];
-
-      setProductMessages(relevantMessages.slice(-5).reverse());
+      const flattened: Notification[] = (
+        Object.values(allNotifications) as Notification[][]
+      )
+        .flat()
+        .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+        .slice(0, 5);
+      setNotifications(flattened);
     } catch (err) {
-      console.error('Error loading bid notifications:', err);
+      console.error('Error loading notifications:', err);
     }
+  };
+
+  useEffect(() => {
+    const parsedUser = JSON.parse(
+      localStorage.getItem('LOGGED_IN_USER') || '{}',
+    );
+    if (parsedUser?.id && parsedUser?.name && parsedUser?.email) {
+      setStoredUser(parsedUser);
+    }
+
+    loadNotifications();
+
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === 'BID_NOTIFICATIONS') {
+        loadNotifications();
+      }
+    };
+
+    const handleCustomUpdate = () => {
+      loadNotifications();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('bidUpdate', handleCustomUpdate);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('bidUpdate', handleCustomUpdate);
+    };
   }, []);
 
   const isUserAvailable = storedUser?.name && storedUser?.email;
@@ -81,14 +103,19 @@ const Header = () => {
             <div className="notification-dropdown">
               <h4>🔔 Latest Bids</h4>
               <div className="notification-messages">
-                {productMessages.length > 0 ? (
-                  productMessages.map((note, index) => (
+                {notifications.length > 0 ? (
+                  notifications.map((note, index) => (
                     <p key={index} className="notification-message">
-                      {note.message}
+                      ✅{' '}
+                      {note.userId === storedUser?.id
+                        ? `You have successfully placed the bid of ₹${note.amount} for the product "${note.productName}"`
+                        : `${note.userName} placed ₹${note.amount} for the product "${note.productName}"`}
                     </p>
                   ))
                 ) : (
-                  <p className="no-notification-message">No notifications yet...</p>
+                  <p className="no-notification-message">
+                    No notifications yet...
+                  </p>
                 )}
               </div>
             </div>
