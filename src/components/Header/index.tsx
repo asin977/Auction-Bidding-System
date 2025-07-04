@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import MyImage from '../../assets/images/Logo.png';
 import SignIcon from '../../assets/images/avatar.png';
@@ -11,16 +11,11 @@ const Header = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [storedUser, setStoredUser] = useState<User | null>(null);
-  const [bidNotifications, setBidNotifications] = useState<
-    Record<string, any[]>
-  >({});
+  const [productMessages, setProductMessages] = useState<{ message: string; timestamp?: number }[]>([]);
 
-  // Parse user
-  React.useEffect(() => {
+  useEffect(() => {
     try {
-      const parsedUser = JSON.parse(
-        localStorage.getItem('LOGGED_IN_USER') || '{}',
-      );
+      const parsedUser = JSON.parse(localStorage.getItem('LOGGED_IN_USER') || '{}');
       if (parsedUser?.id && parsedUser?.name && parsedUser?.email) {
         setStoredUser(parsedUser);
       }
@@ -29,22 +24,22 @@ const Header = () => {
     }
 
     try {
-      const parsedNotifications = JSON.parse(
-        localStorage.getItem('BID_NOTIFICATIONS') || '{}',
-      );
-      if (
-        typeof parsedNotifications === 'object' &&
-        parsedNotifications !== null
-      ) {
-        setBidNotifications(parsedNotifications);
-      }
+      const lastProductId = localStorage.getItem('LAST_BID_PRODUCT_ID') || '';
+      const notifications = JSON.parse(localStorage.getItem('BID_NOTIFICATIONS') || '{}');
+
+      const relevantMessages = Array.isArray(notifications[lastProductId])
+        ? notifications[lastProductId]
+        : notifications[lastProductId]
+        ? [{ message: notifications[lastProductId] }]
+        : [];
+
+      setProductMessages(relevantMessages.slice(-5).reverse());
     } catch (err) {
-      console.error('Error parsing BID_NOTIFICATIONS:', err);
+      console.error('Error loading bid notifications:', err);
     }
   }, []);
 
   const isUserAvailable = storedUser?.name && storedUser?.email;
-  const allMessages = Object.values(bidNotifications).flat();
 
   const handleLogoutRequest = () => {
     setModalMessage('Are you sure you want to logout?');
@@ -59,6 +54,7 @@ const Header = () => {
   return (
     <div className="header-main-container">
       <div className="container">
+
         {showModal && (
           <Modal
             message={modalMessage}
@@ -73,14 +69,15 @@ const Header = () => {
         </div>
 
         <div className="sign-icon">
-          {/* 🔔 Notifications */}
           <div className="bell-notification-wrapper">
-            <img src={BellIcon} alt="bell" className="bell-icon" />
-            {allMessages.length > 0 && (
+            <div className="bell-icon-container">
+              <img src={BellIcon} alt="bell" className="bell-icon" />
+            </div>
+            {productMessages.length > 0 && (
               <div className="notification-dropdown">
-                <h4>🔔 Bid Activity</h4>
+                <h4>🔔 Latest Bids</h4>
                 <div className="notification-messages">
-                  {allMessages.map((note: any, idx: number) => (
+                  {productMessages.map((note, idx) => (
                     <p key={idx} className="notification-message">
                       {note.message}
                     </p>
@@ -90,17 +87,12 @@ const Header = () => {
             )}
           </div>
 
-          {/* 👤 User Info */}
           <div className="user-dropdown-wrapper">
             <img src={SignIcon} alt="menu" className="sign-img" />
             {isUserAvailable && (
               <div className="user-info-dropdown">
-                <p>
-                  <strong>Name:</strong> {storedUser?.name}
-                </p>
-                <p>
-                  <strong>Email:</strong> {storedUser?.email}
-                </p>
+                <p><strong>Name:</strong> {storedUser?.name}</p>
+                <p><strong>Email:</strong> {storedUser?.email}</p>
                 <button className="logout-btn" onClick={handleLogoutRequest}>
                   Logout
                 </button>

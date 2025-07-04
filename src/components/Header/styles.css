@@ -108,18 +108,35 @@ img {
   font-size: 14px;
 }
 
+.bell-notification-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.bell-icon-container {
+  display: inline-block;
+}
+
 .bell-notification-wrapper:hover .notification-dropdown {
   display: block;
 }
 
-.notification-list {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
+.notification-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 10px;
+  width: 250px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: none;
+  z-index: 1000;
+  color: black;
+  font-size: 14px;
 }
 
-.notification-list li {
-  padding: 6px 0;
-  border-bottom: 1px solid #eee;
+.notification-message {
+  margin-bottom: 6px;
 }
 

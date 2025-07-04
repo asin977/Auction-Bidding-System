@@ -142,6 +142,13 @@
   color: #fff;
 }
 
+.bid-notification {
+  margin-top: 8px;
+  color: #2b7a78;
+  font-weight: bold;
+}
+
+
 .notification-list {
   list-style-type: none;
 }

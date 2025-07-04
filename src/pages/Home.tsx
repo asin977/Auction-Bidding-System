@@ -32,7 +32,6 @@ const initialAuctionState: AuctionState = {
   successBids: {},
   notifications: {},
 };
-
 const auctionReducer = (
   state: AuctionState,
   action: AuctionAction,
@@ -86,7 +85,6 @@ export const Home: React.FC = () => {
   const [state, dispatch] = useReducer(auctionReducer, initialAuctionState);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-
   useEffect(() => {
     const storedUser = localStorage.getItem('LOGGED_IN_USER');
     if (storedUser) {
@@ -103,12 +101,17 @@ export const Home: React.FC = () => {
     const storedNotifications = localStorage.getItem('BID_NOTIFICATIONS');
     if (storedNotifications) {
       const parsedNotifications = JSON.parse(storedNotifications);
-      Object.entries(parsedNotifications).forEach(([productId, message]) => {
-        dispatch({
-          type: 'SET_NOTIFICATION',
-          productId,
-          message: message as string,
-        });
+      Object.entries(parsedNotifications).forEach(([productId, messages]) => {
+        const latest = Array.isArray(messages)
+          ? messages[messages.length - 1]?.message
+          : messages;
+        if (latest) {
+          dispatch({
+            type: 'SET_NOTIFICATION',
+            productId,
+            message: latest,
+          });
+        }
       });
     }
   }, []);
@@ -117,7 +120,6 @@ export const Home: React.FC = () => {
     setModalMessage(msg);
     setShowModal(true);
   };
-
   const placeBid = (productId: string) => {
     if (!user) {
       triggerModal('You must be logged in to place a bid.');
@@ -193,20 +195,26 @@ export const Home: React.FC = () => {
     const existingNotifications = JSON.parse(
       localStorage.getItem('BID_NOTIFICATIONS') || '{}',
     );
+
     const updatedNotifications = {
       ...existingNotifications,
-      [productId]: message,
+      [productId]: [
+        ...(existingNotifications[productId] || []),
+        { message, timestamp: now },
+      ],
     };
+
     localStorage.setItem(
       'BID_NOTIFICATIONS',
       JSON.stringify(updatedNotifications),
     );
 
+    localStorage.setItem('LAST_BID_PRODUCT_ID', productId);
+
     setTimeout(() => {
       dispatch({ type: 'RESET_SUCCESS', productId });
     }, 2000);
   };
-
   return (
     <>
       <Header />
@@ -223,7 +231,7 @@ export const Home: React.FC = () => {
           const isExpired = now >= endTime;
 
           const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
-            const highestBid = storedBids
+          const highestBid = storedBids
             .filter((bid: { productId: string; amount: number; userName: string }) => bid.productId === product.id)
             .sort((a: { amount: number }, b: { amount: number }) => b.amount - a.amount)[0];
 
@@ -278,8 +286,15 @@ export const Home: React.FC = () => {
                     : 'Place Bid'}
                 </Button>
               </div>
+
               {state.successBids[product.id] && (
                 <p className="success-message">Your bid was successful!</p>
+              )}
+
+              {state.notifications[product.id] && (
+                <p className="bid-notification">
+                  📢 {state.notifications[product.id]}
+                </p>
               )}
 
               {isExpired && (
@@ -291,7 +306,6 @@ export const Home: React.FC = () => {
           );
         })}
       </div>
-
       <Footer />
     </>
   );
