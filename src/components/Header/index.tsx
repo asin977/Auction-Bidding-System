@@ -78,19 +78,20 @@ const Header = () => {
             <div className="bell-icon-container">
               <img src={BellIcon} alt="bell" className="bell-icon" />
             </div>
-            {productMessages.length > 0 && (
-              <div className="notification-dropdown">
-                <h4>🔔 Latest Bids</h4>
-                <div className="notification-messages">
-                  {productMessages.map((note, idx) => (
-                    <p key={idx} className="notification-message">
+            <div className="notification-dropdown">
+              <h4>🔔 Latest Bids</h4>
+              <div className="notification-messages">
+                {productMessages.length > 0 ? (
+                  productMessages.map((note, index) => (
+                    <p key={index} className="notification-message">
                       {note.message}
                     </p>
-                  ))}
-                </div>
-                {!productMessages.length && <div>No notifications yet...</div>}
+                  ))
+                ) : (
+                  <p className="no-notification-message">No notifications yet...</p>
+                )}
               </div>
-            )}
+            </div>
           </div>
 
           <div className="user-dropdown-wrapper">

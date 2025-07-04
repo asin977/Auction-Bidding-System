@@ -9,6 +9,10 @@ import { ProductList } from '../types/product';
 import { User } from '../types/user';
 import './home.css';
 
+// --------------------
+// Types & Initial State
+// --------------------
+
 type AuctionState = {
   bidInputs: Record<string, string>;
   bids: Record<string, { userId: string; amount: number }>;
@@ -32,10 +36,12 @@ const initialAuctionState: AuctionState = {
   successBids: {},
   notifications: {},
 };
-const auctionReducer = (
-  state: AuctionState,
-  action: AuctionAction,
-): AuctionState => {
+
+// --------------------
+// Reducer
+// --------------------
+
+const auctionReducer = (state: AuctionState, action: AuctionAction): AuctionState => {
   switch (action.type) {
     case 'SET_INPUT':
       return {
@@ -80,11 +86,20 @@ const auctionReducer = (
   }
 };
 
+// --------------------
+// Home Component
+// --------------------
+
 export const Home: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [state, dispatch] = useReducer(auctionReducer, initialAuctionState);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+
+  // --------------------
+  // Effects
+  // --------------------
+
   useEffect(() => {
     const storedUser = localStorage.getItem('LOGGED_IN_USER');
     if (storedUser) {
@@ -106,20 +121,21 @@ export const Home: React.FC = () => {
           ? messages[messages.length - 1]?.message
           : messages;
         if (latest) {
-          dispatch({
-            type: 'SET_NOTIFICATION',
-            productId,
-            message: latest,
-          });
+          dispatch({ type: 'SET_NOTIFICATION', productId, message: latest });
         }
       });
     }
   }, []);
 
+  // --------------------
+  // Helpers
+  // --------------------
+
   const triggerModal = (msg: string) => {
     setModalMessage(msg);
     setShowModal(true);
   };
+
   const placeBid = (productId: string) => {
     if (!user) {
       triggerModal('You must be logged in to place a bid.');
@@ -153,68 +169,36 @@ export const Home: React.FC = () => {
       return;
     }
 
-    if (bidAmount <= product.startingPrice) {
+    if (bidAmount < product.startingPrice) {
       triggerModal('Bid must be higher than the starting price.');
       return;
     }
 
+    // Simulate bid success
     dispatch({ type: 'START_BID', productId });
-    dispatch({
-      type: 'BID_SUCCESS',
-      productId,
-      userId: user.id,
-      amount: bidAmount,
-    });
-    dispatch({ type: 'CLEAR_INPUT', productId });
-
-    const message = `₹${bidAmount} bid placed by ${user.name} on "${product.name}"`;
-    dispatch({ type: 'SET_NOTIFICATION', productId, message });
-
-    const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]') as {
-      productId: string;
-      userId: string;
-      amount: number;
-      userName: string;
-      timer: number;
-    }[];
-
-    const newBid = {
-      productId,
-      userId: user.id,
-      userName: user.name,
-      amount: bidAmount,
-      timer: now,
-    };
-
-    const updatedBids = storedBids.filter(
-      bid => !(bid.productId === productId && bid.userId === user.id),
-    );
-
-    localStorage.setItem('BIDS', JSON.stringify([...updatedBids, newBid]));
-
-    const existingNotifications = JSON.parse(
-      localStorage.getItem('BID_NOTIFICATIONS') || '{}',
-    );
-
-    const updatedNotifications = {
-      ...existingNotifications,
-      [productId]: [
-        ...(existingNotifications[productId] || []),
-        { message, timestamp: now },
-      ],
-    };
-
-    localStorage.setItem(
-      'BID_NOTIFICATIONS',
-      JSON.stringify(updatedNotifications),
-    );
-
-    localStorage.setItem('LAST_BID_PRODUCT_ID', productId);
 
     setTimeout(() => {
-      dispatch({ type: 'RESET_SUCCESS', productId });
-    }, 2000);
+      dispatch({ type: 'BID_SUCCESS', productId, userId: user.id, amount: bidAmount });
+      dispatch({ type: 'CLEAR_INPUT', productId });
+
+      const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
+      const updatedBids = [
+        ...storedBids,
+        { productId, amount: bidAmount, userName: user.name },
+      ];
+      localStorage.setItem('BIDS', JSON.stringify(updatedBids));
+
+      // Reset success state after 2 seconds
+      setTimeout(() => {
+        dispatch({ type: 'RESET_SUCCESS', productId });
+      }, 2000);
+    }, 1000);
   };
+
+  // --------------------
+  // Render
+  // --------------------
+
   return (
     <>
       <Header />
@@ -231,24 +215,18 @@ export const Home: React.FC = () => {
           const isExpired = now >= endTime;
 
           const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
-          const highestBid = storedBids
-            .filter(
-              (bid: { productId: string; amount: number; userName: string }) =>
-                bid.productId === product.id,
-            )
-            .sort(
-              (a: { amount: number }, b: { amount: number }) =>
-                b.amount - a.amount,
-            )[0];
+          const highestBid: {
+            productId: string;
+            amount: number;
+            userName: string;
+          } | undefined = storedBids
+            .filter((bid: { productId: string }) => bid.productId === product.id)
+            .sort((a: { amount: number }, b: { amount: number }) => b.amount - a.amount)[0];
 
           return (
             <div key={product.id} className="product-card">
               <h3 className="product-name">{product.name}</h3>
-              <img
-                src={product.imageUrl}
-                alt={product.name}
-                className="product-image"
-              />
+              <img src={product.imageUrl} alt={product.name} className="product-image" />
               <p className="product-details">{product.imageDetails}</p>
               <p className="price">
                 <strong>Starting Price:</strong> ₹{product.startingPrice}
@@ -298,15 +276,14 @@ export const Home: React.FC = () => {
               )}
 
               {isExpired && (
-                <p className="expired-message">
-                  ⏱️ Bidding has ended for this item.
-                </p>
+                <p className="expired-message">⏱️ Bidding has ended for this item.</p>
               )}
             </div>
           );
         })}
       </div>
-      <Footer />
-    </>
-  );
-};
+
+        <Footer />
+      </>
+    );
+}
