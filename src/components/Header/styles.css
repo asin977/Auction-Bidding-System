@@ -133,3 +133,7 @@ img {
   color: darkgray;
   padding: 0.5rem;
 }
+
+.notification-message ::before{
+  content:'⚫'
+}

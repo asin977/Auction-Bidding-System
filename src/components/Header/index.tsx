@@ -21,7 +21,6 @@ const Header = () => {
   const [storedUser, setStoredUser] = useState<User | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  // Step 1: Load user on mount
   useEffect(() => {
     const parsedUser = JSON.parse(
       localStorage.getItem('LOGGED_IN_USER') || '{}',
@@ -31,7 +30,6 @@ const Header = () => {
     }
   }, []);
 
-  // Step 2: Load notifications when user is available
   useEffect(() => {
     if (!storedUser) return;
 
@@ -41,7 +39,6 @@ const Header = () => {
           localStorage.getItem('BID_NOTIFICATIONS') || '{}',
         );
 
-        // Get product IDs where current user has placed a bid
         const userProductIds = Object.entries(allNotifications)
           .filter(
             ([_, messages]) =>
@@ -52,11 +49,10 @@ const Header = () => {
           )
           .map(([productId]) => productId);
 
-        // Collect all messages for those products
         const filteredMessages: Notification[] = userProductIds
           .flatMap(productId => allNotifications[productId])
           .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
-          .slice(0, 5); // Optional: limit to latest 5
+          .slice(0, 5);
 
         setNotifications(filteredMessages);
       } catch (err) {
@@ -124,7 +120,7 @@ const Header = () => {
                 {notifications.length > 0 ? (
                   notifications.map((note, index) => (
                     <p key={index} className="notification-message">
-                      ✅{' '}
+                      {' '}
                       {note.userId === storedUser?.id
                         ? `You have successfully placed the bid of ₹${note.amount} for the product "${note.productName}"`
                         : `${note.userName} placed ₹${note.amount} for the product "${note.productName}"`}

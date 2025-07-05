@@ -16,7 +16,7 @@
 
 .product-details {
   font-family: 'semi-bold';
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .time-left {
@@ -26,19 +26,21 @@
 
 .product-title {
   color: darkblue;
+  font-size: 26px;
+  font-family: 'bold';
 }
 
-.prodcuct-price {
+.product-price {
   display: flex;
   flex-direction: row;
   justify-content: center;
   gap: 10px;
   margin-top: 16px;
   color: darkred;
-  margin-top: 12px;
+  margin-top: 29px;
 }
 
-.prodcuct-price::before {
+.product-price::before {
   content: ' 💸 ';
   margin-right: 4px;
   color: #999;
@@ -108,11 +110,10 @@
   padding: 10px;
   font-size: 16px;
   border-radius: 5px;
-  max-width:500px;
+  max-width: 500px;
   display: flex;
   justify-content: center;
   align-items: center;
-  
 }
 
 .notification-bell {
@@ -131,9 +132,9 @@
 }
 
 .sub-notification-container {
-  background:#42023a ;
-  padding:20px;
-  color:#fff;
+  background: #42023a;
+  padding: 20px;
+  color: #fff;
   margin-top: 20px;
 }
 
@@ -148,13 +149,12 @@
   font-weight: bold;
 }
 
-
 .notification-list {
   list-style-type: none;
 }
 
 .bid-price-highest-notification {
-  display:flex;
+  display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -167,7 +167,21 @@
   text-align: center;
 }
 .highest-bid-info::before {
-  content: '◘ ';
+  content: '⚫';
   margin-right: 4px;
   color: #999;
+}
+
+input:disabled {
+  color: darkgray;
+  cursor: not-allowed;
+}
+
+.bid-button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.7;
+  transition: background-color 0.3s ease;
+  border: 1px solid #999;
 }

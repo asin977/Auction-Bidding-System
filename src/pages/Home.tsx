@@ -192,7 +192,7 @@ export const Home: React.FC = () => {
       notifications[productId] = updatedMessages;
       localStorage.setItem('BID_NOTIFICATIONS', JSON.stringify(notifications));
       localStorage.setItem('LAST_BID_PRODUCT_ID', productId);
-      
+
       window.dispatchEvent(new Event('bidUpdate'));
       setTimeout(() => {
         dispatch({ type: 'RESET_SUCCESS', productId });
@@ -227,14 +227,14 @@ export const Home: React.FC = () => {
 
           return (
             <div key={product.id} className="product-card">
-              <h3 className="product-name">{product.name}</h3>
+              <h3 className="product-title">{product.name}</h3>
               <img
                 src={product.imageUrl}
                 alt={product.name}
                 className="product-image"
               />
               <p className="product-details">{product.imageDetails}</p>
-              <p className="price">
+              <p className="product-price">
                 <strong>Starting Price:</strong> ₹{product.startingPrice}
               </p>
 
