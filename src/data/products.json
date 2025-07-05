@@ -13,7 +13,7 @@
     "imageUrl": "https://demo.auctify.com/uploads/1740681611_coffeemachine1.webp",
     "name": "Coffee Machine",
     "imageDetails": "Pre-Owned Italian-Style Office Coffee Machine Purchased in 2022",
-    "time": "2025-07-05T23:59:59"
+    "time": "2025-07-10T23:59:59"
   },
   {
     "id": "product3",
@@ -21,7 +21,7 @@
     "imageUrl": "https://demo.auctify.com/uploads/1740674804_chair4.webp",
     "name": "Used Chair",
     "imageDetails": "Used Ergonomic Office Chair Purchased in 2022",
-    "time": "2025-07-04T23:59:59"
+    "time": "2025-08-29T23:59:59"
   },
   {
     "id": "product4",
@@ -62,7 +62,7 @@
     "imageUrl": "https://demo.auctify.com/uploads/1740674470_chair2.webp",
     "name": "Used Chair",
     "imageDetails": "Used Ergonomic Office Chair Purchased in 2021",
-    "time": "2025-07-10T23:59:59"
+    "time": "2025-07-14T23:59:59"
   },
   {
     "id": "product9",
@@ -78,7 +78,7 @@
     "imageUrl": "https://demo.auctify.com/uploads/1740683543_forklift.webp",
     "name": "Forklift",
     "imageDetails": "Pre-Owned Industrial Forklift Purchased in 2022",
-    "time": "2025-07-04T23:59:59"
+    "time": "2025-07-07T23:59:59"
   },
   {
     "id": "product11",
@@ -86,7 +86,7 @@
     "imageUrl": "https://demo.auctify.com/uploads/1740674009_chair.webp",
     "name": "Office Chair",
     "imageDetails": "Used Ergonomic Office Chair Purchased in 2021",
-    "time": "2025-07-05T23:59:59"
+    "time": "2025-07-09T23:59:59"
   },
   {
     "id": "product12",

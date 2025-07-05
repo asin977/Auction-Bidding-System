@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+
 import MyImage from '../../assets/images/Logo.png';
 import SignIcon from '../../assets/images/avatar.png';
 import BellIcon from '../../assets/images/bell.png';
@@ -86,9 +87,11 @@ const Header = () => {
   const handleLogoutRequest = () => {
     setModalMessage('Are you sure you want to logout?');
     setShowModal(true);
+    localStorage.clear();
   };
 
   const confirmLogout = () => {
+    localStorage.clear()
     localStorage.removeItem('LOGGED_IN_USER');
     window.location.href = '/signin';
   };
@@ -115,15 +118,14 @@ const Header = () => {
               <img src={BellIcon} alt="bell" className="bell-icon" />
             </div>
             <div className="notification-dropdown">
-              <h4>🔔 Latest Bids</h4>
+              <h4 className="latest-bid-title">🔔 Latest Bids</h4>
               <div className="notification-messages">
                 {notifications.length > 0 ? (
                   notifications.map((note, index) => (
                     <p key={index} className="notification-message">
-                      {' '}
                       {note.userId === storedUser?.id
-                        ? `You have successfully placed the bid of ₹${note.amount} for the product "${note.productName}"`
-                        : `${note.userName} placed ₹${note.amount} for the product "${note.productName}"`}
+                        ? `🔔 You have successfully placed the bid of ₹${note.amount} for the product "${note.productName}"`
+                        : `🔔 ${note.userName} placed ₹${note.amount} for the product "${note.productName}"`}
                     </p>
                   ))
                 ) : (
@@ -158,3 +160,5 @@ const Header = () => {
 };
 
 export default Header;
+
+//the prevous users latest notifications only needed to be  shown on the current user,no need to show all the previous notifications of the previous user on the current user.

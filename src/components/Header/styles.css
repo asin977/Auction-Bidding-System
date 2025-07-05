@@ -64,7 +64,7 @@ img {
   right: 0;
   background-color: white;
   border: 1px solid #ddd;
-  padding: 10px;
+  padding: 20px;
   width: 220px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   display: none;
@@ -72,6 +72,7 @@ img {
   font-size: 14px;
   color: black;
   cursor: pointer;
+  border-radius: 5px;
 }
 
 .user-dropdown-wrapper:hover .user-info-dropdown {
@@ -106,13 +107,14 @@ img {
   right: 0;
   background-color: white;
   border: 1px solid #ddd;
-  padding: 10px;
+  padding: 20px;
   width: 250px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   display: none;
   z-index: 1000;
   color: black;
   font-size: 14px;
+  border-radius: 3px;
 }
 
 .bell-notification-wrapper:hover .notification-dropdown {
@@ -122,10 +124,10 @@ img {
 .notification-messages {
   max-height: 200px;
   overflow-y: auto;
-}
-
-.notification-message {
+  text-align: justify;
   margin-bottom: 6px;
+  font-family: 'semi-bold';
+  font-size: 15px;
 }
 
 .no-notification-message {
@@ -134,6 +136,13 @@ img {
   padding: 0.5rem;
 }
 
-.notification-message ::before{
-  content:'⚫'
+.notification-message ::before {
+  content: '⚫';
+}
+
+.latest-bid-title {
+  font-family: 'bold';
+  font-size: 20px;
+  color: #42023a;
+  margin: 10px 5px;
 }

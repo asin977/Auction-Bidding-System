@@ -10,7 +10,6 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          
           <Route path={routes.home} element={<Home />} />
           <Route path={routes.signin} element={<SignIn />} />
           <Route path={routes.login} element={<Login />} />
