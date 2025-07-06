@@ -90,16 +90,14 @@ export const Home: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
 
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const noUser = localStorage.getItem('NO_LOGGED_IN_USER');
-  //   if (!noUser) {
-  //     Navigate(routes.signin)
-  //   }
-  //   // Get the local storage
-  //   // If !login.user {// navigage to login page
-  // }, []);
+  useEffect(() => {
+    const user = localStorage.getItem('LOGGED_IN_USER');
+    if (!user) {
+      navigate(routes.signin);
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('LOGGED_IN_USER');

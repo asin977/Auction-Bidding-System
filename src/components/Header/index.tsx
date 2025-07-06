@@ -48,31 +48,53 @@ const Header = () => {
 
         Object.values(allNotifications).forEach((messages: any) => {
           if (Array.isArray(messages)) {
-            messages.forEach((msg: Notification) => {
-              if (msg.userId === storedUser.id) {
-                userBids.push(msg);
+            messages.forEach((msg: any) => {
+              const isValid =
+                msg &&
+                typeof msg.userId === 'string' &&
+                typeof msg.userName === 'string' &&
+                typeof msg.amount === 'number' &&
+                typeof msg.productName === 'string' &&
+                typeof msg.timestamp === 'number' &&
+                !isNaN(msg.timestamp);
+
+              if (!isValid) return;
+
+              const bid: Notification = {
+                userId: msg.userId,
+                userName: msg.userName,
+                amount: msg.amount,
+                productName: msg.productName,
+                timestamp: msg.timestamp,
+              };
+
+              if (bid.userId === storedUser.id) {
+                userBids.push(bid);
               } else {
-                otherBids.push(msg);
+                otherBids.push(bid);
               }
             });
           }
         });
 
-      
         const latestUserBidTime = userBids.reduce(
-          (max, bid) => Math.max(max, bid.timestamp || 0),
+          (max, bid) => Math.max(max, bid.timestamp ?? 0),
           0
         );
 
-        
-        const filteredOtherBids = otherBids
-          .filter(bid => (bid.timestamp || 0) > latestUserBidTime)
-          .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+        const filteredOtherBids =
+        latestUserBidTime > 0
+          ? otherBids
+              .filter(bid => (bid.timestamp ?? 0) > latestUserBidTime)
+              .sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0))
+              .slice(0, 5)
+          : []; // 
+      
+        const sortedUserBids = userBids
+          .sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0))
           .slice(0, 5);
 
-        userBids.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-
-        setUserBids(userBids.slice(0, 5));
+        setUserBids(sortedUserBids);
         setNotifications(filteredOtherBids);
       } catch (err) {
         console.error('Error loading notifications:', err);
