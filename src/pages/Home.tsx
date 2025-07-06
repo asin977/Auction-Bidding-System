@@ -1,4 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+
 import Button from '../components/Button';
 import CountdownTimer from '../components/CountDownTimer';
 import Footer from '../components/Footer';
@@ -8,6 +10,7 @@ import productDataJson from '../data/products.json';
 import { ProductList } from '../types/product';
 import { User } from '../types/user';
 import './home.css';
+import { routes } from '../routes';
 
 type AuctionState = {
   bidInputs: Record<string, string>;
@@ -87,6 +90,17 @@ export const Home: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
 
+  const Navigate = useNavigate();
+
+  // useEffect(() => {
+  //   const noUser = localStorage.getItem('NO_LOGGED_IN_USER');
+  //   if (!noUser) {
+  //     Navigate(routes.signin)
+  //   }
+  //   // Get the local storage
+  //   // If !login.user {// navigage to login page
+  // }, []);
+
   useEffect(() => {
     const storedUser = localStorage.getItem('LOGGED_IN_USER');
     if (storedUser) {
@@ -147,16 +161,21 @@ export const Home: React.FC = () => {
       return;
     }
 
-    if (bidAmount <= (state.bids[productId]?.amount || 0)) {
-      triggerModal('Bid must be greater than the current bid.');
+    const currentBid = state.bids[productId]?.amount || 0;
+
+    if (bidAmount <= currentBid) {
+      triggerModal(
+        `Bid must be greater than the current bid of ₹${currentBid}.`,
+      );
       return;
     }
 
     if (bidAmount < product.startingPrice) {
-      triggerModal('Bid must be higher than the starting price.');
+      triggerModal(
+        `Bid must be at least the starting price of ₹${product.startingPrice}.`,
+      );
       return;
     }
-
     dispatch({ type: 'START_BID', productId });
 
     setTimeout(() => {

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-
 import MyImage from '../../assets/images/Logo.png';
 import SignIcon from '../../assets/images/avatar.png';
 import BellIcon from '../../assets/images/bell.png';
@@ -21,13 +20,17 @@ const Header = () => {
   const [modalMessage, setModalMessage] = useState('');
   const [storedUser, setStoredUser] = useState<User | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [userBids, setUserBids] = useState<Notification[]>([]);
 
   useEffect(() => {
     const parsedUser = JSON.parse(
-      localStorage.getItem('LOGGED_IN_USER') || '{}',
+      localStorage.getItem('LOGGED_IN_USER') || '{}'
     );
+
     if (parsedUser?.id && parsedUser?.name && parsedUser?.email) {
       setStoredUser(parsedUser);
+      setNotifications([]);
+      setUserBids([]);
     }
   }, []);
 
@@ -37,25 +40,40 @@ const Header = () => {
     const loadNotifications = () => {
       try {
         const allNotifications = JSON.parse(
-          localStorage.getItem('BID_NOTIFICATIONS') || '{}',
+          localStorage.getItem('BID_NOTIFICATIONS') || '{}'
         );
 
-        const userProductIds = Object.entries(allNotifications)
-          .filter(
-            ([_, messages]) =>
-              Array.isArray(messages) &&
-              messages.some(
-                (msg: Notification) => msg.userId === storedUser.id,
-              ),
-          )
-          .map(([productId]) => productId);
+        const userBids: Notification[] = [];
+        const otherBids: Notification[] = [];
 
-        const filteredMessages: Notification[] = userProductIds
-          .flatMap(productId => allNotifications[productId])
+        Object.values(allNotifications).forEach((messages: any) => {
+          if (Array.isArray(messages)) {
+            messages.forEach((msg: Notification) => {
+              if (msg.userId === storedUser.id) {
+                userBids.push(msg);
+              } else {
+                otherBids.push(msg);
+              }
+            });
+          }
+        });
+
+      
+        const latestUserBidTime = userBids.reduce(
+          (max, bid) => Math.max(max, bid.timestamp || 0),
+          0
+        );
+
+        
+        const filteredOtherBids = otherBids
+          .filter(bid => (bid.timestamp || 0) > latestUserBidTime)
           .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
           .slice(0, 5);
 
-        setNotifications(filteredMessages);
+        userBids.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+        setUserBids(userBids.slice(0, 5));
+        setNotifications(filteredOtherBids);
       } catch (err) {
         console.error('Error loading notifications:', err);
       }
@@ -87,12 +105,12 @@ const Header = () => {
   const handleLogoutRequest = () => {
     setModalMessage('Are you sure you want to logout?');
     setShowModal(true);
-    localStorage.clear();
   };
 
   const confirmLogout = () => {
-    localStorage.clear()
-    localStorage.removeItem('LOGGED_IN_USER');
+    setStoredUser(null);
+    setNotifications([]);
+    setUserBids([]);
     window.location.href = '/signin';
   };
 
@@ -118,19 +136,32 @@ const Header = () => {
               <img src={BellIcon} alt="bell" className="bell-icon" />
             </div>
             <div className="notification-dropdown">
-              <h4 className="latest-bid-title">🔔 Latest Bids</h4>
+              <h4 className="latest-bid-title">🔔 Your Bids</h4>
               <div className="notification-messages">
-                {notifications.length > 0 ? (
-                  notifications.map((note, index) => (
-                    <p key={index} className="notification-message">
-                      {note.userId === storedUser?.id
-                        ? `🔔 You have successfully placed the bid of ₹${note.amount} for the product "${note.productName}"`
-                        : `🔔 ${note.userName} placed ₹${note.amount} for the product "${note.productName}"`}
+                {userBids.length > 0 ? (
+                  userBids.map((note, index) => (
+                    <p key={`user-${index}`} className="notification-message">
+                      🔔 You successfully placed the bid of ₹{note.amount} for "{note.productName}"
                     </p>
                   ))
                 ) : (
                   <p className="no-notification-message">
-                    No notifications yet...
+                    No bids placed yet...
+                  </p>
+                )}
+              </div>
+
+              <h4 className="latest-bid-title">👥 Other Users' Bids</h4>
+              <div className="notification-messages">
+                {notifications.length > 0 ? (
+                  notifications.map((note, index) => (
+                    <p key={`other-${index}`} className="notification-message">
+                      🔔 {note.userName} placed ₹{note.amount} for "{note.productName}"
+                    </p>
+                  ))
+                ) : (
+                  <p className="no-notification-message">
+                    No new bids from others...
                   </p>
                 )}
               </div>
@@ -160,5 +191,3 @@ const Header = () => {
 };
 
 export default Header;
-
-//the prevous users latest notifications only needed to be  shown on the current user,no need to show all the previous notifications of the previous user on the current user.
