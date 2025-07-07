@@ -5,10 +5,12 @@ import ProductDetails from '../components/ProductDetails';
 import CountDownTimer from '../components/CountDownTimer'; 
 import productDataJson from '../data/products.json';
 import { ProductList } from '../types/product';
+import Header from '../components/Header';
 import './home.css';
 
 export const Home: React.FC = () => (
   <>
+    <Header />
     <h3 className="auction-title">Auction Collection Bids</h3>
 
     <div className="product-container">
