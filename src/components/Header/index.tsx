@@ -24,7 +24,7 @@ const Header = () => {
 
   useEffect(() => {
     const parsedUser = JSON.parse(
-      localStorage.getItem('LOGGED_IN_USER') || '{}'
+      localStorage.getItem('LOGGED_IN_USER') || '{}',
     );
 
     if (parsedUser?.id && parsedUser?.name && parsedUser?.email) {
@@ -40,7 +40,7 @@ const Header = () => {
     const loadNotifications = () => {
       try {
         const allNotifications = JSON.parse(
-          localStorage.getItem('BID_NOTIFICATIONS') || '{}'
+          localStorage.getItem('BID_NOTIFICATIONS') || '{}',
         );
 
         const userBids: Notification[] = [];
@@ -79,17 +79,17 @@ const Header = () => {
 
         const latestUserBidTime = userBids.reduce(
           (max, bid) => Math.max(max, bid.timestamp ?? 0),
-          0
+          0,
         );
 
         const filteredOtherBids =
-        latestUserBidTime > 0
-          ? otherBids
-              .filter(bid => (bid.timestamp ?? 0) > latestUserBidTime)
-              .sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0))
-              .slice(0, 5)
-          : []; // 
-      
+          latestUserBidTime > 0
+            ? otherBids
+                .filter(bid => (bid.timestamp ?? 0) > latestUserBidTime)
+                .sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0))
+                .slice(0, 5)
+            : [];
+
         const sortedUserBids = userBids
           .sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0))
           .slice(0, 5);
@@ -163,7 +163,8 @@ const Header = () => {
                 {userBids.length > 0 ? (
                   userBids.map((note, index) => (
                     <p key={`user-${index}`} className="notification-message">
-                      🔔 You successfully placed the bid of ₹{note.amount} for "{note.productName}"
+                      🔔 You successfully placed the bid of ₹{note.amount} for "
+                      {note.productName}"
                     </p>
                   ))
                 ) : (
@@ -178,7 +179,8 @@ const Header = () => {
                 {notifications.length > 0 ? (
                   notifications.map((note, index) => (
                     <p key={`other-${index}`} className="notification-message">
-                      🔔 {note.userName} placed ₹{note.amount} for "{note.productName}"
+                      🔔 {note.userName} placed ₹{note.amount} for "
+                      {note.productName}"
                     </p>
                   ))
                 ) : (
