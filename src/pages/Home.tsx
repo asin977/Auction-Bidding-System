@@ -1,14 +1,16 @@
 import React from 'react';
 
 import Button from '../components/Button';
-import ProductDetails from '../components/ProductDetails';
-import CountDownTimer from '../components/CountDownTimer'; 
+import CountDownTimer from '../components/CountDownTimer';
 import productDataJson from '../data/products.json';
 import { ProductList } from '../types/product';
 import { User } from '../types/user';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { auctionReducer, initialAuctionState } from '../components/AuctionAction';
+import {
+  auctionReducer,
+  initialAuctionState,
+} from '../components/AuctionAction';
 import { useEffect, useReducer, useState } from 'react';
 import { routes } from '../Routes';
 import { useNavigate } from 'react-router-dom';
@@ -16,13 +18,11 @@ import Modal from '../components/Modal/homePage';
 
 import './home.css';
 
-
 export const Home: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [state, dispatch] = useReducer(auctionReducer, initialAuctionState);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-  
 
   const navigate = useNavigate();
 
@@ -156,8 +156,6 @@ export const Home: React.FC = () => {
       <Header />
       <h3 className="auction-title">Auction Collection Bids</h3>
 
-      
-
       <div className="product-container">
         {productDataJson.map((product: ProductList) => {
           const now = Date.now();
@@ -244,4 +242,3 @@ export const Home: React.FC = () => {
     </>
   );
 };
-
