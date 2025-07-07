@@ -5,33 +5,243 @@ import ProductDetails from '../components/ProductDetails';
 import CountDownTimer from '../components/CountDownTimer'; 
 import productDataJson from '../data/products.json';
 import { ProductList } from '../types/product';
+import { User } from '../types/user';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import { auctionReducer, initialAuctionState } from '../components/AuctionAction';
+import { useEffect, useReducer, useState } from 'react';
+import { routes } from '../Routes';
+import { useNavigate } from 'react-router-dom';
+import Modal from '../components/Modal/homePage';
+
 import './home.css';
 
-export const Home: React.FC = () => (
-  <>
-    <h3 className="auction-title">Auction Collection Bids</h3>
 
-    <div className="product-container">
-      {(productDataJson || []).map((product: ProductList) => (
-        <div key={product.id} className="product-card">
-          <p className="product-details">{product.imageDetails}</p>
-          <img
-            src={product.imageUrl}
-            alt={product.name}
-            className="product-image"
-          />
+export const Home: React.FC = () => {
+  const [user, setUser] = useState<User | null>(null);
+  const [state, dispatch] = useReducer(auctionReducer, initialAuctionState);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  
 
-          <ProductDetails />
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    const user = localStorage.getItem('LOGGED_IN_USER');
+    if (!user) {
+      navigate(routes.signin);
+    }
+  }, [navigate]);
 
-          <CountDownTimer endTime={product.time} />
+  useEffect(() => {
+    const storedUser = localStorage.getItem('LOGGED_IN_USER');
+    if (storedUser) {
+      try {
+        const existingUser = JSON.parse(storedUser);
+        if (existingUser?.id && existingUser?.name && existingUser?.email) {
+          setUser(existingUser);
+        }
+      } catch (err) {
+        console.error('Error parsing user:', err);
+      }
+    }
 
-          <div className="button-container">
-            <Button>Bid Now</Button>
-            <Button>Active</Button>
-          </div>
-        </div>
-      ))}
-    </div>
-  </>
-);
+    const storedNotifications = localStorage.getItem('BID_NOTIFICATIONS');
+    if (storedNotifications) {
+      const parsedNotifications = JSON.parse(storedNotifications);
+      Object.entries(parsedNotifications).forEach(([productId, messages]) => {
+        const latest = Array.isArray(messages)
+          ? messages[messages.length - 1]?.message
+          : messages;
+        if (latest) {
+          dispatch({ type: 'SET_NOTIFICATION', productId, message: latest });
+        }
+      });
+    }
+  }, []);
+
+  const triggerModal = (msg: string) => {
+    setModalMessage(msg);
+    setShowModal(true);
+  };
+
+  const placeBid = (productId: string) => {
+    if (!user) {
+      triggerModal('You must be logged in to place a bid.');
+      return;
+    }
+
+    const input = state.bidInputs[productId]?.trim();
+    const bidAmount = Number(input);
+    const product = productDataJson.find(p => p.id === productId);
+    const now = Date.now();
+    const endTime = new Date(product?.time || '').getTime();
+    const isExpired = now >= endTime;
+
+    if (!input || isNaN(bidAmount) || bidAmount <= 0) {
+      triggerModal('Please enter a valid bid amount.');
+      return;
+    }
+
+    if (!product) {
+      triggerModal('Product not found.');
+      return;
+    }
+
+    if (isExpired) {
+      triggerModal('Bidding has ended for this product.');
+      return;
+    }
+
+    const currentBid = state.bids[productId]?.amount || 0;
+
+    if (bidAmount <= currentBid) {
+      triggerModal(
+        `Bid must be greater than the current bid of ₹${currentBid}.`,
+      );
+      return;
+    }
+
+    if (bidAmount < product.startingPrice) {
+      triggerModal(
+        `Bid must be at least the starting price of ₹${product.startingPrice}.`,
+      );
+      return;
+    }
+    dispatch({ type: 'START_BID', productId });
+
+    setTimeout(() => {
+      dispatch({
+        type: 'BID_SUCCESS',
+        productId,
+        userId: user.id,
+        amount: bidAmount,
+      });
+      dispatch({ type: 'CLEAR_INPUT', productId });
+
+      const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
+      const updatedBids = [
+        ...storedBids,
+        { productId, amount: bidAmount, userName: user.name },
+      ];
+      localStorage.setItem('BIDS', JSON.stringify(updatedBids));
+
+      const notifications = JSON.parse(
+        localStorage.getItem('BID_NOTIFICATIONS') || '{}',
+      );
+      const newMessage = {
+        userId: user.id,
+        userName: user.name,
+        amount: bidAmount,
+        productName: product.name,
+        timestamp: Date.now(),
+      };
+      const updatedMessages = Array.isArray(notifications[productId])
+        ? [...notifications[productId], newMessage]
+        : [newMessage];
+
+      notifications[productId] = updatedMessages;
+      localStorage.setItem('BID_NOTIFICATIONS', JSON.stringify(notifications));
+      localStorage.setItem('LAST_BID_PRODUCT_ID', productId);
+
+      window.dispatchEvent(new Event('bidUpdate'));
+      setTimeout(() => {
+        dispatch({ type: 'RESET_SUCCESS', productId });
+      }, 2000);
+    }, 1000);
+  };
+
+  return (
+    <>
+      <Header />
+      <h3 className="auction-title">Auction Collection Bids</h3>
+
+      
+
+      <div className="product-container">
+        {productDataJson.map((product: ProductList) => {
+          const now = Date.now();
+          const endTime = new Date(product.time).getTime();
+          const isExpired = now >= endTime;
+
+          const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
+          const highestBid = storedBids
+            .filter(
+              (bid: { productId: string }) => bid.productId === product.id,
+            )
+            .sort(
+              (a: { amount: number }, b: { amount: number }) =>
+                b.amount - a.amount,
+            )[0];
+
+          return (
+            <div key={product.id} className="product-card">
+              <h3 className="product-title">{product.name}</h3>
+              <img
+                src={product.imageUrl}
+                alt={product.name}
+                className="product-image"
+              />
+              <p className="product-details">{product.imageDetails}</p>
+              <p className="product-price">
+                <strong>Starting Price:</strong> ₹{product.startingPrice}
+              </p>
+
+              {highestBid && (
+                <p className="highest-bid-info">
+                  Highest bid: ₹{highestBid.amount} by {highestBid.userName}
+                </p>
+              )}
+
+              <CountDownTimer endTime={product.time} />
+
+              <input
+                type="number"
+                placeholder="Enter bid amount"
+                className="bid-input"
+                value={state.bidInputs[product.id] || ''}
+                onChange={e =>
+                  dispatch({
+                    type: 'SET_INPUT',
+                    productId: product.id,
+                    value: e.target.value,
+                  })
+                }
+                disabled={!user || isExpired}
+              />
+
+              <div className="bid-buttons">
+                <Button
+                  onClick={() => placeBid(product.id)}
+                  className="bid-button"
+                  disabled={state.loadingBids[product.id] || isExpired || !user}
+                >
+                  {isExpired
+                    ? 'Bidding Closed'
+                    : state.loadingBids[product.id]
+                    ? 'Placing...'
+                    : state.successBids[product.id]
+                    ? 'Success!'
+                    : 'Place Bid'}
+                </Button>
+              </div>
+
+              {state.successBids[product.id] && (
+                <p className="success-message">Your bid was successful!</p>
+              )}
+
+              {isExpired && (
+                <p className="expired-message">
+                  ⏱️ Bidding has ended for this item.
+                </p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <Footer />
+    </>
+  );
+};
+

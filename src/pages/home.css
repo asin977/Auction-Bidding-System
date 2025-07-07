@@ -6,7 +6,6 @@
 .product-image {
   width: 200px;
   height: 200px;
-  object-fit: cover;
 }
 
 .product-container {
@@ -17,7 +16,7 @@
 
 .product-details {
   font-family: 'semi-bold';
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .time-left {
@@ -27,6 +26,8 @@
 
 .product-title {
   color: darkblue;
+  font-family: 'bold';
+  font-size: 23px;
 }
 
 .product-price {
@@ -36,20 +37,21 @@
   gap: 30px;
   margin-top: 16px;
   color: darkred;
-  margin-top: 12px;
+  margin-top: 30px;
+  font-size: 18px;
 }
 
-.price span::before {
-  content: '◘ ';
-  margin-right: 4px;
-  color: #999;
+.product-price::before {
+  content: '💸';
 }
 
 .auction-title {
   font-family: 'bold';
   font-size: 40px;
   margin: 0px;
-  padding: 20px;
+  padding: 35px;
+  margin-top: 39px;
+  color: darkblue;
 }
 
 .button-container {
@@ -57,4 +59,23 @@
   justify-content: center;
   margin-top: 30px;
   gap: 30px;
+}
+
+.bid-input {
+  min-width: 30%;
+  margin-top: 50px;
+}
+
+.highest-bid-info {
+  font-family: 'semi-bold';
+  font-size: 20px;
+  color: #ac0395;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.highest-bid-info::before {
+  content: '🚨';
+  margin-right: 4px;
+  margin-top: 20px;
 }
