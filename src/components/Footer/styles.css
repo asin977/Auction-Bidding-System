@@ -1,12 +1,13 @@
 .footer-container {
   width: 100%;
-  position: fixed;
   bottom: 0;
-  background-color: #fff;
+  background-color: #ac0395;
+  margin-top: 129px;
+  padding:20px;
 }
 
 .footer-about {
-  color: grey;
+  color: cornsilk;
   font-weight: bold;
   text-decoration: none;
 }
@@ -14,19 +15,9 @@
 .footer-content {
   font-size: 17px;
   font-family: 'Inconsolata';
-  color: rgb(159, 159, 163);
+  color: cornsilk;
   margin: 0;
   font-weight: bold;
-}
-
-.footer-links {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  text-align: center;
-  gap: 15px;
-  font-family: 'Inconsolata';
-  color: gray;
 }
 
 .footer-description {
@@ -35,4 +26,5 @@
   font-family: 'script';
   text-align: center;
   font-weight: bold;
+  color: cornsilk;
 }

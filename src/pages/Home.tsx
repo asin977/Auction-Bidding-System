@@ -12,6 +12,7 @@ import { auctionReducer, initialAuctionState } from '../components/AuctionAction
 import { useEffect, useReducer, useState } from 'react';
 import { routes } from '../Routes';
 import { useNavigate } from 'react-router-dom';
+import Modal from '../components/Modal/homePage';
 
 import './home.css';
 
@@ -19,6 +20,8 @@ import './home.css';
 export const Home: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [state, dispatch] = useReducer(auctionReducer, initialAuctionState);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
   
 
   const navigate = useNavigate();
