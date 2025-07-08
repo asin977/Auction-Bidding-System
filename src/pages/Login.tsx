@@ -19,7 +19,6 @@ export const Login: React.FC = () => {
     email: '',
     password: '',
   });
-
   const navigate = useNavigate();
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,18 +46,20 @@ export const Login: React.FC = () => {
     const storedUsers = JSON.parse(localStorage.getItem(USERS) || '[]');
 
     const existingUser = storedUsers.find(
-      (USER: User) => USER.email === formInputs.email.toLowerCase(),
+      (USER: User) =>
+        USER.email.toLowerCase() === formInputs.email.toLowerCase(),
     );
 
     if (existingUser) {
       alert('An account with this email already exists.');
       return;
     }
-
     const newUser = {
       id: generateId(),
       ...formInputs,
     };
+    const updatedUsers = [...storedUsers, newUser];
+    localStorage.setItem(USERS, JSON.stringify(updatedUsers));
 
     localStorage.setItem(
       'LOGGED_IN_USER',
@@ -107,11 +108,11 @@ export const Login: React.FC = () => {
           onChange={handleInput}
           required
         />
-      </form>
 
-      <div className="button-container">
-        <LoginButton />
-      </div>
+        <div className="button-container">
+          <LoginButton />
+        </div>
+      </form>
     </div>
   );
 };
