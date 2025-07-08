@@ -4,8 +4,7 @@ import './styles.css';
 
 const LoginButton = () => (
   <>
-    <button className="create-account">Create Account</button>
-    <button className="login">Login</button>
+    <button className="create-account">Sign Up</button>
   </>
 );
 
