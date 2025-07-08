@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import LoginButton from '../components/loginButton';
 import { USERS } from '../constants/common';
 import { User } from '../types/user';
 import { isStrongPassword, isValidEmail } from '../utils/login-validators';
+import { routes } from '../Routes';
 import './login.css';
+
+const generateId = () =>
+  typeof crypto?.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : Math.random().toString(36).substring(2, 10);
 
 export const Login: React.FC = () => {
   const [formInputs, setFormInputs] = useState({
@@ -12,6 +19,7 @@ export const Login: React.FC = () => {
     email: '',
     password: '',
   });
+  const navigate = useNavigate();
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormInputs({
@@ -38,20 +46,32 @@ export const Login: React.FC = () => {
     const storedUsers = JSON.parse(localStorage.getItem(USERS) || '[]');
 
     const existingUser = storedUsers.find(
-      (USER: User) => USER.email === formInputs.email,
+      (USER: User) =>
+        USER.email.toLowerCase() === formInputs.email.toLowerCase(),
     );
 
     if (existingUser) {
       alert('An account with this email already exists.');
       return;
     }
-
-    const updatedUsers = [...storedUsers, formInputs];
+    const newUser = {
+      id: generateId(),
+      ...formInputs,
+    };
+    const updatedUsers = [...storedUsers, newUser];
     localStorage.setItem(USERS, JSON.stringify(updatedUsers));
 
-    alert(
-      `Welcome, ${formInputs.name}! Your account has been created and your password is ${formInputs.password}. Keep it safe for future reference.`,
+    localStorage.setItem(
+      'LOGGED_IN_USER',
+      JSON.stringify({
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+      }),
     );
+
+    alert(`Welcome ${newUser.name}! Your account has been created.`);
+    navigate(routes.home);
   };
 
   return (
@@ -88,12 +108,11 @@ export const Login: React.FC = () => {
           onChange={handleInput}
           required
         />
-      </form>
 
-      <div className="button-container">
-        <LoginButton />
-      </div>
+        <div className="button-container">
+          <LoginButton />
+        </div>
+      </form>
     </div>
   );
 };
-
