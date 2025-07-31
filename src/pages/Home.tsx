@@ -7,10 +7,10 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Modal from '../components/Modal/homePage';
 import productDataJson from '../data/products.json';
-import { ProductList } from '../types/product';
-import { User } from '../types/user';
-import './home.css';
 import { routes } from '../routes';
+import { User } from '../types/user';
+
+import './home.css';
 
 type AuctionState = {
   bidInputs: Record<string, string>;
@@ -89,33 +89,29 @@ export const Home: React.FC = () => {
   const [state, dispatch] = useReducer(auctionReducer, initialAuctionState);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = localStorage.getItem('LOGGED_IN_USER');
-    if (!user) {
-      navigate(routes.signin);
-    }
-  }, [navigate]);
+    const userData = localStorage.getItem('LOGGED_IN_USER');
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('LOGGED_IN_USER');
-    if (storedUser) {
-      try {
-        const existingUser = JSON.parse(storedUser);
-        if (existingUser?.id && existingUser?.name && existingUser?.email) {
-          setUser(existingUser);
-        }
-      } catch (err) {
-        console.error('Error parsing user:', err);
+    if (!userData) {
+      setTimeout(() => navigate(routes.signin), 0);
+      return;
+    }
+
+    try {
+      const parsedUser = JSON.parse(userData);
+      if (parsedUser?.id && parsedUser?.name && parsedUser?.email) {
+        setUser(parsedUser);
       }
+    } catch (err) {
+      console.error('Error parsing user:', err);
     }
 
     const storedNotifications = localStorage.getItem('BID_NOTIFICATIONS');
     if (storedNotifications) {
-      const parsedNotifications = JSON.parse(storedNotifications);
-      Object.entries(parsedNotifications).forEach(([productId, messages]) => {
+      const parsed = JSON.parse(storedNotifications);
+      Object.entries(parsed).forEach(([productId, messages]) => {
         const latest = Array.isArray(messages)
           ? messages[messages.length - 1]?.message
           : messages;
@@ -124,7 +120,7 @@ export const Home: React.FC = () => {
         }
       });
     }
-  }, []);
+  }, [navigate]);
 
   const triggerModal = (msg: string) => {
     setModalMessage(msg);
@@ -132,48 +128,30 @@ export const Home: React.FC = () => {
   };
 
   const placeBid = (productId: string) => {
-    if (!user) {
-      triggerModal('You must be logged in to place a bid.');
-      return;
-    }
+    if (!user) return triggerModal('You must be logged in to place a bid.');
 
     const input = state.bidInputs[productId]?.trim();
     const bidAmount = Number(input);
     const product = productDataJson.find(p => p.id === productId);
     const now = Date.now();
-    const endTime = new Date(product?.time || '').getTime();
-    const isExpired = now >= endTime;
 
-    if (!input || isNaN(bidAmount) || bidAmount <= 0) {
-      triggerModal('Please enter a valid bid amount.');
-      return;
-    }
+    if (!input || isNaN(bidAmount) || bidAmount <= 0)
+      return triggerModal('Please enter a valid bid amount.');
+    if (!product) return triggerModal('Product not found.');
 
-    if (!product) {
-      triggerModal('Product not found.');
-      return;
-    }
-
-    if (isExpired) {
-      triggerModal('Bidding has ended for this product.');
-      return;
-    }
+    const isExpired = now >= new Date(product.time).getTime();
+    if (isExpired) return triggerModal('Bidding has ended for this product.');
 
     const currentBid = state.bids[productId]?.amount || 0;
-
-    if (bidAmount <= currentBid) {
-      triggerModal(
+    if (bidAmount <= currentBid)
+      return triggerModal(
         `Bid must be greater than the current bid of ₹${currentBid}.`,
       );
-      return;
-    }
-
-    if (bidAmount < product.startingPrice) {
-      triggerModal(
+    if (bidAmount < product.startingPrice)
+      return triggerModal(
         `Bid must be at least the starting price of ₹${product.startingPrice}.`,
       );
-      return;
-    }
+
     dispatch({ type: 'START_BID', productId });
 
     setTimeout(() => {
@@ -192,7 +170,7 @@ export const Home: React.FC = () => {
       ];
       localStorage.setItem('BIDS', JSON.stringify(updatedBids));
 
-      const notifications = JSON.parse(
+      const storedMessages = JSON.parse(
         localStorage.getItem('BID_NOTIFICATIONS') || '{}',
       );
       const newMessage = {
@@ -200,21 +178,26 @@ export const Home: React.FC = () => {
         userName: user.name,
         amount: bidAmount,
         productName: product.name,
-        timestamp: Date.now(),
+        timestamp: now,
       };
-      const updatedMessages = Array.isArray(notifications[productId])
-        ? [...notifications[productId], newMessage]
-        : [newMessage];
-
-      notifications[productId] = updatedMessages;
-      localStorage.setItem('BID_NOTIFICATIONS', JSON.stringify(notifications));
+      storedMessages[productId] = [
+        ...(storedMessages[productId] || []),
+        newMessage,
+      ];
+      localStorage.setItem('BID_NOTIFICATIONS', JSON.stringify(storedMessages));
       localStorage.setItem('LAST_BID_PRODUCT_ID', productId);
 
       window.dispatchEvent(new Event('bidUpdate'));
-      setTimeout(() => {
-        dispatch({ type: 'RESET_SUCCESS', productId });
-      }, 2000);
+
+      setTimeout(() => dispatch({ type: 'RESET_SUCCESS', productId }), 2000);
     }, 1000);
+  };
+
+  const getHighestBid = (productId: string) => {
+    const bids = JSON.parse(localStorage.getItem('BIDS') || '[]');
+    return bids
+      .filter((bid: any) => bid.productId === productId)
+      .sort((a: any, b: any) => b.amount - a.amount)[0];
   };
 
   return (
@@ -227,20 +210,9 @@ export const Home: React.FC = () => {
       )}
 
       <div className="product-container">
-        {productDataJson.map((product: ProductList) => {
-          const now = Date.now();
-          const endTime = new Date(product.time).getTime();
-          const isExpired = now >= endTime;
-
-          const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
-          const highestBid = storedBids
-            .filter(
-              (bid: { productId: string }) => bid.productId === product.id,
-            )
-            .sort(
-              (a: { amount: number }, b: { amount: number }) =>
-                b.amount - a.amount,
-            )[0];
+        {productDataJson.map(product => {
+          const isExpired = Date.now() >= new Date(product.time).getTime();
+          const topBid = getHighestBid(product.id);
 
           return (
             <div key={product.id} className="product-card">
@@ -255,9 +227,9 @@ export const Home: React.FC = () => {
                 <strong>Starting Price:</strong> ₹{product.startingPrice}
               </p>
 
-              {highestBid && (
+              {topBid && (
                 <p className="highest-bid-info">
-                  Highest bid: ₹{highestBid.amount} by {highestBid.userName}
+                  Highest bid: ₹{topBid.amount} by {topBid.userName}
                 </p>
               )}
 
@@ -297,7 +269,6 @@ export const Home: React.FC = () => {
               {state.successBids[product.id] && (
                 <p className="success-message">Your bid was successful!</p>
               )}
-
               {isExpired && (
                 <p className="expired-message">
                   ⏱️ Bidding has ended for this item.
