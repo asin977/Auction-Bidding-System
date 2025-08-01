@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useBidContext } from '../components/BidContext';
 import Button from '../components/Button';
 import CountdownTimer from '../components/CountDownTimer';
 import Footer from '../components/Footer';
@@ -90,10 +91,10 @@ export const Home: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const navigate = useNavigate();
+  const { addBidNotification } = useBidContext();
 
   useEffect(() => {
     const userData = localStorage.getItem('LOGGED_IN_USER');
-
     if (!userData) {
       setTimeout(() => navigate(routes.signin), 0);
       return;
@@ -107,19 +108,6 @@ export const Home: React.FC = () => {
     } catch (err) {
       console.error('Error parsing user:', err);
     }
-
-    const storedNotifications = localStorage.getItem('BID_NOTIFICATIONS');
-    if (storedNotifications) {
-      const parsed = JSON.parse(storedNotifications);
-      Object.entries(parsed).forEach(([productId, messages]) => {
-        const latest = Array.isArray(messages)
-          ? messages[messages.length - 1]?.message
-          : messages;
-        if (latest) {
-          dispatch({ type: 'SET_NOTIFICATION', productId, message: latest });
-        }
-      });
-    }
   }, [navigate]);
 
   const triggerModal = (msg: string) => {
@@ -128,29 +116,17 @@ export const Home: React.FC = () => {
   };
 
   const placeBid = (productId: string) => {
-    if (!user) return triggerModal('You must be logged in to place a bid.');
+    if (!user) return;
+    const bidInput = state.bidInputs[productId];
+    const bidAmount = Number(bidInput);
 
-    const input = state.bidInputs[productId]?.trim();
-    const bidAmount = Number(input);
+    if (!bidAmount || bidAmount <= 0) {
+      triggerModal('Please enter a valid bid amount.');
+      return;
+    }
+
     const product = productDataJson.find(p => p.id === productId);
-    const now = Date.now();
-
-    if (!input || isNaN(bidAmount) || bidAmount <= 0)
-      return triggerModal('Please enter a valid bid amount.');
-    if (!product) return triggerModal('Product not found.');
-
-    const isExpired = now >= new Date(product.time).getTime();
-    if (isExpired) return triggerModal('Bidding has ended for this product.');
-
-    const currentBid = state.bids[productId]?.amount || 0;
-    if (bidAmount <= currentBid)
-      return triggerModal(
-        `Bid must be greater than the current bid of ₹${currentBid}.`,
-      );
-    if (bidAmount < product.startingPrice)
-      return triggerModal(
-        `Bid must be at least the starting price of ₹${product.startingPrice}.`,
-      );
+    if (!product) return;
 
     dispatch({ type: 'START_BID', productId });
 
@@ -163,31 +139,16 @@ export const Home: React.FC = () => {
       });
       dispatch({ type: 'CLEAR_INPUT', productId });
 
-      const storedBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
-      const updatedBids = [
-        ...storedBids,
-        { productId, amount: bidAmount, userName: user.name },
-      ];
-      localStorage.setItem('BIDS', JSON.stringify(updatedBids));
-
-      const storedMessages = JSON.parse(
-        localStorage.getItem('BID_NOTIFICATIONS') || '{}',
-      );
-      const newMessage = {
+      const newBid = {
         userId: user.id,
         userName: user.name,
         amount: bidAmount,
         productName: product.name,
-        timestamp: now,
+        timestamp: Date.now(),
       };
-      storedMessages[productId] = [
-        ...(storedMessages[productId] || []),
-        newMessage,
-      ];
-      localStorage.setItem('BID_NOTIFICATIONS', JSON.stringify(storedMessages));
-      localStorage.setItem('LAST_BID_PRODUCT_ID', productId);
 
-      window.dispatchEvent(new Event('bidUpdate'));
+      addBidNotification(newBid);
+      localStorage.setItem('LAST_BID_PRODUCT_ID', productId);
 
       setTimeout(() => dispatch({ type: 'RESET_SUCCESS', productId }), 2000);
     }, 1000);
