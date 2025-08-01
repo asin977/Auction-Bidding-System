@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { User } from '../../types/user';
 import Modal from '../Modal/homePage';
 import NotificationsDropdown from '../Notification';
+import UserDropdown from '../UserDropDown';
 
 import MyImage from '../../assets/images/Logo.png';
-import SignIcon from '../../assets/images/avatar.png';
 
 import './styles.css';
 
@@ -33,8 +33,6 @@ const Header = () => {
     window.location.href = '/signin';
   };
 
-  const isUserAvailable = storedUser?.name && storedUser?.email;
-
   return (
     <div className="header-main-container">
       <div className="container">
@@ -53,23 +51,7 @@ const Header = () => {
 
         <div className="sign-icon">
           <NotificationsDropdown storedUser={storedUser} />
-
-          <div className="user-dropdown-wrapper">
-            <img src={SignIcon} alt="menu" className="sign-img" />
-            {isUserAvailable && (
-              <div className="user-info-dropdown">
-                <p className="icon-name">
-                  <strong>Name:</strong> {storedUser?.name}
-                </p>
-                <p className="icon-name">
-                  <strong>Email:</strong> {storedUser?.email}
-                </p>
-                <button className="logout-btn" onClick={handleLogoutRequest}>
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
+          <UserDropdown user={storedUser} onLogoutClick={handleLogoutRequest} />
         </div>
       </div>
     </div>
