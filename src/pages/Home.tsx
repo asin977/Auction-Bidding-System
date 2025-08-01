@@ -115,6 +115,18 @@ export const Home: React.FC = () => {
     setShowModal(true);
   };
 
+  const getHighestBid = (productId: string) => {
+    const bids = JSON.parse(localStorage.getItem('BIDS') || '[]');
+    return bids
+      .filter(
+        (bid: any) =>
+          bid.productId === productId &&
+          typeof bid.amount === 'number' &&
+          typeof bid.userName === 'string',
+      )
+      .sort((a: any, b: any) => b.amount - a.amount)[0];
+  };
+
   const placeBid = (productId: string) => {
     if (!user) return;
 
@@ -128,6 +140,26 @@ export const Home: React.FC = () => {
 
     const product = productDataJson.find(p => p.id === productId);
     if (!product) return;
+
+    const highestBid = getHighestBid(productId);
+    const startingPrice = Number(product.startingPrice) || 0;
+
+    // ✅ Enforce bid rules
+    if (highestBid) {
+      if (bidAmount <= highestBid.amount) {
+        triggerModal(
+          `Your bid must be greater than the current highest bid of ₹${highestBid.amount}.`,
+        );
+        return;
+      }
+    } else {
+      if (bidAmount < startingPrice) {
+        triggerModal(
+          `Your bid must be at least the starting price of ₹${startingPrice}.`,
+        );
+        return;
+      }
+    }
 
     dispatch({ type: 'START_BID', productId });
 
@@ -161,18 +193,6 @@ export const Home: React.FC = () => {
 
       setTimeout(() => dispatch({ type: 'RESET_SUCCESS', productId }), 2000);
     }, 1000);
-  };
-
-  const getHighestBid = (productId: string) => {
-    const bids = JSON.parse(localStorage.getItem('BIDS') || '[]');
-    return bids
-      .filter(
-        (bid: any) =>
-          bid.productId === productId &&
-          typeof bid.amount === 'number' &&
-          typeof bid.userName === 'string',
-      )
-      .sort((a: any, b: any) => b.amount - a.amount)[0];
   };
 
   return (
