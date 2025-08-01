@@ -5,6 +5,8 @@ import { useBidNotifications } from '../../Hooks/useBidNotifications';
 
 import BellIcon from '../../assets/images/bell.png';
 
+import './styles.css';
+
 type Props = {
   storedUser: User | null;
 };
@@ -24,8 +26,9 @@ const NotificationsDropdown: React.FC<Props> = ({ storedUser }) => {
           {userBids.length > 0 ? (
             userBids.map((note, index) => (
               <p key={`user-${index}`} className="notification-message">
-                🔔 You have successfully placed the bid of ₹{note.amount} for "
-                {note.productName}"
+                🔔 You have successfully placed the bid of{' '}
+                <strong>₹{note.amount}</strong> for{' '}
+                <strong> "{note.productName}"</strong>
               </p>
             ))
           ) : (
@@ -38,8 +41,8 @@ const NotificationsDropdown: React.FC<Props> = ({ storedUser }) => {
           {otherUserBids.length > 0 ? (
             otherUserBids.map((note, index) => (
               <p key={`other-${index}`} className="notification-message">
-                🔔 {note.userName} placed ₹{note.amount} for "{note.productName}
-                "
+                🔔 <strong>{note.userName}</strong> placed ₹{note.amount} for{' '}
+                <strong>"{note.productName}"</strong>
               </p>
             ))
           ) : (
