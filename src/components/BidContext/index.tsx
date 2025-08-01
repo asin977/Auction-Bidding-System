@@ -4,9 +4,10 @@ import React, {
   useEffect,
   useState,
   ReactNode,
+  useCallback,
 } from 'react';
 
-type Notification = {
+export type Notification = {
   userId: string;
   userName: string;
   amount: number;
@@ -27,7 +28,7 @@ export const BidProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const loadNotifications = () => {
+  const loadNotifications = useCallback(() => {
     try {
       const raw = localStorage.getItem('BID_NOTIFICATIONS') || '{}';
       const allNotifications = JSON.parse(raw);
@@ -52,37 +53,39 @@ export const BidProvider: React.FC<{ children: ReactNode }> = ({
         }
       }
 
-      setNotifications(
-        result.sort((a, b) => (a.timestamp ?? 0) - (b.timestamp ?? 0)),
+      const sorted = result.sort(
+        (a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0),
       );
+      setNotifications(sorted);
     } catch (error) {
       console.error('Failed to load notifications:', error);
     }
-  };
+  }, []);
 
   const addBidNotification = (bid: Notification) => {
-    const stored = localStorage.getItem('BID_NOTIFICATIONS') || '{}';
-    const all = JSON.parse(stored);
+    try {
+      const stored = localStorage.getItem('BID_NOTIFICATIONS') || '{}';
+      const all = JSON.parse(stored);
 
-    if (!Array.isArray(all[bid.productName])) {
-      all[bid.productName] = [];
+      if (!Array.isArray(all[bid.productName])) {
+        all[bid.productName] = [];
+      }
+
+      all[bid.productName].push(bid);
+      localStorage.setItem('BID_NOTIFICATIONS', JSON.stringify(all));
+
+      setNotifications(prev => {
+        const updated = [...prev, bid];
+        return updated.sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0));
+      });
+    } catch (error) {
+      console.error('Failed to add bid notification:', error);
     }
-
-    all[bid.productName].push(bid);
-    localStorage.setItem('BID_NOTIFICATIONS', JSON.stringify(all));
-
-    setNotifications(prev => {
-      const updated = [...prev, bid];
-      return updated.sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0));
-    });
-
-    const bidUpdateEvent = new Event('bidUpdate');
-    window.dispatchEvent(bidUpdateEvent);
   };
 
   useEffect(() => {
     loadNotifications();
-  }, []);
+  }, [loadNotifications]);
 
   return (
     <BidContext.Provider
