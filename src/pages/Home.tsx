@@ -144,7 +144,7 @@ export const Home: React.FC = () => {
     const highestBid = getHighestBid(productId);
     const startingPrice = Number(product.startingPrice) || 0;
 
-    // ✅ Enforce bid rules
+    
     if (highestBid) {
       if (bidAmount <= highestBid.amount) {
         triggerModal(
