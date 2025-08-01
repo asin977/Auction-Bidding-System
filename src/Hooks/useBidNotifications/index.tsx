@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { useBidContext, Notification } from '../BidContext';
+import { useBidContext, Notification } from '../../components/BidContext';
 import { User } from '../../types/user';
 
 type NotificationResult = {

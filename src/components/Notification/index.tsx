@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { User } from '../../types/user';
-import { useBidNotifications } from '../../Hooks/BidNotifications';
+import { useBidNotifications } from '../../Hooks/useBidNotifications';
 
 import BellIcon from '../../assets/images/bell.png';
 
