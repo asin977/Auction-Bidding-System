@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { useBidContext, Notification } from '../../components/BidContext';
+import { Notification, useBidContext } from '../../components/BidContext';
 import { User } from '../../types/user';
 
 type NotificationResult = {
@@ -31,22 +31,13 @@ export const useBidNotifications = (
       .sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0))
       .slice(0, 5);
 
-    const latestUserBidTime = sortedUserBids.reduce(
-      (max, bid) => Math.max(max, bid.timestamp ?? 0),
-      0,
-    );
-
-    const filteredOtherBids =
-      latestUserBidTime > 0
-        ? otherBids
-            .filter(bid => (bid.timestamp ?? 0) > latestUserBidTime)
-            .sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0))
-            .slice(0, 5)
-        : [];
+    const sortedOtherUserBids = otherBids
+      .sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0))
+      .slice(0, 5);
 
     return {
       userBids: sortedUserBids,
-      otherUserBids: filteredOtherBids,
+      otherUserBids: sortedOtherUserBids,
     };
   }, [notifications, storedUser]);
 
