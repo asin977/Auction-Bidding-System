@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { routes } from './routes';
 import { Home, Login, SignIn } from './pages';
-import { BidProvider } from './components/BidContext';
+import { BidProvider } from './Hooks/BidContext';
 
 import './App.css';
 
