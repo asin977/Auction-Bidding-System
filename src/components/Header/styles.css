@@ -136,8 +136,8 @@ img {
   padding: 0.5rem;
 }
 
-.notification-message ::before {
-  content: '⚫';
+.icon-name {
+  font-family: 'semi-bold';
 }
 
 .latest-bid-title {

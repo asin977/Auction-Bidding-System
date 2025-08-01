@@ -117,6 +117,7 @@ export const Home: React.FC = () => {
 
   const placeBid = (productId: string) => {
     if (!user) return;
+
     const bidInput = state.bidInputs[productId];
     const bidAmount = Number(bidInput);
 
@@ -148,6 +149,14 @@ export const Home: React.FC = () => {
       };
 
       addBidNotification(newBid);
+
+      const existingBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
+      existingBids.push({
+        ...newBid,
+        productId,
+      });
+      localStorage.setItem('BIDS', JSON.stringify(existingBids));
+
       localStorage.setItem('LAST_BID_PRODUCT_ID', productId);
 
       setTimeout(() => dispatch({ type: 'RESET_SUCCESS', productId }), 2000);
@@ -157,7 +166,12 @@ export const Home: React.FC = () => {
   const getHighestBid = (productId: string) => {
     const bids = JSON.parse(localStorage.getItem('BIDS') || '[]');
     return bids
-      .filter((bid: any) => bid.productId === productId)
+      .filter(
+        (bid: any) =>
+          bid.productId === productId &&
+          typeof bid.amount === 'number' &&
+          typeof bid.userName === 'string',
+      )
       .sort((a: any, b: any) => b.amount - a.amount)[0];
   };
 

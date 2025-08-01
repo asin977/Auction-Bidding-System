@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from 'react';
 
 type Notification = {
   userId: string;
@@ -8,15 +14,15 @@ type Notification = {
   timestamp?: number;
 };
 
-interface BidContextType {
+type BidContextType = {
   notifications: Notification[];
   addBidNotification: (bid: Notification) => void;
   loadNotifications: () => void;
-}
+};
 
 const BidContext = createContext<BidContextType | undefined>(undefined);
 
-export const BidProvider: React.FC<{ children: React.ReactNode }> = ({
+export const BidProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -47,7 +53,7 @@ export const BidProvider: React.FC<{ children: React.ReactNode }> = ({
       }
 
       setNotifications(
-        result.sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0)),
+        result.sort((a, b) => (a.timestamp ?? 0) - (b.timestamp ?? 0)),
       );
     } catch (error) {
       console.error('Failed to load notifications:', error);
@@ -64,7 +70,14 @@ export const BidProvider: React.FC<{ children: React.ReactNode }> = ({
 
     all[bid.productName].push(bid);
     localStorage.setItem('BID_NOTIFICATIONS', JSON.stringify(all));
-    loadNotifications(); 
+
+    setNotifications(prev => {
+      const updated = [...prev, bid];
+      return updated.sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0));
+    });
+
+    const bidUpdateEvent = new Event('bidUpdate');
+    window.dispatchEvent(bidUpdateEvent);
   };
 
   useEffect(() => {
