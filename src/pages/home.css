@@ -11,7 +11,7 @@
 .product-container {
   display: grid;
   grid-template-rows: repeat(5, 1fr);
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .product-details {
@@ -47,12 +47,12 @@
 }
 
 .auction-title {
-  font-family: 'bold';
   font-size: 40px;
   margin: 0px;
-  padding: 30px;
+  padding: 40px;
   margin-top: 39px;
   color: darkblue;
+  text-align: start;
 }
 
 .button-container {
