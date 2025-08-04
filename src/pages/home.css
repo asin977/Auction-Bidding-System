@@ -1,11 +1,13 @@
 .product-card {
   background-color: #fff;
   border: 0.5px solid rgb(243, 240, 240);
+  padding: 50px;
 }
 
 .product-image {
   width: 200px;
-  height: 200px;
+  height: 300px;
+  object-fit: cover;
 }
 
 .product-container {

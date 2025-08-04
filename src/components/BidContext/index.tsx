@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 
 export type Notification = {
+  productId: any;
   userId: string;
   userName: string;
   amount: number;

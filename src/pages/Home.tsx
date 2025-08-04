@@ -177,6 +177,7 @@ export const Home: React.FC = () => {
         amount: bidAmount,
         productName: product.name,
         timestamp: Date.now(),
+        productId: product.id,
       };
 
       addBidNotification(newBid);

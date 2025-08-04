@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { Notification, useBidContext } from '../../components/BidContext';
 import { User } from '../../types/user';
 
@@ -13,33 +11,47 @@ export const useBidNotifications = (
 ): NotificationResult => {
   const { notifications } = useBidContext();
 
-  const { userBids, otherUserBids } = useMemo(() => {
-    if (!storedUser) return { userBids: [], otherUserBids: [] };
+  if (!storedUser) {
+    return { userBids: [], otherUserBids: [] };
+  }
 
-    const userBids: Notification[] = [];
-    const otherBids: Notification[] = [];
+  const userBids: Notification[] = [];
+  const otherUserBids: Notification[] = [];
 
-    notifications.forEach(bid => {
-      if (bid.userId === storedUser.id) {
-        userBids.push(bid);
-      } else {
-        otherBids.push(bid);
-      }
-    });
+  notifications.forEach(bid => {
+    if (bid.userId === storedUser.id) {
+      userBids.push(bid);
+    } else {
+      otherUserBids.push(bid);
+    }
+  });
 
-    const sortedUserBids = userBids
-      .sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0))
-      .slice(0, 5);
+  const sortedUserBids = userBids
+    .sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0))
+    .slice(0, 5);
 
-    const sortedOtherUserBids = otherBids
-      .sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0))
-      .slice(0, 5);
+  const userProductIds = new Set(userBids.map(bid => bid.productId));
 
-    return {
-      userBids: sortedUserBids,
-      otherUserBids: sortedOtherUserBids,
-    };
-  }, [notifications, storedUser]);
+  const latestOtherBidsMap = new Map<string, Notification>();
 
-  return { userBids, otherUserBids };
+  otherUserBids.forEach(bid => {
+    if (!userProductIds.has(bid.productId)) return;
+
+    const existing = latestOtherBidsMap.get(bid.productId);
+    const bidTimestamp = bid.timestamp ?? 0;
+    const existingTimestamp = existing?.timestamp ?? 0;
+
+    if (!existing || bidTimestamp > existingTimestamp) {
+      latestOtherBidsMap.set(bid.productId, bid);
+    }
+  });
+
+  const sortedOtherUserBids = Array.from(latestOtherBidsMap.values())
+    .sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0))
+    .slice(0, 5);
+
+  return {
+    userBids: sortedUserBids,
+    otherUserBids: sortedOtherUserBids,
+  };
 };
