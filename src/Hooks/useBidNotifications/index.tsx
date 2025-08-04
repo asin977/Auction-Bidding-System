@@ -32,21 +32,11 @@ export const useBidNotifications = (
 
   const userProductIds = new Set(userBids.map(bid => bid.productId));
 
-  const latestOtherBidsMap = new Map<string, Notification>();
+  const relevantOtherUserBids = otherUserBids.filter(bid =>
+    userProductIds.has(bid.productId),
+  );
 
-  otherUserBids.forEach(bid => {
-    if (!userProductIds.has(bid.productId)) return;
-
-    const existing = latestOtherBidsMap.get(bid.productId);
-    const bidTimestamp = bid.timestamp ?? 0;
-    const existingTimestamp = existing?.timestamp ?? 0;
-
-    if (!existing || bidTimestamp > existingTimestamp) {
-      latestOtherBidsMap.set(bid.productId, bid);
-    }
-  });
-
-  const sortedOtherUserBids = Array.from(latestOtherBidsMap.values())
+  const sortedOtherUserBids = relevantOtherUserBids
     .sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0))
     .slice(0, 5);
 
