@@ -79,9 +79,7 @@ export const BidProvider: React.FC<{ children: ReactNode }> = ({
         const updated = [...prev, bid];
         return updated.sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0));
       });
-    } catch (error) {
-      console.error('Failed to add bid notification:', error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
