@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { LOGGED_IN_USER } from '../../constants/common';
 import { User } from '../../types/user';
 import Modal from '../Modal/homePage';
 import NotificationsDropdown from '../Notification';
@@ -16,7 +17,7 @@ const Header = () => {
 
   useEffect(() => {
     const parsedUser = JSON.parse(
-      localStorage.getItem('LOGGED_IN_USER') || '{}',
+      localStorage.getItem(LOGGED_IN_USER) || '{}',
     );
     if (parsedUser?.id && parsedUser?.name && parsedUser?.email) {
       setStoredUser(parsedUser);

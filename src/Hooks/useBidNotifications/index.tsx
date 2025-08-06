@@ -1,4 +1,5 @@
-import { Notification, useBidContext } from '../../components/BidContext';
+import { useBidContext } from '../../components/BidProvider';
+import { Notification } from '../../types/notification';
 import { User } from '../../types/user';
 
 type NotificationResult = {
@@ -21,14 +22,14 @@ export const useBidNotifications = (
   notifications.forEach(bid => {
     if (bid.userId === storedUser.id) {
       userBids.push(bid);
-    } else {
-      otherUserBids.push(bid);
+      return;
     }
+    otherUserBids.push(bid);
   });
 
-  const sortedUserBids = userBids
-    .sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0))
-    .slice(0, 5);
+  const sortedUserBids = userBids.sort(
+    (a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0),
+  );
 
   const userProductIds = new Set(userBids.map(bid => bid.productId));
 
