@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { useBidContext } from '../components/BidProvider';
 import Button from '../components/Button';
@@ -91,7 +92,7 @@ export const Home: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const navigate = useNavigate();
-  const { addBidNotification } = useBidContext();
+  const { addNewBid } = useBidContext();
 
   useEffect(() => {
     const userData = localStorage.getItem('LOGGED_IN_USER');
@@ -106,7 +107,7 @@ export const Home: React.FC = () => {
         setUser(parsedUser);
       }
     } catch (err) {
-      console.error('Error parsing user:', err);
+      toast.error('Failed to load notifications..Try again later..');
     }
   }, [navigate]);
 
@@ -180,7 +181,7 @@ export const Home: React.FC = () => {
         productId: product.id,
       };
 
-      addBidNotification(newBid);
+      addNewBid(newBid);
 
       const existingBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
       existingBids.push({

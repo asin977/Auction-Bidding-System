@@ -10,7 +10,7 @@ import { Notification } from '../../types/notification';
 
 type BidContextType = {
   notifications: Notification[];
-  addBidNotification: (bid: Notification) => void;
+  addNewBid: (bid: Notification) => void;
   loadNotifications: () => void;
 };
 
@@ -20,7 +20,6 @@ const BidContext = createContext<BidContextType | undefined>(undefined);
 
 const isValidBid = (bid: Notification) => {
   return (
-    bid &&
     typeof bid.userId === 'string' &&
     typeof bid.userName === 'string' &&
     typeof bid.amount === 'number' &&
@@ -38,36 +37,29 @@ export const BidProvider: React.FC<{ children: ReactNode }> = ({
     const notifications = JSON.parse(
       localStorage.getItem(BID_NOTIFICATIONS) || '{}',
     );
-
     const allBids = Object.values(notifications)
       .filter(Array.isArray)
       .flat()
       .filter(isValidBid);
-
     const sorted = allBids.sort(
       (a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0),
     );
     setNotifications(sorted);
   }, []);
 
-  const addBidNotification = (bid: Notification) => {
-    try {
-      const notifications = JSON.parse(
-        localStorage.getItem(BID_NOTIFICATIONS) || '{}',
-      );
-
-      if (!Array.isArray(notifications[bid.productName])) {
-        notifications[bid.productName] = [];
-      }
-
-      notifications[bid.productName].push(bid);
-      localStorage.setItem(BID_NOTIFICATIONS, JSON.stringify(notifications));
-
-      setNotifications(prev => {
-        const updated = [...prev, bid];
-        return updated.sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0));
-      });
-    } catch {}
+  const addNewBid = (bid: Notification) => {
+    const notifications = JSON.parse(
+      localStorage.getItem(BID_NOTIFICATIONS) || '{}',
+    );
+    if (!Array.isArray(notifications[bid.productName])) {
+      notifications[bid.productName] = [];
+    }
+    notifications[bid.productName].push(bid);
+    localStorage.setItem(BID_NOTIFICATIONS, JSON.stringify(notifications));
+    setNotifications(prev => {
+      const updated = [...prev, bid];
+      return updated.sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0));
+    });
   };
 
   useEffect(() => {
@@ -76,7 +68,7 @@ export const BidProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <BidContext.Provider
-      value={{ notifications, addBidNotification, loadNotifications }}
+      value={{ notifications, addNewBid, loadNotifications }}
     >
       {children}
     </BidContext.Provider>
@@ -88,7 +80,7 @@ export const useBidContext = (): BidContextType => {
   return (
     context || {
       notifications: [],
-      addBidNotification: () => {},
+      addNewBid: () => {},
       loadNotifications: () => {},
     }
   );
