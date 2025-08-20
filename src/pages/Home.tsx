@@ -8,6 +8,7 @@ import CountdownTimer from '../components/CountDownTimer';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Modal from '../components/Modal/homePage';
+import { BIDS, LAST_BID_PRODUCT_ID, LOGGED_IN_USER } from '../constants/common';
 import productDataJson from '../data/products.json';
 import { routes } from '../routes';
 import { User } from '../types/user';
@@ -95,7 +96,7 @@ export const Home: React.FC = () => {
   const { addNewBid } = useBidContext();
 
   useEffect(() => {
-    const userData = localStorage.getItem('LOGGED_IN_USER');
+    const userData = localStorage.getItem(LOGGED_IN_USER);
     if (!userData) {
       setTimeout(() => navigate(routes.signin), 0);
       return;
@@ -107,7 +108,7 @@ export const Home: React.FC = () => {
         setUser(parsedUser);
       }
     } catch (err) {
-      toast.error('Failed to load notifications..Try again later..');
+      toast.error('Failed to load user data. Try again later.');
     }
   }, [navigate]);
 
@@ -117,7 +118,7 @@ export const Home: React.FC = () => {
   };
 
   const getHighestBid = (productId: string) => {
-    const bids = JSON.parse(localStorage.getItem('BIDS') || '[]');
+    const bids = JSON.parse(localStorage.getItem(BIDS) || '[]');
     return bids
       .filter(
         (bid: any) =>
@@ -183,14 +184,7 @@ export const Home: React.FC = () => {
 
       addNewBid(newBid);
 
-      const existingBids = JSON.parse(localStorage.getItem('BIDS') || '[]');
-      existingBids.push({
-        ...newBid,
-        productId,
-      });
-      localStorage.setItem('BIDS', JSON.stringify(existingBids));
-
-      localStorage.setItem('LAST_BID_PRODUCT_ID', productId);
+      localStorage.setItem(LAST_BID_PRODUCT_ID, productId);
 
       setTimeout(() => dispatch({ type: 'RESET_SUCCESS', productId }), 2000);
     }, 1000);

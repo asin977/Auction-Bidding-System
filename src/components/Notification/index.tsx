@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { User } from '../../types/user';
-import { useBidNotifications } from '../../Hooks/useBidNotifications';
+import { useBidNotifications } from '../BidProvider';
 
 import BellIcon from '../../assets/images/bell.png';
 
 import './styles.css';
+
 
 type Props = {
   storedUser: User | null;

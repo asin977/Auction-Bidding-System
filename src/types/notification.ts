@@ -4,5 +4,5 @@ export type Notification = {
   userName: string;
   amount: number;
   productName: string;
-  timestamp?: number;
+  timestamp: number;
 };

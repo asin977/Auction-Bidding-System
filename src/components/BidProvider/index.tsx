@@ -6,70 +6,69 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+
+import { BIDS } from '../../constants/common';
 import { Notification } from '../../types/notification';
+import { User } from '../../types/user';
 
 type BidContextType = {
-  notifications: Notification[];
+  bids: Notification[];
   addNewBid: (bid: Notification) => void;
-  loadNotifications: () => void;
+  loadBids: () => void;
 };
-
-const BID_NOTIFICATIONS = 'BID_NOTIFICATIONS';
 
 const BidContext = createContext<BidContextType | undefined>(undefined);
-
-const isValidBid = (bid: Notification) => {
-  return (
-    typeof bid.userId === 'string' &&
-    typeof bid.userName === 'string' &&
-    typeof bid.amount === 'number' &&
-    typeof bid.productName === 'string' &&
-    typeof bid.timestamp === 'number'
-  );
-};
 
 export const BidProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [bids, setBids] = useState<Notification[]>([]);
 
-  const loadNotifications = useCallback(() => {
-    const notifications = JSON.parse(
-      localStorage.getItem(BID_NOTIFICATIONS) || '{}',
-    );
-    const allBids = Object.values(notifications)
-      .filter(Array.isArray)
-      .flat()
-      .filter(isValidBid);
-    const sorted = allBids.sort(
-      (a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0),
-    );
-    setNotifications(sorted);
+  const loadBids = useCallback(() => {
+    try {
+      const stored = localStorage.getItem(BIDS);
+      const parsed = stored ? JSON.parse(stored) : [];
+
+      if (Array.isArray(parsed)) {
+        setBids(parsed as Notification[]);
+      } else {
+        setBids([]);
+      }
+    } catch (error) {
+      setBids([]);
+    }
   }, []);
 
   const addNewBid = (bid: Notification) => {
-    const notifications = JSON.parse(
-      localStorage.getItem(BID_NOTIFICATIONS) || '{}',
-    );
-    if (!Array.isArray(notifications[bid.productName])) {
-      notifications[bid.productName] = [];
-    }
-    notifications[bid.productName].push(bid);
-    localStorage.setItem(BID_NOTIFICATIONS, JSON.stringify(notifications));
-    setNotifications(prev => {
-      const updated = [...prev, bid];
-      return updated.sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0));
-    });
+    try {
+      const timestampedBid = {
+        ...bid,
+        timestamp: bid.timestamp ?? Date.now(),
+      };
+
+      const stored = localStorage.getItem(BIDS);
+      const existing = stored ? JSON.parse(stored) : [];
+
+      const updated = Array.isArray(existing)
+        ? [...existing, timestampedBid]
+        : [timestampedBid];
+
+      localStorage.setItem(BIDS, JSON.stringify(updated));
+
+      setBids(prev =>
+        [...prev, timestampedBid].sort(
+          (a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0),
+        ),
+      );
+    } catch (error) {}
   };
 
   useEffect(() => {
-    loadNotifications();
-  }, [loadNotifications]);
+    loadBids();
+  }, [loadBids]);
 
   return (
-    <BidContext.Provider
-      value={{ notifications, addNewBid, loadNotifications }}
-    >
+    <BidContext.Provider value={{ bids, addNewBid, loadBids }}>
       {children}
     </BidContext.Provider>
   );
@@ -77,11 +76,76 @@ export const BidProvider: React.FC<{ children: ReactNode }> = ({
 
 export const useBidContext = (): BidContextType => {
   const context = useContext(BidContext);
-  return (
-    context || {
-      notifications: [],
-      addNewBid: () => {},
-      loadNotifications: () => {},
+  if (!context) {
+    throw new Error('useBidContext must be used within a BidProvider');
+  }
+  return context;
+};
+
+type NotificationResult = {
+  userBids: Notification[];
+  otherUserBids: Notification[];
+};
+
+export const useBidNotifications = (
+  storedUser: User | null,
+): NotificationResult => {
+  const { bids } = useBidContext();
+
+  if (!storedUser) {
+    return { userBids: [], otherUserBids: [] };
+  }
+
+  const groupedBids: Record<string, Notification[]> = {};
+  bids.forEach(bid => {
+    if (!groupedBids[bid.productId]) {
+      groupedBids[bid.productId] = [];
     }
-  );
+    groupedBids[bid.productId].push(bid);
+  });
+
+  const userBids: Notification[] = [];
+  const otherUserBids: Notification[] = [];
+
+  Object.entries(groupedBids).forEach(([productId, productBids]) => {
+    const latestBidByUser: Record<string, Notification> = {};
+
+    productBids.forEach(bid => {
+      const existing = latestBidByUser[bid.userId];
+      const bidTime = bid.timestamp ?? 0;
+      const existingTime = existing?.timestamp ?? 0;
+
+      if (!existing || bidTime > existingTime) {
+        latestBidByUser[bid.userId] = bid;
+      }
+    });
+
+    const userLatestBid = latestBidByUser[storedUser.id];
+    if (!userLatestBid) {
+      return;
+    }
+
+    const userLatestTimestamp = userLatestBid.timestamp ?? 0;
+
+    userBids.push(userLatestBid);
+
+    Object.entries(latestBidByUser).forEach(([userId, bid]) => {
+      if (userId !== storedUser.id) {
+        const bidTimestamp = bid.timestamp ?? 0;
+        if (bidTimestamp > userLatestTimestamp) {
+          otherUserBids.push(bid);
+        }
+      }
+    });
+  });
+
+  userBids.sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0));
+  otherUserBids.sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0));
+
+  const limitedOtherUserBids = otherUserBids;
+
+  return {
+    userBids,
+    otherUserBids: limitedOtherUserBids,
+  };
 };

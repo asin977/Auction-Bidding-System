@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import LoginButton from '../components/loginButton';
-import { USERS } from '../constants/common';
+import { LOGGED_IN_USER, USERS } from '../constants/common';
+import { routes } from '../routes';
 import { User } from '../types/user';
 import { isStrongPassword, isValidEmail } from '../utils/login-validators';
-import { routes } from '../routes';
+
 import './login.css';
 
 const generateId = () =>
@@ -19,17 +19,15 @@ export const Login: React.FC = () => {
     email: '',
     password: '',
   });
+
   const navigate = useNavigate();
 
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormInputs({
-      ...formInputs,
-      [event.target.name]: event.target.value,
-    });
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormInputs({ ...formInputs, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
 
     if (!isValidEmail(formInputs.email)) {
       alert('Please enter a valid email address.');
@@ -38,31 +36,41 @@ export const Login: React.FC = () => {
 
     if (!isStrongPassword(formInputs.password)) {
       alert(
-        'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.',
+        'Password must be at least 8 characters, include uppercase, lowercase, number & special char.',
       );
       return;
     }
 
-    const storedUsers = JSON.parse(localStorage.getItem(USERS) || '[]');
+    let storedUsers: User[] = [];
+    try {
+      storedUsers = JSON.parse(localStorage.getItem(USERS) || '[]');
+    } catch {
+      storedUsers = [];
+    }
 
-    const existingUser = storedUsers.find(
-      (USER: User) =>
-        USER.email.toLowerCase() === formInputs.email.toLowerCase(),
-    );
-
-    if (existingUser) {
-      alert('An account with this email already exists.');
+    if (
+      storedUsers.find(
+        u => u.email.toLowerCase() === formInputs.email.toLowerCase(),
+      )
+    ) {
+      alert('User with this email already exists.');
       return;
     }
-    const newUser = {
+
+    const newUser: User = {
       id: generateId(),
-      ...formInputs,
+      name: formInputs.name,
+      email: formInputs.email,
+      password: formInputs.password,
+      firstName: '',
+      lastName: ''
     };
+
     const updatedUsers = [...storedUsers, newUser];
     localStorage.setItem(USERS, JSON.stringify(updatedUsers));
 
     localStorage.setItem(
-      'LOGGED_IN_USER',
+      LOGGED_IN_USER,
       JSON.stringify({
         id: newUser.id,
         name: newUser.name,
@@ -76,42 +84,33 @@ export const Login: React.FC = () => {
 
   return (
     <div className="main-login-container">
-      <h1 className="welcome-title">Welcome New User</h1>
-
-      <form onSubmit={handleSubmit} className="details-container">
+      <h1>Register New User</h1>
+      <form onSubmit={handleSubmit}>
         <input
-          className="details-input-box"
           type="text"
           name="name"
-          placeholder="Enter your full name *"
+          placeholder="Full Name"
           value={formInputs.name}
           onChange={handleInput}
           required
         />
-
         <input
-          className="details-input-box"
           type="email"
           name="email"
-          placeholder="Enter your email *"
+          placeholder="Email"
           value={formInputs.email}
           onChange={handleInput}
           required
         />
-
         <input
-          className="details-input-box"
           type="password"
           name="password"
-          placeholder="Create your password *"
+          placeholder="Password"
           value={formInputs.password}
           onChange={handleInput}
           required
         />
-
-        <div className="button-container">
-          <LoginButton />
-        </div>
+        <button type="submit">Register</button>
       </form>
     </div>
   );
