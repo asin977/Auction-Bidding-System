@@ -1,85 +1,71 @@
-.signin-title {
-  margin: 0;
-  color: #5a189a;
-  font-family: 'bold';
-  font-size: 35px;
-  padding: 15px;
-}
-
-input,
-button:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-}
-
-input:focus {
-  outline: none;
-}
-
-.sign-in {
-  border: none;
-  color: #fff;
-  background-color: #5a189a;
-  padding: 10px 20px;
-  border-radius: 3px;
-  font-weight: bold;
-  font-size: 15px;
-  margin-top: 16px;
-}
-
-.sign-in-input-box-details {
-  background-color: #fff;
-  color: #fff;
-  margin: 15px;
-  box-shadow: 0 2px 10px #5a189a;
-  border-radius: 10px;
-  margin-right: -398px;
-  margin-top: 25px;
-  padding: 8px;
-}
-
-.forgot-password {
-  font-size: 15px;
-  display: flex;
-  margin-left: 12px;
-}
-
-.sign-in-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #5a189a;
-  font-family: 'script';
-  font-size: 19px;
-  background-color: #fff;
-  border-radius: 10px;
-  margin-right: 500px;
-  margin-bottom: -408px;
-  margin-top: 30px;
-  padding: 146px;
-  font-family: 'bold';
-}
-
-.sign-account {
-  color: #5a189a;
-}
-
-.sign-input-box-details {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 26px;
-}
-
 .main-sign-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 52px;
-  margin-left: 54px;
+  background-color: #fff;
+  padding: 40px 60px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(90, 24, 154, 0.2);
+  width: 600px;
+  position: relative;
+  left: 36%;
+  margin-top: 80px;
+}
+
+.main-sign-container h2 {
+  margin: 0 0 20px 0;
+  color: #5a189a;
+  font-family: 'bold', sans-serif;
+  font-size: 35px;
+  padding: 15px 0 0 0;
+  text-align: center;
+}
+
+form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+input[type='email'],
+input[type='password'] {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 2px solid #5a189a;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  font-family: 'bold', sans-serif;
+  color: #5a189a;
+}
+
+input[type='email']::placeholder,
+input[type='password']::placeholder {
+  color: #5a189a;
+  font-size: 16px;
+}
+
+input[type='email']:focus,
+input[type='password']:focus {
+  outline: none;
+  border-color: #7d1dd1;
+  box-shadow: 0 0 8px rgba(125, 29, 209, 0.5);
+  transform: scale(1.02);
+}
+
+button {
+  background-color: #5a189a;
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'bold', sans-serif;
+  margin-top: 16px;
 }
 
 button:hover {
@@ -88,15 +74,20 @@ button:hover {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
-input::placeholder {
+.register_link {
+  margin-top: 24px;
   color: #5a189a;
+  font-family: 'bold', sans-serif;
   font-size: 16px;
+  text-align: center;
 }
 
 .signup-link {
   color: #007bff;
   text-decoration: none;
   font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .signup-link:hover {

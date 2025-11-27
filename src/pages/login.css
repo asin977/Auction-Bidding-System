@@ -2,37 +2,78 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-content: center;
+  align-items: center;
   background-color: #fff;
-  margin-top: 200px;
-  padding: 50px;
-  width: 50%;
-  margin-left: 445px;
-  box-shadow: 0 2px 10px #5a189a;
+  padding: 50px 40px;
+  width: 400px;
+  max-width: 90vw;
+  margin: 100px auto;
+  box-shadow: 0 2px 15px rgba(90, 24, 154, 0.3);
+  border-radius: 10px;
+  font-family: 'bold', sans-serif;
 }
 
-input {
-  min-width: 80%;
-  padding: 10px;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin: 15px;
+.main-login-container h1 {
+  font-size: 36px;
+  color: #5a189a;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+input[type='text'],
+input[type='email'],
+input[type='password'] {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 12px 0;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
   color: #7b2cbf;
+  transition: all 0.3s ease;
+  font-family: 'bold', sans-serif;
+}
+
+input[type='text']:focus,
+input[type='email']:focus,
+input[type='password']:focus {
+  outline: none;
+  border-color: #5a189a;
+  box-shadow: 0 0 8px rgba(90, 24, 154, 0.4);
+  transform: scale(1.02);
+}
+
+button {
+  background-color: #5a189a;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 12px 30px;
   border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 25px;
+  width: 100%;
+  font-family: 'bold', sans-serif;
+}
+
+button:hover {
+  background-color: #7d1dd1;
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(125, 29, 209, 0.6);
 }
 
 .button-container {
   display: flex;
-  flex-direction: row;
   justify-content: center;
   gap: 80px;
   margin-top: 25px;
 }
 
 .welcome-title {
-  font-family: 'bold';
+  font-family: 'bold', sans-serif;
   font-size: 40px;
   color: #5a1f8c;
+  text-align: center;
 }

@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import LoginButton from '../components/loginButton';
-import { USERS } from '../constants/common';
+import { LOGGED_IN_USER, USERS } from '../constants/common';
+import { routes } from '../routes';
 import { User } from '../types/user';
 import { isStrongPassword, isValidEmail } from '../utils/login-validators';
+
 import './login.css';
+
+const generateId = () =>
+  typeof crypto?.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : Math.random().toString(36).substring(2, 10);
 
 export const Login: React.FC = () => {
   const [formInputs, setFormInputs] = useState({
@@ -13,15 +20,14 @@ export const Login: React.FC = () => {
     password: '',
   });
 
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormInputs({
-      ...formInputs,
-      [event.target.name]: event.target.value,
-    });
+  const navigate = useNavigate();
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormInputs({ ...formInputs, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
 
     if (!isValidEmail(formInputs.email)) {
       alert('Please enter a valid email address.');
@@ -30,70 +36,82 @@ export const Login: React.FC = () => {
 
     if (!isStrongPassword(formInputs.password)) {
       alert(
-        'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.',
+        'Password must be at least 8 characters, include uppercase, lowercase, number & special char.',
       );
       return;
     }
 
-    const storedUsers = JSON.parse(localStorage.getItem(USERS) || '[]');
+    let storedUsers: User[] = [];
+    try {
+      storedUsers = JSON.parse(localStorage.getItem(USERS) || '[]');
+    } catch {
+      storedUsers = [];
+    }
 
-    const existingUser = storedUsers.find(
-      (USER: User) => USER.email === formInputs.email,
-    );
-
-    if (existingUser) {
-      alert('An account with this email already exists.');
+    if (
+      storedUsers.find(
+        u => u.email.toLowerCase() === formInputs.email.toLowerCase(),
+      )
+    ) {
+      alert('User with this email already exists.');
       return;
     }
 
-    const updatedUsers = [...storedUsers, formInputs];
+    const newUser: User = {
+      id: generateId(),
+      name: formInputs.name,
+      email: formInputs.email,
+      password: formInputs.password,
+      firstName: '',
+      lastName: ''
+    };
+
+    const updatedUsers = [...storedUsers, newUser];
     localStorage.setItem(USERS, JSON.stringify(updatedUsers));
 
-    alert(
-      `Welcome, ${formInputs.name}! Your account has been created and your password is ${formInputs.password}. Keep it safe for future reference.`,
+    localStorage.setItem(
+      LOGGED_IN_USER,
+      JSON.stringify({
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+      }),
     );
+
+    alert(`Welcome ${newUser.name}! Your account has been created.`);
+    navigate(routes.home);
   };
 
   return (
     <div className="main-login-container">
-      <h1 className="welcome-title">Welcome New User</h1>
-
-      <form onSubmit={handleSubmit} className="details-container">
+      <h1>Register New User</h1>
+      <form onSubmit={handleSubmit}>
         <input
-          className="details-input-box"
           type="text"
           name="name"
-          placeholder="Enter your full name *"
+          placeholder="Full Name"
           value={formInputs.name}
           onChange={handleInput}
           required
         />
-
         <input
-          className="details-input-box"
           type="email"
           name="email"
-          placeholder="Enter your email *"
+          placeholder="Email"
           value={formInputs.email}
           onChange={handleInput}
           required
         />
-
         <input
-          className="details-input-box"
           type="password"
           name="password"
-          placeholder="Create your password *"
+          placeholder="Password"
           value={formInputs.password}
           onChange={handleInput}
           required
         />
+        <button type="submit">Register</button>
       </form>
-
-      <div className="button-container">
-        <LoginButton />
-      </div>
     </div>
   );
 };
-

@@ -1,6 +1,3 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-
 import './styles.css';
 
 const Footer = () => (
@@ -11,15 +8,6 @@ const Footer = () => (
     <p className="footer-description">
       This is a real-time auction bidding system.Buit with JavaScript.
     </p>
-    
-    <div className="footer-links">
-      <Link to="routes.about" className="footer-about">
-        About
-      </Link>
-      <Link to="routes.contact" className="footer-about">
-        Contact
-      </Link>
-    </div>
   </div>
 );
 

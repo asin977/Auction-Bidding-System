@@ -1,12 +1,11 @@
-import React from 'react';
-
 import './styles.css';
 
-const LoginButton = () => (
-  <>
-    <button className="create-account">Create Account</button>
-    <button className="login">Login</button>
-  </>
-);
+const LoginButton = () => {
+  return (
+    <div className="-button-container">
+      <button className='login-button'>Sign Up</button>
+    </div>
+  );
+};
 
 export default LoginButton;

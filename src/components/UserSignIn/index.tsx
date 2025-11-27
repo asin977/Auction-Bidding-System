@@ -1,88 +1,75 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { USERS } from '../../constants/common';
-import { routes } from '../../routes/Routes';
-import Button from '../Button';
+import { LOGGED_IN_USER, USERS } from '../../constants/common';
+import { routes } from '../../routes';
+
 import './styles.css';
 
-const UserSignIn: React.FC = () => {
-  const [formInputs, setForm] = useState({
+export const UserSignIn: React.FC = () => {
+  const [formInputs, setFormInputs] = useState({
     email: '',
     password: '',
   });
-
   const navigate = useNavigate();
 
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({
-      ...formInputs,
-      [event.target.name]: event.target.value,
-    });
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormInputs({ ...formInputs, [e.target.name]: e.target.value });
   };
 
-  const handleSignIn = (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSignIn = (e: React.FormEvent) => {
+    e.preventDefault();
 
     const storedUsers = JSON.parse(localStorage.getItem(USERS) || '[]');
-
-    const userMatch = storedUsers.find(
-      (user: { email: string; password: string }) =>
-        user.email === formInputs.email &&
+    const matchedUser = storedUsers.find(
+      (user: any) =>
+        user.email.toLowerCase() === formInputs.email.toLowerCase() &&
         user.password === formInputs.password,
     );
 
-    if (userMatch) {
-      alert(`Welcome back, ${userMatch.name}!`);
-      navigate(routes.home);
+    if (!matchedUser) {
+      alert('Incorrect email or password.');
       return;
     }
-    alert('Invalid email or password. Please try again.');
+
+    localStorage.setItem(
+      LOGGED_IN_USER,
+      JSON.stringify({
+        id: matchedUser.id,
+        name: matchedUser.name,
+        email: matchedUser.email,
+      }),
+    );
+
+    alert(`Welcome back, ${matchedUser.name}!`);
+    navigate(routes.home);
   };
 
   return (
     <div className="main-sign-container">
-      <div className="sign-in-container">
-        <h2>Welcome Back</h2>
-      </div>
-
-      <div className="sign-in-input-box-details">
-        <h1 className="signin-title">Sign In</h1>
-
-        <form onSubmit={handleSignIn} className="details-container">
-          <input
-            className="input-name-box"
-            type="email"
-            name="email"
-            placeholder="Enter your email *"
-            value={formInputs.email}
-            onChange={handleInput}
-            required
-          />
-
-          <input
-            className="password-input-box"
-            type="password"
-            name="password"
-            placeholder="Enter your password *"
-            value={formInputs.password}
-            onChange={handleInput}
-            required
-          />
-
-          <Button>Sign In</Button>
-        </form>
-
-        <span className="forgot-password">Forgot password?</span>
-        <p className="sign-account">
-          New here?{' '}
-          <Link to={routes.login} className="signup-link">
-            Create an Account
-          </Link>
-        </p>
-      </div>
+      <h2>Sign In</h2>
+      <form onSubmit={handleSignIn}>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formInputs.email}
+          onChange={handleInput}
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formInputs.password}
+          onChange={handleInput}
+          required
+        />
+        <button type="submit">Sign In</button>
+      </form>
+      <p className='register_link'>
+        New user? <Link to={routes.login}>Create an account</Link>
+      </p>
     </div>
   );
 };
-
-export default UserSignIn;
